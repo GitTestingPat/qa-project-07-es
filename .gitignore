@@ -1,4 +1,0 @@
-# Comentarios pueden ser añadidos con el símbolo #
-.idea/            # Ignora el directorio .idea/
-Python/           # Ignora el directorio Python/
-__pycache__/      # Ignora el directorio __pycache/
