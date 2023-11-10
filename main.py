@@ -1,9 +1,7 @@
-# Localizadores y Métodos
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdrive
+from selenium.webdriver
 import time
 import data # Importar el archivo data.py
 
@@ -110,71 +108,96 @@ class UrbanRoutesPage:
         time.sleep(time_to_wait)
         self.driver.quit()
 
-# Uso en main.py
-if __name__ == "__main__":
-    driver = webdriver.Chrome()
-    self.driver.get("URBAN_ROUTES_URL") # Usar la URL definida en data.py
-    urban_routes_page.set_from_address(data.ADDRESS_FROM)  # Utiliza la dirección desde data.py
-    urban_routes_page.set_to_address(data.TO_ADDRESS)  # Utiliza la dirección desde data.py
-    urban_routes_page.click_request_taxi(data.REQUEST_TAXI) # Utiliza la solicitud de pedir un taxi desde data.py
-    urban_routes_page.select_category(data.SELECT_CATEGORY) # Utiliza la categoría desde data.py
-    urban_routes_page.enter_phone_number(data.PHONE_NUMBER)  # Utiliza el número de teléfono desde data.py
-    urban_routes_page.enter_card_number(data.CARD_NUMBER) # Utiliza el número de tarjeta desde data.py
-    urban_routes_page.enter_card_code(data.CARD_CODE) # Utiliza el número de código de tarjeta desde data.py
-    urban_routes_page.enter_message_for_driver(data.MESSAGE_FOR_DRIVER) # Utiliza el mensaje desde data.py
-    urban_routes_page.activate_blankets_and_tissues(data.BLANKETS_AND_TISSUES) # Utiliza la solicitud de mantas y pañuelos desde data.py
-    urban_routes_page.add_ice_creams(data.ICE_CREAMS) # Utiliza la solicitud de 2 helados desde data.py
-    urban_routes_page.click_request_taxi(data.REQUEST_TAXI) # Utiliza la solicitud de pedir un taxi otra vez desde data.py
-    urban_routes_page.wait_for_bender(data.FOR_BENDER) # Utiliza esperar la figura de bender desde data.py
+    # Función para configurar el controlador y la página de Urban Routes
+    def setup(self):
+        driver = webdriver.Chrome()
+        driver.get(data.URBAN_ROUTES_URL)
+        urban_routes_page = UrbanRoutesPage(driver)
+        return driver, urban_routes_page
 
+    # Función para realizar una prueba de reserva de taxi
+    def test_booking(self):
+        driver, urban_routes_page = setup()
+        urban_routes_page.set_from_address(data.ADDRESS_FROM)
+        urban_routes_page.set_to_address(data.TO_ADDRESS)
+        urban_routes_page.click_request_taxi(data.REQUEST_TAXI)
+        urban_routes_page.select_category(data.SELECT_CATEGORY)
+        urban_routes_page.enter_phone_number(data.PHONE_NUMBER)
+        urban_routes_page.click_next_button()
+        assert urban_routes_page.is_phone_submitted(), "Phone number not submitted"
+        driver.quit()
 
-    urban_routes_page = UrbanRoutesPage(driver)
+    # Función para realizar una prueba de agregar una tarjeta de crédito
+    def test_add_credit_card(self):
+        driver, urban_routes_page = setup()
+        # Agregar una tarjeta de crédito
+        urban_routes_page.select_payment_method()
+        assert urban_routes_page.is_payment_method_added(), "Payment method not added"
+        driver.quit()
 
-    # Configurar la dirección
-    urban_routes_page.set_from_address("East 2nd Street, 601") # Usar la dirección definida en data.py
-    urban_routes_page.set_to_address("1300 1st St") # Usar la dirección definida en data.py
-    urban_routes_page.click_request_taxi()
-    assert urban_routes_page.is_booking_confirmed(), "Booking was not confirmed"
+    # Función para realizar una prueba de pedido adicional
+    def test_additional_order(self):
+        driver, urban_routes_page = setup()
+        urban_routes_page.add_comment_for_driver("Traer los snacks")
+        urban_routes_page.activate_blankets_and_tissues()
+        urban_routes_page.add_ice_creams()
+        urban_routes_page.request_taxi_again()
+        assert urban_routes_page.is_taxi_requested(), "Taxi request failed"
+        urban_routes_page.wait_for_bender()
+        assert urban_routes_page.wait_for_bender(), "Bender not found"
+        driver.quit()
 
-    # seleccionar la tarifa "Confort"
-    urban_routes_page.select_category("Comfort")
-    assert urban_routes_page.is_category_selected("Comfort"), "Comfort category not selected"
+    # Función principal para ejecutar todas las pruebas
+    if __name__ == "__main__":
+        test_booking()
+        test_add_credit_card()
+        test_additional_order()
 
-    # Rellenar el número de teléfono
-    urban_routes_page.click_phone_field()
-    urban_routes_page.enter_phone_number("+12312312312")
-    urban_routes_page.click_next_button()
-    assert urban_routes_page.is_phone_submitted(), "Phone number not submitted"
+        # Configurar la dirección
+        urban_routes_page.set_from_address("East 2nd Street, 601") # Usar la dirección definida en data.py
+        urban_routes_page.set_to_address("1300 1st St") # Usar la dirección definida en data.py
+        urban_routes_page.click_request_taxi()
+        assert urban_routes_page.is_booking_confirmed(), "Booking was not confirmed"
 
-    # Obtener y confirmar código SMS
-    urban_routes_page.retrieve_sms_code()
-    assert sms_code, "SMS code not retrieved successfully"
+        # seleccionar la tarifa "Confort"
+        urban_routes_page.select_category("Comfort")
+        assert urban_routes_page.is_category_selected("Comfort"), "Comfort category not selected"
 
-    # Agregar una tarjeta de Crédito
-    urban_routes_page.select_payment_method()
-    assert urban_routes_page.is_payment_method_added(), "Payment method not added"
+        # Rellenar el número de teléfono
+        urban_routes_page.click_phone_field()
+        urban_routes_page.enter_phone_number("+12312312312")
+        urban_routes_page.click_next_button()
+        assert urban_routes_page.is_phone_submitted(), "Phone number not submitted"
 
-    # Escribir un mensaje para el conductor
-    urban_routes_page.add_comment_for_driver("Traer los snacks")
-    assert urban_routes_page.is_comment_added("Traer los snacks"), "Comment not added"
+        # Obtener y confirmar código SMS
+        urban_routes_page.retrieve_sms_code()
+        assert sms_code, "SMS code not retrieved successfully"
 
-    # Pedir una manta y pañuelos.
-    urban_routes_page.activate_blankets_and_tissues()
-    assert urban_routes_page.are_blankets_activated(), "Blankets not activated"
+        # Agregar una tarjeta de Crédito
+        urban_routes_page.select_payment_method()
+        assert urban_routes_page.is_payment_method_added(), "Payment method not added"
 
-    # Pedir 2 helados.
-    urban_routes_page.add_ice_creams()
-    assert urban_routes_page.are_ice_creams_added(), "Ice creams not added"
+        # Escribir un mensaje para el conductor
+        urban_routes_page.add_comment_for_driver("Traer los snacks")
+        assert urban_routes_page.is_comment_added("Traer los snacks"), "Comment not added"
 
-    # Aparece el modal para buscar un taxi.
-    urban_routes_page.request_taxi_again()
-    assert urban_routes_page.is_taxi_requested(), "Taxi request failed"
+        # Pedir una manta y pañuelos.
+        urban_routes_page.activate_blankets_and_tissues()
+        assert urban_routes_page.are_blankets_activated(), "Blankets not activated"
 
-    # Esperar a que aparezca la información del conductor en el modal
-    urban_routes_page.wait_for_bender()
-    assert urban_routes_page.wait_for_bender(), "Bender not found"
+        # Pedir 2 helados.
+        urban_routes_page.add_ice_creams()
+        assert urban_routes_page.are_ice_creams_added(), "Ice creams not added"
 
-    # Esperar y cerrar la página
-    urban_routes_page.wait_and_close_page(5)
+        # Aparece el modal para buscar un taxi.
+        urban_routes_page.request_taxi_again()
+        assert urban_routes_page.is_taxi_requested(), "Taxi request failed"
+
+        # Esperar a que aparezca la información del conductor en el modal
+        urban_routes_page.wait_for_bender()
+        assert urban_routes_page.wait_for_bender(), "Bender not found"
+
+        # Esperar y cerrar la página
+        urban_routes_page.wait_and_close_page(5)
 
 

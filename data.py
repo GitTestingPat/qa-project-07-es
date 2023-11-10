@@ -1,6 +1,5 @@
-# URL BASE
+BASE_URL = "https://1464dfbf-f20a-461a-b722-669ebf1dd612.serverhub.tripleten-services.com/?lng=es"
 
-BASE_URL = "https://3ccd53d1-691c-40d8-9921-ffcce95f1838.serverhub.tripleten-services.com/"
 
 class UrbanRoutesData:
     BASE_URL = "URBAN_ROUTES_URL"
@@ -14,6 +13,5 @@ class UrbanRoutesData:
     MESSAGE_FOR_DRIVER = "Traer los snacks"
     BLANKETS_AND_TISSUES = "Pedir mantas y pañuelos"
     ICE_CREAMS = "Pedir 2 helados"
-    REQUEST_TAXI = "Pedir un taxi otra vez"
+    REQUEST_TAXI_AGAIN = "Pedir un taxi otra vez"
     FOR_BENDER = "Esperar que aparezca la figura de bender"
-
