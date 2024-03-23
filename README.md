@@ -1,7 +1,6 @@
-# qa-project-07-es
 # **UI Selenium automation project** 
 
-Test de pruebas automatizadas para comprobar la funcionalidad de una app de transporte llamada Urban Routes. 
+## **Test de pruebas automatizadas para comprobar la funcionalidad de una app de transporte llamada Urban Routes**
 
 - Definición de localizadores y métodos utilizados en la clase UrbanRoutesPage
 - Definición de las pruebas en la clase TestUrbanRoutes.
@@ -15,43 +14,43 @@ Test de pruebas automatizadas para comprobar la funcionalidad de una app de tran
 - Solicitar un taxi presionando el botón correspondiente.
 - Esperar a que aparezca la información del conductor, matrícula y tiempo de espera en el modal.
 
-# Verificación e Instalación de Python y Pytest
+# **Verificación e Instalación de Python y Pytest**
 
 Este archivo detalla los pasos para verificar si Python está instalado en el entorno de desarrollo, cómo instalarlo si no lo está, y luego cómo verificar si pytest está instalado y cómo ejecutar pruebas utilizando pytest.
 
-## Verificar la Instalación de Python
+## **Verificar la Instalación de Python**
 
 Para verificar si Python está instalado, abrir una terminal y ejecutar el siguiente comando:
 
-* Abrir terminal en gitbash
+**Abrir terminal en gitbash**
 Ejecutar el comando 'python --version'
 
 Si Python está instalado, este comando mostrará la versión instalada. Si no está instalado, se mostrará un mensaje de error indicando que 'python' no se reconoce como un comando.
 
-Instalación de Python
+**Instalación de Python**
 
 Si Python no está instalado, siga estos pasos para instalarlo:
 
-Para Windows:
+**Para Windows:**
 
     Ir al sitio web oficial de Python: python.org.
     Descargar el instalador adecuado para su sistema operativo.
     Ejecutar el instalador y seguir las instrucciones en pantalla.
 
-Para macOS:
+**Para macOS:**
 
 Puede instalar Python usando Homebrew o descargando el instalador desde el sitio web oficial de Python.
 
 brew install python
 
-Para Linux:
+**Para Linux:**
 
 La mayoría de las distribuciones de Linux ya incluyen Python. Puede instalarlo a través del gestor de paquetes de distribución. Por ejemplo, en Ubuntu y Debian:
 
 sudo apt-get update
 sudo apt-get install python3
 
-Verificar la Instalación de Pytest
+**Verificar la Instalación de Pytest**
 
 Para verificar si pytest está instalado, en la terminal, ejecutar:
 
@@ -63,7 +62,7 @@ Si pytest no está instalado, puede instalarlo usando pip, el gestor de paquetes
 
 pip install -U pytest
 
-Ejecutar Pruebas con Pytest
+**Ejecutar Pruebas con Pytest**
 
 Una vez que pytest esté instalado, puede ejecutar sus pruebas de la siguiente manera:
 
@@ -74,8 +73,6 @@ Esto ejecutará todas las pruebas en el directorio actual y sus subdirectorios.
 
 Recuerde que este es un ejemplo general. Los pasos pueden variar dependiendo de su sistema operativo y su configuración particular.
 
-
-**
 Esto debería proporcionar una guía clara para verificar la presencia de Python, instalarlo si es necesario, verificar la presencia de pytest y cómo ejecutar pruebas utilizando pytest una vez que esté instalado.
 
 
