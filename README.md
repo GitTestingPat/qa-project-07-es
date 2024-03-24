@@ -33,7 +33,7 @@ Si Python no está instalado, siga estos pasos para instalarlo:
 
 **Para Windows:**
 
-    Ir al sitio web oficial de Python: python.org.
+    Ir al sitio web oficial de Python [aquí](https://www.python.org/)
     Descargar el instalador adecuado para su sistema operativo.
     Ejecutar el instalador y seguir las instrucciones en pantalla.
 
