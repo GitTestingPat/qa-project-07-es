@@ -33,13 +33,13 @@ Si Python no está instalado, siga estos pasos para instalarlo:
 
 **Para Windows:**
 
-Ir al sitio web oficial de Python <br>
+Ir al sitio web oficial de Python [aquí](https://www.python.org/) <br>
 Descargar el instalador adecuado para su sistema operativo. <br>
 Ejecutar el instalador y seguir las instrucciones en pantalla.
 
 **Para macOS:**
 
-Puede instalar Python usando Homebrew o descargando el instalador desde el sitio web oficial de Python.
+Puede instalar Python usando Homebrew o descargando el instalador desde el sitio web oficial de Python [aquí](https://www.python.org/).
 
 brew install python
 
