@@ -39,9 +39,11 @@ Ejecutar el instalador y seguir las instrucciones en pantalla.
 
 **Para macOS:**
 
-Puede instalar Python usando Homebrew o descargando el instalador desde el sitio web oficial de Python [aquí](https://www.python.org/).
+Puede instalar Python usando Homebrew desde la terminal:
 
-brew install python
+    brew install python 
+
+o descargando el instalador desde el sitio web oficial de Python [aquí](https://www.python.org/downloads/).
 
 **Para Linux:**
 
