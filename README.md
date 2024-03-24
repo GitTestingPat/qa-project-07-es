@@ -42,7 +42,7 @@ Ejecutar el instalador y seguir las instrucciones en pantalla.
 
 Puede instalar Python usando Homebrew desde la terminal:
 
-    brew install python 
+    brew install python o si esto no funciona intente brew install python3
 
 o descargando el instalador desde el sitio web oficial de Python [aquí](https://www.python.org/downloads/).
 
