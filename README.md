@@ -22,8 +22,9 @@ Este archivo detalla los pasos para verificar si Python está instalado en el en
 
 Para verificar si Python está instalado, abrir una terminal y ejecutar el siguiente comando:
 
-**Abrir terminal en gitbash**
-Ejecutar el comando 'python --version'
+**Abrir terminal en gitbash** <br>
+
+    Ejecutar el comando 'python --version'
 
 Si Python está instalado, este comando mostrará la versión instalada. Si no está instalado, se mostrará un mensaje de error indicando que 'python' no se reconoce como un comando.
 
