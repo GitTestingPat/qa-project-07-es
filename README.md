@@ -25,7 +25,7 @@ Para verificar si Python está instalado, abrir una terminal de Gitbash y ejecut
     Ejecutar el comando 'python --version' o si esto no funciona pruebe 'python3 --version'
 
 Si no tiene instalado Gitbash puede descargarlo para Windows desde [aquí](https://git-scm.com/download/win) <br>
-Aunque no es necesario descargar Gitbash para macOS ya que ya está instalada una versión por defecto llamada "Terminal zsh", puede descargar Gitbash [aquí](https://git-scm.com/downloads) 
+Aunque no es necesario descargar Gitbash para macOS debido a que ya está instalada una versión por defecto llamada "Terminal zsh", puede descargar Gitbash [aquí](https://git-scm.com/downloads) 
 
 Si Python está instalado en su sistema, este comando mostrará la versión instalada. Si no está instalado, se mostrará un mensaje de error indicando que 'python' no se reconoce como un comando.
 
