@@ -1,4 +1,4 @@
-# **UI Selenium automation project** 
+# **UI Selenium Automation Project** 
 
 ## **Test de pruebas automatizadas para comprobar la funcionalidad de una app de transporte llamada Urban Routes**
 
