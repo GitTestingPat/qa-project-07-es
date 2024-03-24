@@ -47,22 +47,23 @@ o descargando el instalador desde el sitio web oficial de Python [aquí](https:/
 
 **Para Linux:**
 
-La mayoría de las distribuciones de Linux ya incluyen Python. Puede instalarlo a través del gestor de paquetes de distribución. Por ejemplo, en Ubuntu y Debian:
+La mayoría de las distribuciones de Linux ya incluyen Python. Puede instalarlo a través del gestor de paquetes de distribución. Por ejemplo, en Ubuntu y Debian. <br>
+Ejecute en la terminal:
 
-sudo apt-get update
-sudo apt-get install python3
+    sudo apt-get update
+    sudo apt-get install python3
 
 **Verificar la Instalación de Pytest**
 
 Para verificar si pytest está instalado, en la terminal, ejecutar:
 
-pytest --version
+    pytest --version
 
 Si pytest está instalado, mostrará la versión instalada. Si no está instalado, se mostrará un mensaje de error indicando que 'pytest' no se reconoce como un comando.
 
 Si pytest no está instalado, puede instalarlo usando pip, el gestor de paquetes de Python.
 
-pip install -U pytest
+    pip install -U pytest
 
 **Ejecutar Pruebas con Pytest**
 
