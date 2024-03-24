@@ -18,15 +18,16 @@
 
 Este archivo detalla los pasos para verificar si Python está instalado en el entorno de desarrollo, cómo instalarlo si no lo está, y luego cómo verificar si pytest está instalado y cómo ejecutar pruebas utilizando pytest.
 
-## **Verificar la Instalación de Python**
+## **Verificar la Instalación de Python en Windows**
 
-Para verificar si Python está instalado, abrir una terminal y ejecutar el siguiente comando:
-
-**Abrir terminal en gitbash** <br>
+Para verificar si Python está instalado, abrir una terminal de Gitbash y ejecutar el siguiente comando:
 
     Ejecutar el comando 'python --version' o si esto no funciona pruebe 'python3 --version'
 
-Si Python está instalado, este comando mostrará la versión instalada. Si no está instalado, se mostrará un mensaje de error indicando que 'python' no se reconoce como un comando.
+Si no tiene instalado Gitbash puede descargarlo para Windows desde [aquí](https://git-scm.com/download/win) 
+Aunque no es necesario descargar Gitbash para macOS ya que ya está instalada una versión por defecto llamada "Terminal zsh", puede descargar Gitbash [aquí](https://git-scm.com/downloads) 
+
+Si Python está instalado en su sistema, este comando mostrará la versión instalada. Si no está instalado, se mostrará un mensaje de error indicando que 'python' no se reconoce como un comando.
 
 **Instalación de Python**
 
@@ -70,8 +71,8 @@ Si pytest no está instalado, puede instalarlo usando pip, el gestor de paquetes
 
 Una vez que pytest esté instalado, puede ejecutar sus pruebas de la siguiente manera:
 
-    Asegúrese de que está en el directorio donde se encuentran sus pruebas.
-    Ejecutar el comando: pytest
+    En la terminal, asegúrese que está dentro del directorio donde se están sus pruebas.
+    Ejecute el comando: pytest
 
 Esto ejecutará todas las pruebas en el directorio actual y sus subdirectorios.
 
