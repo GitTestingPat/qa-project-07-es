@@ -1,5 +1,5 @@
 # URL BASE
-BASE_URL = "https://cnt-7a249598-6015-429d-a683-492de5def48e.containerhub.tripleten-services.com?lng=es"
+BASE_URL = "https://cnt-c36dd692-f6ad-4335-ba8a-307531fc242c.containerhub.tripleten-services.com?lng=es"
 
 
 class UrbanRoutesData:
