@@ -6,8 +6,27 @@ import selenium.webdriver.common.keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
+@pytest.fixture
+def browser():
+    options = webdriver.ChromeOptions()
+    options.add_argument("--disable-notifications")  # Desactiva las notificaciones
+    options.add_argument("--disable-infobars")       # Desactiva la barra de información de Chrome
+    options.add_argument("--disable-extensions")     # Desactiva las extensiones
+    options.add_argument("--start-maximized")        # Inicia el navegador maximizado
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
 
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    driver.implicitly_wait(10)
+    yield driver
+    driver.quit()
+
+def test_example(browser):
+    browser.get('https://www.example.com')
+    assert "Example Domain" in browser.title
 
 
 @pytest.fixture(scope="module")
