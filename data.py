@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-BASE_URL = "https://1464dfbf-f20a-461a-b722-669ebf1dd612.serverhub.tripleten-services.com/?lng=es"
-=======
 # URL BASE
 BASE_URL = "https://cnt-7a249598-6015-429d-a683-492de5def48e.containerhub.tripleten-services.com?lng=es"
->>>>>>> 13f451f (Cambios en data.py)
 
 
 class UrbanRoutesData:
