@@ -7,15 +7,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-import data  # Importar el archivo data.py
+import data  # Import file data.py
 
 @pytest.fixture
 def browser():
     options = webdriver.ChromeOptions()
-    options.add_argument("--disable-notifications")  # Desactiva las notificaciones
-    options.add_argument("--disable-infobars")       # Desactiva la barra de información de Chrome
-    options.add_argument("--disable-extensions")     # Desactiva las extensiones
-    options.add_argument("--start-maximized")        # Inicia el navegador maximizado
+    options.add_argument("--disable-notifications")  # Disable notifications
+    options.add_argument("--disable-infobars")       # Disable Chrome's information bar
+    options.add_argument("--disable-extensions")     # Disable extensions
+    options.add_argument("--start-maximized")        # Start the browser maximized
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
 
