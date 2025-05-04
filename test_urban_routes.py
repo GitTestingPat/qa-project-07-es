@@ -55,51 +55,51 @@ def test_03_set_to_address(driver):
     to_input.send_keys(data.UrbanRoutesData.TO_ADDRESS)  # Use URL data.py
     assert to_input.get_attribute("value") == data.UrbanRoutesData.TO_ADDRESS
 
-# Prueba 04. Hacer click en el botón "Pedir un taxi"
+# Test 04. Click in botton "Pedir un taxi"
 @pytest.mark.smoke
 def test_04_click_request_taxi(driver):
     request_taxi_button = driver.find_element(By.XPATH, f"//button[text()='{data.UrbanRoutesData.REQUEST_TAXI}']")
     request_taxi_button.click()
     assert "Tariff Selection" in driver.page_source
 
-# Prueba 05: Seleccionar la categoría "Comfort"
+# Test 05: Select category "Comfort"
 @pytest.mark.smoke
 def test_05_select_category(driver):
     comfort_category = driver.find_element(By.XPATH, f"//div[text()='{data.UrbanRoutesData.SELECT_CATEGORY}']")
     comfort_category.click()
     assert data.UrbanRoutesData.SELECT_CATEGORY in comfort_category.text
 
-# Prueba 06: Hacer click en el campo "Número de teléfono"
+# Test 06: Click in the field "Número de teléfono" 
 @pytest.mark.smoke
 def test_06_click_phone_field(driver):
     phone_field = driver.find_element(By.XPATH, "//div[text()='Número de teléfono']")
     phone_field.click()
     assert "Número de teléfono" in driver.page_source
 
-# Prueba 07: Introducir un número válido en el campo "Número de teléfono"
+# Test 07: Add a valid number in the field "Número de teléfono"
 @pytest.mark.smoke
 def test_07_enter_phone_number(driver):
     phone_input = driver.find_element(By.ID, "phone")
     phone_input.clear()
-    phone_input.send_keys(data.UrbanRoutesData.PHONE_NUMBER)  # Usar el número de teléfono de data.py
+    phone_input.send_keys(data.UrbanRoutesData.PHONE_NUMBER)  # Use phone number of data.py
     assert phone_input.get_attribute("value") == data.UrbanRoutesData.PHONE_NUMBER
 
-# Prueba 08: Hacer click en el botón "Siguiente"
+# Test 08: Click in botton "Siguiente"
 @pytest.mark.smoke
 def test_08_click_next_button(driver):
     next_button = driver.find_element(By.XPATH, "//button[text()='Siguiente']")
     next_button.click()
     assert "Next Page" in driver.title
 
-# Prueba 09: Hacer click en la pestaña "Network" en la página real en vez de chrome://devtools
+# Test 09: Click "Network" tab into the real page instead of chrome://devtools
 @pytest.mark.smoke
 def test_09_select_tab(driver):
-    driver.get(data.BASE_URL)  # Cambiar esto a la URL real donde esté la pestaña "Network"
+    driver.get(data.BASE_URL)  # Change this to the actual URL where the “Network” tab is located.
     network_tab = driver.find_element(By.XPATH, "//div[@class='tab'][text()='Network']")
     network_tab.click()
     assert network_tab.is_selected()
 
-# Prueba 010: Esperar a que la pestaña "Network" cargue completamente
+# Test 010: Wait for the “Network” tab to load completely.
 @pytest.mark.smoke
 def test_010_wait_for_network_tab(driver):
     WebDriverWait(driver, 10).until(
@@ -107,7 +107,7 @@ def test_010_wait_for_network_tab(driver):
     )
     assert len(driver.find_elements(By.XPATH, "//div[@class='name']/div")) > 0
 
-# Prueba 011: Seleccionar el último enlace de la columna "Name" en la pestaña "Network"
+# Test 011: Select the last link in the “Name” column in the “Network” tab.
 @pytest.mark.smoke
 def test_011_select_last_network_link(driver):
     network_links = driver.find_elements(By.XPATH, "//div[@class='name']/div")
@@ -115,7 +115,7 @@ def test_011_select_last_network_link(driver):
     last_link.click()
     assert last_link.is_selected()
 
-# Prueba 012: Esperar a que aparezca el código en la pestaña "Preview"
+# Test 012: Wait for the code to appear in the “Preview” tab.
 @pytest.mark.smoke
 def test_012_wait_for_preview_code(driver):
     WebDriverWait(driver, 10).until(
@@ -123,14 +123,14 @@ def test_012_wait_for_preview_code(driver):
     )
     assert driver.find_element(By.XPATH, "//div[@class='preview']/div").is_displayed()
 
-# Prueba 013: Copiar el código de la pestaña "Preview"
+# Test 013: Copying the code from the “Preview” tab
 @pytest.mark.smoke
 def test_013_copy_number(driver):
     code_element = driver.find_element(By.XPATH, "//div[@class='preview']/div")
     verification_code = code_element.text
     assert verification_code != ""
 
-# Prueba 014: Encontrar el campo para ingresar el código SMS y pegar el código
+# Test 014: Finding the field for entering the SMS code and pasting the code
 @pytest.mark.smoke
 def test_014_enter_number(driver):
     verification_code = data.UrbanRoutesData.VERIFICATION_CODE  # Usar el código de verificación de data.py
@@ -146,21 +146,21 @@ def test_015_select_button(driver):
     confirm_button.click()
     assert confirm_button.is_displayed()
 
-# Prueba 016: Hacer click en el campo "Forma de pago" en la flecha derecha
+# Test 015: Click on the “Confirm” button.
 @pytest.mark.smoke
 def test_016_select_arrow(driver):
     payment_arrow = driver.find_element(By.XPATH, "//img[@alt='Arrow right']")
     payment_arrow.click()
     assert payment_arrow.is_displayed()
 
-# Prueba 017: Hacer click en "Agregar una tarjeta"
+# Test 017: Click on “Add a card”.
 @pytest.mark.smoke
 def test_017_add_card(driver):
     add_card = driver.find_element(By.XPATH, "//div[text()='Agregar una tarjeta']")
     add_card.click()
     assert add_card.is_displayed()
 
-# Prueba 018: Escribir el número de tarjeta y su código de verificación
+# Test 018: Enter the card number and its verification code
 @pytest.mark.smoke
 def test_018_enter_number(driver):
     card_number_input = driver.find_element(By.ID, "number")
@@ -168,7 +168,7 @@ def test_018_enter_number(driver):
     card_number_input.send_keys(data.UrbanRoutesData.CARD_NUMBER)
     assert card_number_input.get_attribute("value") == data.UrbanRoutesData.CARD_NUMBER
 
-# Prueba 019: Escribir el código de verificación de la tarjeta
+# Test 019: Write the verification code of the card
 @pytest.mark.smoke
 def test_019_enter_number(driver):
     code_input = driver.find_element(By.ID, "code")
@@ -176,28 +176,28 @@ def test_019_enter_number(driver):
     code_input.send_keys(data.UrbanRoutesData.CARD_CODE)
     assert code_input.get_attribute("value") == data.UrbanRoutesData.CARD_CODE
 
-# Prueba 020: Hacer click (parte blanca) fuera del cuadro principal para activar el botón "Enlace"
+# Test 020: Click (white part) outside the main box to activate the “Link” button.
 @pytest.mark.smoke
 def test_020_select_overlay(driver):
     overlay = driver.find_element(By.CLASS_NAME, "overlay")
     overlay.click()
     assert overlay.is_enabled()
 
-# Prueba 021: Hacer click en el botón "Enlace"
+# Test 021: Click on the “Link” button.
 @pytest.mark.smoke
 def test_021_select_link(driver):
     enlace_button = driver.find_element(By.XPATH, "//button[text()='Enlace']")
     enlace_button.click()
     assert enlace_button.is_displayed()
 
-# Prueba 022: Hacer click en el botón cerrar ventana
+# Test 022: Click on the close window button.
 @pytest.mark.smoke
 def test_022_select_button(driver):
     close_button = driver.find_element(By.CLASS_NAME, "close-button")
     close_button.click()
     assert close_button.is_displayed()
 
-# Prueba 023: Agregar comentario para el conductor
+# Test 023: Add driver comment
 @pytest.mark.smoke
 def test_023_add_text(driver):
     comment_input = driver.find_element(By.ID, "comment")
@@ -205,14 +205,14 @@ def test_023_add_text(driver):
     comment_input.send_keys(data.UrbanRoutesData.MESSAGE_FOR_DRIVER)
     assert comment_input.get_attribute("value") == data.UrbanRoutesData.MESSAGE_FOR_DRIVER
 
-# Prueba 024: Activar el botón "mantas y pañuelos"
+# Test 024: Activate the “blankets and handkerchiefs” button.
 @pytest.mark.smoke
 def test_024_select_button(driver):
     blankets_button = driver.find_element(By.CLASS_NAME, "slider")
     blankets_button.click()
     assert blankets_button.is_selected()
 
-# Prueba 025: Agregar 2 helados
+# Test 025: Add 2 ice creams
 @pytest.mark.smoke
 def test_025_select_button(driver):
     ice_cream_button = driver.find_element(By.CLASS_NAME, "counter-plus")
@@ -220,14 +220,14 @@ def test_025_select_button(driver):
     ice_cream_button.click()
     assert "counter-plus" in driver.page_source
 
-# Prueba 026: Hacer click en el botón "Pedir un taxi"
+# Test 026: Click on the “Order a cab” button.
 @pytest.mark.smoke
 def test_026_select_button(driver):
     request_taxi_button_2 = driver.find_element(By.CLASS_NAME, "smart-button-main")
     request_taxi_button_2.click()
     assert request_taxi_button_2.is_displayed()
 
-# Prueba 027: Esperar a que aparezca la figura de "Bender"
+# Test 027: Wait for the “Bender” figure to appear.
 @pytest.mark.smoke
 def test_027_webdriverwait(driver):
     bender_image = WebDriverWait(driver, 10).until(
@@ -235,7 +235,7 @@ def test_027_webdriverwait(driver):
     )
     assert bender_image.is_displayed()
 
-# Esperar 5 segundos y cerrar la página
+# Wait 5 seconds and close the page
 def driver():
     driver = webdriver.Chrome()
     yield driver
