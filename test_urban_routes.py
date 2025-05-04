@@ -25,34 +25,34 @@ def browser():
     driver.quit()
 
 def test_example(browser):
-    browser.get(data.BASE_URL)  # Usar la URL de data.py
-    assert "Urban Routes" in browser.title  # Reemplaza con el título esperado de tu página
+    browser.get(data.BASE_URL)  # Use URL data.py
+    assert "Urban Routes" in browser.title  # Replace with the expected page title
 
 @pytest.fixture(scope="module")
 def driver():
     with webdriver.Chrome() as driver:
         yield driver
 
-# Prueba 01: Verificar que la página inicial se carga correctamente
+# Test 01: Verify that the home page loads correctly
 @pytest.mark.smoke
 def test_01_urbanroutes_flow(driver):
-    driver.get(data.BASE_URL)  # Usar la URL de data.py
+    driver.get(data.BASE_URL)  # Use URL data.py
     assert "Urban Routes" in driver.title
 
-# Prueba 02: Escribir la dirección "East 2nd Street, 601" en el campo "Desde"
+# Test 02: Write the adress "East 2nd Street, 601" in the field "from"
 @pytest.mark.smoke
 def test_02_set_from_address(driver):
     from_input = driver.find_element(By.ID, "from")
     from_input.clear()
-    from_input.send_keys(data.UrbanRoutesData.ADDRESS_FROM)  # Usar la dirección de data.py
+    from_input.send_keys(data.UrbanRoutesData.ADDRESS_FROM)  # Use URL data.py
     assert from_input.get_attribute("value") == data.UrbanRoutesData.ADDRESS_FROM
 
-# Prueba 03: Escribir la dirección "1300 1st St" en el campo "Hasta"
+# Test 03: Write the adress "1300 1st St" in the field "to"
 @pytest.mark.smoke
 def test_03_set_to_address(driver):
     to_input = driver.find_element(By.ID, "to")
     to_input.clear()
-    to_input.send_keys(data.UrbanRoutesData.TO_ADDRESS)  # Usar la dirección de data.py
+    to_input.send_keys(data.UrbanRoutesData.TO_ADDRESS)  # Use URL data.py
     assert to_input.get_attribute("value") == data.UrbanRoutesData.TO_ADDRESS
 
 # Prueba 04. Hacer click en el botón "Pedir un taxi"
