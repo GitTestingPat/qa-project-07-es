@@ -1,7 +1,5 @@
-import time
 import pytest
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -236,7 +234,7 @@ def test_027_webdriverwait(driver):
     assert bender_image.is_displayed()
 
 # Wait 5 seconds and close the page
-def driver():
+def driver():  # noqa: F811
     driver = webdriver.Chrome()
     yield driver
     driver.quit()
