@@ -37,15 +37,16 @@ Si Python está instalado en su sistema, este comando mostrará la versión inst
 
 **Instalación de Python**
 
-Si Python no está instalado, siga estos pasos para instalarlo:
+Si Python no está instalado, siga estos pasos para instalarlo en cada OS:
 
-**Para Windows:**
+**![Static Badge](https://img.shields.io/badge/Windows-blue):**
+
 
 Ir al sitio web oficial de Python [aquí](https://www.python.org/downloads/windows/) <br>
 Descargar el instalador adecuado para su sistema operativo. <br>
 Ejecutar el instalador y seguir las instrucciones en pantalla.
 
-**Para macOS:**
+**![Static Badge](https://img.shields.io/badge/Mac-black):**
 
 Puede instalar Python usando Homebrew desde la terminal:
 
@@ -53,7 +54,7 @@ Puede instalar Python usando Homebrew desde la terminal:
 
 o descargando el instalador desde el sitio web oficial de Python [aquí](https://www.python.org/downloads/).
 
-**Para Linux:**
+**![Static Badge](https://img.shields.io/badge/Linux-purple):**
 
 La mayoría de las distribuciones de Linux ya incluyen Python. Puede instalarlo a través del gestor de paquetes de distribución. Por ejemplo, en Ubuntu y Debian. <br>
 Ejecute en la terminal:
