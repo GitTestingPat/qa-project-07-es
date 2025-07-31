@@ -18,7 +18,7 @@
 - Solicitar un taxi presionando el botón correspondiente.
 - Esperar a que aparezca la información del conductor, matrícula y tiempo de espera en el modal.
 
-https://img.shields.io/badge/:badgeContent
+![Static Badge](https://img.shields.io/badge/:badgeContent)
 
 # **Verificación e Instalación de Python y Pytest**
 
