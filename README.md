@@ -19,7 +19,7 @@
 - Esperar a que aparezca la información del conductor, matrícula y tiempo de espera en el modal.
 
 # **Verificación e Instalación de Python y Pytest**
-![Static Badge](https://img.shields.io/badge/Python_3.12-blue)
+![Static Badge](https://img.shields.io/badge/Python_3.12-blue)![Static Badge](https://img.shields.io/badge/Pytest_8.4.1-green)
 
 
 Este archivo detalla los pasos para verificar si Python está instalado en el entorno de desarrollo, cómo instalarlo si no lo está, y luego cómo verificar si pytest está instalado y cómo ejecutar pruebas utilizando pytest.
