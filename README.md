@@ -18,6 +18,8 @@
 - Solicitar un taxi presionando el botón correspondiente.
 - Esperar a que aparezca la información del conductor, matrícula y tiempo de espera en el modal.
 
+https://img.shields.io/badge/any_text-you_like-blue
+
 # **Verificación e Instalación de Python y Pytest**
 
 Este archivo detalla los pasos para verificar si Python está instalado en el entorno de desarrollo, cómo instalarlo si no lo está, y luego cómo verificar si pytest está instalado y cómo ejecutar pruebas utilizando pytest.
