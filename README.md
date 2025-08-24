@@ -1,8 +1,8 @@
 
 <img width="1600" height="899" alt="selenium_python_logo" src="https://github.com/user-attachments/assets/9f34af9f-95a3-43b1-ac0c-f0bda77f2300" />
 
-
-# **UI Selenium Automation Project** 
+<h1 align="center"> UI Selenium Automation Project </h1>
+ 
 
 ## **Test de pruebas automatizadas para comprobar la funcionalidad de una app de transporte llamada Urban Routes**
 
