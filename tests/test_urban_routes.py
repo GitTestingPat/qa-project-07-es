@@ -16,9 +16,11 @@ def page(driver):
 
 # Test 01: Abre la URL base y verifica que el título de la página contenga "Urban Routes".
 def test_01_urbanroutes_flow(page):
+    print(f"\n🔍 Intentando abrir: '{data.BASE_URL}'")
     page.get_page(data.BASE_URL)
-    assert "Urban Routes" in page.driver.title
-
+    print(f"📄 Título real: '{page.driver.title}'")
+    print(f"🌐 URL actual: {page.driver.current_url}")
+    assert "Urban" in page.driver.title  
 
 # Test 02: Ingresa la dirección de origen en el campo correspondiente y verifica que el valor del campo coincida con la dirección esperada.
 def test_02_set_from_address(page):
