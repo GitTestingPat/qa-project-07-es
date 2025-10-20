@@ -1,8 +1,8 @@
 ![Selenium Banner](docs/images/selenium_python_logo.png)
 
-# **UI Selenium Automation Project**
 
-<h1 align="center"> UI Selenium Automation Project </h1>
+
+<h1 align="center"><strong>UI Selenium Automation Project</strong></h1>
  
 ## **Automated tests to verify the functionality of an urban transportation app called Urban Routes**
 
