@@ -1,8 +1,42 @@
 ![Selenium Banner](docs/images/selenium_python_logo.png)
 
-
-
 <h1 align="center"><strong>UI Selenium Automation Project</strong></h1>
+
+### ⚠️ Important Note on Test Environment and "DevTools" Interaction
+
+This test suite is designed to run in a **controlled educational testing environment** (such as TripleTen's ContainerHub or similar platforms), where the application under test includes a **simulated browser DevTools panel** as part of its **visible HTML DOM**.
+
+In a real-world scenario, **Selenium cannot interact with the actual browser DevTools** (e.g., Network tab, Console, etc.), because those are part of the browser’s internal UI—not the web page’s HTML. However, in this specific environment:
+
+- The test page **embeds a fake "Network" panel** directly into the page using standard HTML elements (e.g., `<div class="tab">Network</div>`, `<div class="name">`, `<div class="preview">`, etc.).
+- These elements are **fully accessible via Selenium** because they exist in the document object model (DOM) like any other button or input field.
+- Therefore, tests such as `test_09_select_tab` through `test_13_copy_number` **successfully extract verification codes** by interacting with this simulated panel—not the real DevTools.
+
+#### Example of Simulated DevTools HTML (visible in page source):
+```html
+<div class="tab">Network</div>
+<div class="name">
+  <div>POST /api/auth/verification</div>
+</div>
+<div class="preview">
+  <div>123</div> <!-- This is the SMS code -->
+</div>
+```
+
+Because of this setup, the following test logic **works as intended** in this environment:
+```python
+network_tab = driver.find_element(By.XPATH, "//div[@class='tab'][text()='Network']")
+network_tab.click()
+
+code_element = driver.find_element(By.XPATH, "//div[@class='preview']/div")
+sms_code = code_element.text  # Returns "123"
+```
+
+> 🔒 **Do not expect this approach to work on real websites.**  
+> This technique is **only valid in this specific training environment**, where the "DevTools" are part of the app’s UI for educational purposes.
+
+If you run these tests against a standard production website, they will **fail** because the required DOM elements won’t exist.
+
  
 ## **Automated tests to verify the functionality of an urban transportation app called Urban Routes**
 
