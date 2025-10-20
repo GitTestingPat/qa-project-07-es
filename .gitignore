@@ -1,6 +1,9 @@
 .idea              # Ignora el directorio .idea/
-__pycache__/      # Ignora el directorio __pycache
+__pycache__/*      # Ignora el directorio __pycache
 *.pyc
 *.txt              # Ignora archivos .txt
 *.log              # Ignora archivos .log
 .DS_Store
+.vscode/
+env/
+.env
