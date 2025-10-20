@@ -1,3 +1,7 @@
+# Este archivo contiene pruebas que simulan el flujo completo de usuario en Urban Routes.
+# Debido a las limitaciones del entorno de prueba, algunos pasos (como la obtención del código
+# de verificación) requieren interactuar con las herramientas de desarrollo del navegador (DevTools).
+
 import pytest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
