@@ -2,3 +2,4 @@
 __pycache__/*      # Ignora el directorio __pycache
 *.txt              # Ignora archivos .txt
 *.log              # Ignora archivos .log
+.DS_Store
