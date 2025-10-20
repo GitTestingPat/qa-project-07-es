@@ -1,92 +1,111 @@
+![Selenium Banner](docs/images/selenium_python_logo.png)
 
-<img width="1600" height="899" alt="selenium_python_logo" src="https://github.com/user-attachments/assets/9f34af9f-95a3-43b1-ac0c-f0bda77f2300" />
+# **UI Selenium Automation Project**
 
 <h1 align="center"> UI Selenium Automation Project </h1>
  
+## **Automated tests to verify the functionality of an urban transportation app called Urban Routes**
 
-## **Test de pruebas automatizadas para comprobar la funcionalidad de una app de transporte llamada Urban Routes**
+- Definition of locators and methods used in the `UrbanRoutesPage` class  
+- Definition of test cases in the `TestUrbanRoutes` class  
+- Automated tests covering the complete taxi booking workflow:
+  - Setting a pickup address  
+  - Selecting a fare option  
+  - Filling in a valid phone number  
+  - Adding a valid credit card  
+  - Writing a message for the driver  
+  - Requesting additional services  
+  - Ordering a taxi by clicking the corresponding button  
+  - Waiting for the driver’s information, license plate, and estimated arrival time to appear in the modal
 
-- Definición de localizadores y métodos utilizados en la clase UrbanRoutesPage
-- Definición de las pruebas en la clase TestUrbanRoutes.
-- Pruebas automatizadas que cubren el proceso completo de pedir un taxi:
-- Configurar una dirección.
-- Seleccionar una tarifa.
-- Rellenar el campo número de teléfono con un número válido.
-- Agregar una tarjeta de crédito válida.  
-- Escribir un mensaje para el conductor.
-- Realizar peticiones y servicios.
-- Solicitar un taxi presionando el botón correspondiente.
-- Esperar a que aparezca la información del conductor, matrícula y tiempo de espera en el modal.
+# **Python and Pytest Verification & Installation**
+![Static Badge](https://img.shields.io/badge/Python_3.12-blue) ![Static Badge](https://img.shields.io/badge/Pytest_8.4.1-green)
 
-# **Verificación e Instalación de Python y Pytest**
-![Static Badge](https://img.shields.io/badge/Python_3.12-blue)![Static Badge](https://img.shields.io/badge/Pytest_8.4.1-green)
+This file outlines the steps to verify whether Python is installed in your development environment, how to install it if missing, and how to check for pytest installation and run tests using pytest.
 
+## **Verifying Python Installation on Windows**
 
-Este archivo detalla los pasos para verificar si Python está instalado en el entorno de desarrollo, cómo instalarlo si no lo está, y luego cómo verificar si pytest está instalado y cómo ejecutar pruebas utilizando pytest.
+To check if Python is installed, open a Git Bash terminal and run the following command:
 
-## **Verificar la Instalación de Python en Windows**
+```bash
+python --version
+```
 
-Para verificar si Python está instalado, abrir una terminal de Gitbash y ejecutar el siguiente comando:
+If that doesn't work, try:
 
-    Ejecutar el comando 'python --version' o si esto no funciona pruebe 'python3 --version'
+```bash
+python3 --version
+```
 
-Si no tiene instalado Gitbash puede descargarlo para Windows desde [aquí](https://git-scm.com/download/win) <br>
-Aunque no es necesario descargar Gitbash para macOS debido a que ya está instalada una versión por defecto llamada "Terminal zsh", puede descargar Gitbash [aquí](https://git-scm.com/downloads) 
+If you don’t have Git Bash installed, you can download it for Windows from [here](https://git-scm.com/download/win).  
+On macOS, Git Bash is not required because a default terminal (zsh) is already available, but you can still download Git from [here](https://git-scm.com/downloads).
 
-Si Python está instalado en su sistema, este comando mostrará la versión instalada. Si no está instalado, se mostrará un mensaje de error indicando que 'python' no se reconoce como un comando.
+If Python is installed, this command will display the installed version. If not, you’ll see an error indicating that `'python'` is not recognized as a command.
 
-**Instalación de Python**
+### **Installing Python**
 
-Si Python no está instalado, siga estos pasos para instalarlo en cada OS:
+If Python is not installed, follow these steps based on your operating system:
 
 **![Static Badge](https://img.shields.io/badge/Windows-blue):**
 
-
-Ir al sitio web oficial de Python [aquí](https://www.python.org/downloads/windows/) <br>
-Descargar el instalador adecuado para su sistema operativo. <br>
-Ejecutar el instalador y seguir las instrucciones en pantalla.
+- Go to the official Python website: [https://www.python.org/downloads/windows/](https://www.python.org/downloads/windows/)  
+- Download the appropriate installer for your system  
+- Run the installer and follow the on-screen instructions
 
 **![Static Badge](https://img.shields.io/badge/Mac-black):**
 
-Puede instalar Python usando Homebrew desde la terminal:
+You can install Python using Homebrew from the terminal:
 
-    brew install python o si esto no funciona intente brew install python3
+```bash
+brew install python
+```
 
-o descargando el instalador desde el sitio web oficial de Python [aquí](https://www.python.org/downloads/).
+or, if that fails:
+
+```bash
+brew install python3
+```
+
+Alternatively, download the installer from the official Python website: [https://www.python.org/downloads/](https://www.python.org/downloads/)
 
 **![Static Badge](https://img.shields.io/badge/Linux-purple):**
 
-La mayoría de las distribuciones de Linux ya incluyen Python. Puede instalarlo a través del gestor de paquetes de distribución. Por ejemplo, en Ubuntu y Debian. <br>
-Ejecute en la terminal:
+Most Linux distributions include Python by default. You can install or update it using your distribution’s package manager. For example, on Ubuntu or Debian, run:
 
-    sudo apt-get update
-    sudo apt-get install python3
+```bash
+sudo apt-get update
+sudo apt-get install python3
+```
 
-**Verificar la Instalación de Pytest**
+## **Verifying Pytest Installation**
 
-Para verificar si pytest está instalado, en la terminal, ejecutar:
+To check if pytest is installed, run the following command in your terminal:
 
-    pytest --version
+```bash
+pytest --version
+```
 
-Si pytest está instalado, mostrará la versión instalada. Si no está instalado, se mostrará un mensaje de error indicando que 'pytest' no se reconoce como un comando.
+If pytest is installed, it will display the version number. If not, you’ll get an error indicating that `'pytest'` is not recognized.
 
-Si pytest no está instalado, puede instalarlo usando pip, el gestor de paquetes de Python.
+If pytest is not installed, you can install it using `pip`, Python’s package manager:
 
-    pip install -U pytest
+```bash
+pip install -U pytest
+```
 
-**Ejecutar Pruebas con Pytest**
+## **Running Tests with Pytest**
 
-Una vez que pytest esté instalado, puede ejecutar sus pruebas de la siguiente manera:
+Once pytest is installed, you can run your tests as follows:
 
-    En la terminal, asegúrese que está dentro del directorio donde se están sus pruebas.
-    Ejecute el comando: pytest
+- In your terminal, navigate to the directory containing your test files  
+- Run the command:
 
-Esto ejecutará todas las pruebas en el directorio actual y sus subdirectorios.
+```bash
+pytest
+```
 
-Recuerde que este es un ejemplo general. Los pasos pueden variar dependiendo de su sistema operativo y su configuración particular.
+This will execute all tests in the current directory and its subdirectories.
 
-Esto debería proporcionar una guía clara para verificar la presencia de Python, instalarlo si es necesario, verificar la presencia de pytest y cómo ejecutar pruebas utilizando pytest una vez que esté instalado.
+> **Note:** This is a general guide. Steps may vary slightly depending on your operating system and specific environment configuration.
 
-
-
-
+This should provide a clear, step-by-step reference for verifying Python, installing it if needed, checking for pytest, and running automated tests once everything is set up.
