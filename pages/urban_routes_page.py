@@ -5,8 +5,8 @@ from selenium.webdriver.support import expected_conditions as EC
 class UrbanRoutesPage:
     FROM_FIELD = (By.XPATH, "//input[@id='from']")
     TO_FIELD = (By.XPATH, "//input[@id='to']")
-    REQUEST_TAXI_BUTTON = (By.XPATH, '//*[@id="root"]/div/div[3]/div[3]/div[1]/div[3]/div[1]/button')
-    COMFORT_CATEGORY = (By.XPATH, '//*[@id="root"]/div/div[3]/div[3]/div[2]/div[1]/div[5]/div[2]')
+    REQUEST_TAXI_BUTTON = (By.CLASS_NAME, "button.round")
+    COMFORT_OPTION = (By.XPATH, "//div[contains(text(), 'Comfort')]")
     PHONE_FIELD_LABEL = (By.XPATH, "//div[text()='Número de teléfono']")
     PHONE_INPUT = (By.ID, "phone")
     NEXT_BUTTON = (By.XPATH, "//button[text()='Siguiente']")
@@ -50,7 +50,8 @@ class UrbanRoutesPage:
         to_field.send_keys(address)
 
     def click_request_taxi(self):
-        self.wait.until(EC.element_to_be_clickable(self.REQUEST_TAXI_BUTTON)).click()
+        button = self.wait.until(EC.element_to_be_clickable(self.REQUEST_TAXI_BUTTON))
+        button.click()
 
     def select_comfort_category(self):
         self.wait.until(EC.element_to_be_clickable(self.COMFORT_CATEGORY)).click()
