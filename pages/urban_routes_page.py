@@ -1,7 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
 
 class UrbanRoutesPage:
     FROM_FIELD = (By.ID, "from")
@@ -27,19 +26,17 @@ class UrbanRoutesPage:
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
 
-    def get_page(self, url, timeout=20):  # ⬆️ Aumentado a 20 segundos
+    def get_page(self, url, timeout=20): 
         """Abre la página y espera que cargue completamente"""
         self.driver.get(url)
         try:
-            # Esperar que aparezca el logo-disclaimer
+            # Esperar que aparezca el logo-disclaimer con el nombre PLATFORM
             WebDriverWait(self.driver, timeout).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "logo-disclaimer"))
             )
             print("✅ Página cargada correctamente")
         except Exception as e:
             print(f"⚠️ Error esperando 'logo-disclaimer': {e}")
-            # Intentar con una espera simple como fallback
-            time.sleep(3)
             print(f"📄 Título después de espera: '{self.driver.title}'")
 
     def set_from_address(self, address):
