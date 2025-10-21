@@ -2,7 +2,10 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from pages.urban_routes_page import UrbanRoutesPage
+import data
 
+# Fixture para inicializar y cerrar el driver de Selenium
 @pytest.fixture(scope="function")
 def driver():
     options = webdriver.ChromeOptions()
@@ -30,3 +33,14 @@ def driver():
     driver.implicitly_wait(10)
     yield driver
     driver.quit()
+
+# Fixture para inicializar la página UrbanRoutesPage    
+@pytest.fixture
+def page(driver):
+    return UrbanRoutesPage(driver)
+
+# Fixture para abrir la URL base antes de cada test que lo requiera
+@pytest.fixture
+def page_with_url(page):
+    page.get_page(data.BASE_URL)
+    return page
