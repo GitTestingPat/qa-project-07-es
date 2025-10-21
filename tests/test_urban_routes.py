@@ -37,9 +37,23 @@ def test_02_set_from_address(page_with_url):
     assert valor_real == valor_esperado
 
 # Test 03: Ingresa la dirección de destino en el campo correspondiente y verifica que el valor del campo coincida con la dirección esperada.
-def test_03_set_to_address(page):
-    page.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
-    assert page.is_to_address_set(data.UrbanRoutesData.TO_ADDRESS)
+def test_03_set_to_address(page_with_url):
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+
+    # Leer el valor REAL del campo 'to' usando JavaScript
+    to_field = page_with_url.wait.until(
+        EC.presence_of_element_located(page_with_url.TO_FIELD)
+    )
+    valor_real = page_with_url.driver.execute_script("return arguments[0].value;", to_field)
+    valor_esperado = data.UrbanRoutesData.TO_ADDRESS
+
+    # Mostrar en consola
+    print(f"\n📝 Dirección escrita en el campo 'to': '{valor_real}'")
+    print(f"🎯 Dirección esperada:                 '{valor_esperado}'")
+    print(f"✅ ¿Coinciden? {valor_real == valor_esperado}")
+
+    # Verificar
+    assert valor_real == valor_esperado
 
 
 # Test 04: Hace clic en el botón "Pedir un taxi" y verifica que el texto "Comfort" aparezca en el código fuente de la página.
