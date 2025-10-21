@@ -3,8 +3,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 class UrbanRoutesPage:
-    FROM_FIELD = (By.ID, "from")
-    TO_FIELD = (By.ID, "to")
+    FROM_FIELD = (By.XPATH, "//input[@id='from']")
+    TO_FIELD = (By.XPATH, "//input[@id='to']")
     REQUEST_TAXI_BUTTON = (By.XPATH, '//*[@id="root"]/div/div[3]/div[3]/div[1]/div[3]/div[1]/button')
     COMFORT_CATEGORY = (By.XPATH, '//*[@id="root"]/div/div[3]/div[3]/div[2]/div[1]/div[5]/div[2]')
     PHONE_FIELD_LABEL = (By.XPATH, "//div[text()='Número de teléfono']")
