@@ -2,16 +2,10 @@
 # Debido a las limitaciones del entorno de prueba, algunos pasos (como la obtención del código
 # de verificación) requieren interactuar con las herramientas de desarrollo del navegador (DevTools).
 
-import pytest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from pages.urban_routes_page import UrbanRoutesPage
 import data
-
-@pytest.fixture
-def page(driver):
-    return UrbanRoutesPage(driver)
 
 
 # Test 01: Abre la URL base y verifica que el título de la página contenga "Urban Routes".
@@ -23,10 +17,24 @@ def test_01_urbanroutes_flow(page):
     assert "Urban" in page.driver.title  
 
 # Test 02: Ingresa la dirección de origen en el campo correspondiente y verifica que el valor del campo coincida con la dirección esperada.
-def test_02_set_from_address(page):
-    page.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
-    assert page.is_from_address_set(data.UrbanRoutesData.ADDRESS_FROM)
+def test_02_set_from_address(page_with_url):
+    print(f"\n🔍 Abriendo página para test 02: '{data.BASE_URL}'")
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
 
+    # Lee el valor REAL del campo usando JavaScript
+    from_field = page_with_url.wait.until(
+        EC.presence_of_element_located(page_with_url.FROM_FIELD)
+    )
+    valor_real = page_with_url.driver.execute_script("return arguments[0].value;", from_field)
+    valor_esperado = data.UrbanRoutesData.ADDRESS_FROM
+
+    # Muestra EXACTAMENTE lo que pasó
+    print(f"\n📝 Dirección escrita en el campo 'from': '{valor_real}'")
+    print(f"🎯 Dirección esperada:                '{valor_esperado}'")
+    print(f"✅ ¿Coinciden? {valor_real == valor_esperado}")
+
+    # Verifica que el valor ingresado sea correcto 
+    assert valor_real == valor_esperado
 
 # Test 03: Ingresa la dirección de destino en el campo correspondiente y verifica que el valor del campo coincida con la dirección esperada.
 def test_03_set_to_address(page):
