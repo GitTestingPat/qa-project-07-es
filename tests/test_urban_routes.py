@@ -16,6 +16,7 @@ def test_01_urbanroutes_flow(page):
     print(f"🌐 URL actual: {page.driver.current_url}")
     assert "Urban" in page.driver.title  
 
+
 # Test 02: Ingresa la dirección de origen en el campo correspondiente y verifica que el valor del campo coincida con la dirección esperada.
 def test_02_set_from_address(page_with_url):
     print(f"\n🔍 Abriendo página para test 02: '{data.BASE_URL}'")
@@ -35,6 +36,7 @@ def test_02_set_from_address(page_with_url):
 
     # Verifica que el valor ingresado sea correcto 
     assert valor_real == valor_esperado
+
 
 # Test 03: Ingresa la dirección de destino en el campo correspondiente y verifica que el valor del campo coincida con la dirección esperada.
 def test_03_set_to_address(page_with_url):
@@ -57,9 +59,21 @@ def test_03_set_to_address(page_with_url):
 
 
 # Test 04: Hace clic en el botón "Pedir un taxi" y verifica que el texto "Comfort" aparezca en el código fuente de la página.
-def test_04_click_request_taxi(page):
-    page.click_request_taxi()
-    assert "Comfort" in page.driver.page_source
+def test_04_click_request_taxi(page_with_url):
+    # Precondiciones: llenar origen y destino
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+
+    print("\n🖱️  Haciendo clic en 'Pedir un taxi'...")
+    page_with_url.click_request_taxi()
+
+    # Verificar que aparece "Comfort"
+    comfort_element = page_with_url.wait.until(
+        EC.presence_of_element_located(page_with_url.COMFORT_OPTION)
+    )
+    comfort_text = comfort_element.text
+    print(f"✅ Texto encontrado: '{comfort_text}'")
+    assert "Comfort" in comfort_text
 
 
 # Test 05: Hace clic en la categoría "Comfort" y verifica que el texto "Comfort" esté presente en el código fuente de la página.
