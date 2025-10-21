@@ -40,6 +40,7 @@ def test_02_set_from_address(page_with_url):
 
 # Test 03: Ingresa la dirección de destino en el campo correspondiente y verifica que el valor del campo coincida con la dirección esperada.
 def test_03_set_to_address(page_with_url):
+    print(f"\n🔍 Abriendo página para test 03: '{data.BASE_URL}'")
     page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
 
     # Leer el valor REAL del campo 'to' usando JavaScript
@@ -60,6 +61,7 @@ def test_03_set_to_address(page_with_url):
 
 # Test 04: Hace clic en el botón "Pedir un taxi" y verifica que el texto "Comfort" aparezca en el código fuente de la página.
 def test_04_click_request_taxi(page_with_url):
+    print(f"\n🔍 Abriendo página para test 04: '{data.BASE_URL}'")
     # Precondiciones: llenar origen y destino
     page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
     page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
