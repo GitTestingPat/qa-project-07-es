@@ -55,11 +55,15 @@ class UrbanRoutesPage:
         button.click()
 
     def select_comfort_category(self):
-    # Esperar a que el panel de tarifas aparezca (espera al primer tcard)
+        # Esperar a que el panel de tarifas aparezca (espera al primer tcard)
         self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "tcard")))
-        # Luego hacer clic en Comfort
+        # Hacer clic en Comfort
         comfort = self.wait.until(EC.element_to_be_clickable(self.COMFORT_CATEGORY_BUTTON))
         comfort.click()
+        
+    def get_comfort_element(self):
+        """Devuelve el elemento de Comfort una vez visible."""
+        return self.wait.until(EC.visibility_of_element_located(self.COMFORT_CATEGORY_BUTTON))
 
     def click_phone_field(self):
         self.wait.until(EC.element_to_be_clickable(self.PHONE_FIELD_LABEL)).click()
