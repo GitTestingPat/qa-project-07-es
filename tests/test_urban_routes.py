@@ -78,10 +78,8 @@ def test_04_click_request_taxi(page_with_url):
     assert "Comfort" in comfort_text
 
 
-# Test 05: Hace clic en la categoría "Comfort" y verifica que el texto "Comfort" esté presente en el código fuente de la página.
 def test_05_select_category(page_with_url):
     print(f"\n🔍 Abriendo página para test 04: '{data.BASE_URL}'")
-    # Precondiciones: origen, destino y clic en "Pedir un taxi"
     page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
     page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
     page_with_url.click_request_taxi()
@@ -89,14 +87,10 @@ def test_05_select_category(page_with_url):
     print("\n🛋️  Seleccionando categoría 'Comfort'...")
     page_with_url.select_comfort_category()
 
-    # Verificar que se seleccionó: busca un ícono o texto que aparezca SOLO tras seleccionar
-    # En la app real, al seleccionar Comfort, aparece el campo de "Agregar tarjeta" o el ícono de teléfono
-    # Pero si solo quieres confirmar que "Comfort" está visible:
-    comfort_title = page_with_url.wait.until(
-        EC.visibility_of_element_located((By.XPATH, "//div[contains(@class, 'tcard') and .//div[normalize-space()='Comfort']]"))
-    )
+    # Verificar que el elemento esté visible (usando el MISMO localizador)
+    comfort_element = page_with_url.get_comfort_element()
+    assert comfort_element.is_displayed()
     print("✅ Categoría 'Comfort' visible y seleccionada.")
-    assert comfort_title.is_displayed()
 
 
 # Test 06: Hace clic en el campo que muestra el texto "Número de teléfono" y verifica que ese texto aparezca en el código fuente de la página.
