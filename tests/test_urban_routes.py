@@ -78,6 +78,7 @@ def test_04_click_request_taxi(page_with_url):
     assert "Comfort" in comfort_text
 
 
+# Test 05: Hace clic en la categoría "Comfort" y verifica que el texto "Comfort" esté presente en el código fuente de la página.
 def test_05_select_category(page_with_url):
     print(f"\n🔍 Abriendo página para test 04: '{data.BASE_URL}'")
     page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
