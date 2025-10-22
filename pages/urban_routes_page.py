@@ -7,6 +7,7 @@ class UrbanRoutesPage:
     TO_FIELD = (By.XPATH, "//input[@id='to']")
     REQUEST_TAXI_BUTTON = (By.CLASS_NAME, "button.round")
     COMFORT_OPTION = (By.XPATH, "//div[contains(text(), 'Comfort')]")
+    COMFORT_CATEGORY_BUTTON = (By.XPATH, "//div[@class='tcard-title'][normalize-space()='Comfort']")
     PHONE_FIELD_LABEL = (By.XPATH, "//div[text()='Número de teléfono']")
     PHONE_INPUT = (By.ID, "phone")
     NEXT_BUTTON = (By.XPATH, "//button[text()='Siguiente']")
@@ -54,7 +55,10 @@ class UrbanRoutesPage:
         button.click()
 
     def select_comfort_category(self):
-        self.wait.until(EC.element_to_be_clickable(self.COMFORT_CATEGORY)).click()
+        comfort_button = self.wait.until(
+        EC.element_to_be_clickable(self.COMFORT_CATEGORY_BUTTON)
+        )
+        comfort_button.click()
 
     def click_phone_field(self):
         self.wait.until(EC.element_to_be_clickable(self.PHONE_FIELD_LABEL)).click()
