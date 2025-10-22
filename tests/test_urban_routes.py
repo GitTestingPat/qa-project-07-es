@@ -79,9 +79,23 @@ def test_04_click_request_taxi(page_with_url):
 
 
 # Test 05: Hace clic en la categoría "Comfort" y verifica que el texto "Comfort" esté presente en el código fuente de la página.
-def test_05_select_category(page):
-    page.select_comfort_category()
-    assert data.UrbanRoutesData.SELECT_CATEGORY in page.driver.page_source
+def test_05_select_category(page_with_url):
+    print(f"\n🔍 Abriendo página para test 04: '{data.BASE_URL}'")
+    # Precondiciones: origen, destino y clic en "Pedir un taxi"
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+    page_with_url.click_request_taxi()
+
+    # Seleccionar Comfort
+    print("\n🛋️  Seleccionando categoría 'Comfort'...")
+    page_with_url.select_comfort_category()
+
+    # Verificar que se seleccionó el ícono de Comfort)
+    comfort_selected = page_with_url.wait.until(
+        EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'selected') and contains(., 'Comfort')]"))
+    )
+    print(f"✅ Categoría seleccionada: {comfort_selected.text}")
+    assert "Comfort" in comfort_selected.text
 
 
 # Test 06: Hace clic en el campo que muestra el texto "Número de teléfono" y verifica que ese texto aparezca en el código fuente de la página.
