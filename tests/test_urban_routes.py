@@ -6,7 +6,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import data
-import time
 
 
 # Test 01: Abre la URL base y verifica que el título de la página contenga "Urban Routes".
@@ -106,7 +105,7 @@ def test_06_click_phone_field(page_with_url):
     print("\n🛋️  Seleccionando categoría 'Comfort'...")
     page_with_url.select_comfort_category()
     
-    # # 👇 AÑADIR ESTE PASO DE DIAGNÓSTICO 👇
+    # # 👇 DIAGNÓSTICO DEL DOM 👇
     # print("\n📄 Guardando el código fuente de la página para inspección...")
     # html_source = page_with_url.driver.page_source
     # with open("debug_page_source.html", "w", encoding="utf-8") as f:
