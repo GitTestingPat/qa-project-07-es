@@ -8,8 +8,8 @@ class UrbanRoutesPage:
     REQUEST_TAXI_BUTTON = (By.CLASS_NAME, "button.round")
     COMFORT_OPTION = (By.XPATH, "//div[contains(text(), 'Comfort')]")
     COMFORT_CATEGORY_BUTTON = (By.XPATH, "//div[contains(@class, 'tcard') and .//div[normalize-space()='Comfort']]")
-    PHONE_FIELD_LABEL = (By.XPATH, "//div[text()='Número de teléfono']")
-    PHONE_INPUT = (By.ID, "phone")
+    PHONE_NUMBER_BUTTON = (By.XPATH, "//div[contains(text(), 'Phone number')]")
+    PHONE_LABEL = (By.CSS_SELECTOR, "label[for='phone']")  # El label que está encima 
     NEXT_BUTTON = (By.XPATH, "//button[text()='Siguiente']")
     SMS_CODE_INPUT = (By.ID, "code")
     CONFIRM_BUTTON = (By.XPATH, "//button[text()='Confirmar']")
@@ -62,12 +62,21 @@ class UrbanRoutesPage:
         comfort.click()
         
     def get_comfort_element(self):
-        """Devuelve el elemento de Comfort una vez visible."""
+        # Obtener el elemento de la categoría Comfort
         return self.wait.until(EC.visibility_of_element_located(self.COMFORT_CATEGORY_BUTTON))
 
     def click_phone_field(self):
-        self.wait.until(EC.element_to_be_clickable(self.PHONE_FIELD_LABEL)).click()
-
+        """Abre el modal de teléfono y activa el campo"""
+        # Hacer clic en el div que abre el modal
+        phone_button = self.wait.until(
+            EC.element_to_be_clickable((By.XPATH, "//div[contains(text(), 'Phone number')]"))
+        )
+        phone_button.click()
+        print("✅ Modal abierto y campo de teléfono listo")
+        
+        # Solo esperar que el input sea visible (el modal ya lo activa)
+        self.wait.until(EC.visibility_of_element_located((By.ID, "phone")))
+        
     def enter_phone_number(self, phone):
         phone_input = self.wait.until(EC.presence_of_element_located(self.PHONE_INPUT))
         phone_input.clear()
