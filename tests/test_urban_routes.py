@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import data
+import time
 
 
 # Test 01: Abre la URL base y verifica que el título de la página contenga "Urban Routes".
@@ -95,9 +96,28 @@ def test_05_select_category(page_with_url):
 
 
 # Test 06: Hace clic en el campo que muestra el texto "Número de teléfono" y verifica que ese texto aparezca en el código fuente de la página.
-def test_06_click_phone_field(page):
-    page.click_phone_field()
-    assert "Número de teléfono" in page.driver.page_source
+def test_06_click_phone_field(page_with_url):
+    print(f"\n🔍 Abriendo página para test 04: '{data.BASE_URL}'")
+    print("JS enabled?", page_with_url.driver.execute_script("return true;"))
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+    page_with_url.click_request_taxi()
+
+    print("\n🛋️  Seleccionando categoría 'Comfort'...")
+    page_with_url.select_comfort_category()
+    
+    # # 👇 AÑADIR ESTE PASO DE DIAGNÓSTICO 👇
+    # print("\n📄 Guardando el código fuente de la página para inspección...")
+    # html_source = page_with_url.driver.page_source
+    # with open("debug_page_source.html", "w", encoding="utf-8") as f:
+    #     f.write(html_source)
+    # print("✅ Código fuente guardado en 'debug_page_source.html'. Por favor, ábrelo en un navegador y busca el campo de teléfono.")
+    
+    # Haz clic en el input real de teléfono
+    page_with_url.click_phone_field()
+    print("✅ Campo de teléfono seleccionado.")    
+    # Verificar que el texto "Phone number" está en el código fuente
+    assert "Phone number" in page_with_url.driver.page_source
 
 
 # Test 07: Ingresa el número de teléfono en el campo correspondiente y verifica que el valor del campo coincida con el número esperado.
