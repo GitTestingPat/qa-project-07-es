@@ -7,3 +7,5 @@ __pycache__/*      # Ignora el directorio __pycache
 .vscode/
 env/
 .env
+debug_page_source.html
+debug_phone.png
