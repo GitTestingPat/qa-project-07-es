@@ -143,9 +143,26 @@ def test_07_enter_phone_number(page_with_url):
 
 
 # Test 08: Hace clic en el botón "Siguiente" y verifica que el campo "Introduce el código del SMS" esté visible.
-def test_08_click_next_button(page):
-    page.click_next_button()
-    assert page.driver.find_element(By.ID, "code").is_displayed()
+def test_08_click_next_button(page_with_url):
+    print(f"\n🔍 Abriendo página para test 07: '{data.BASE_URL}'")
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+    page_with_url.click_request_taxi()
+
+    print("\n🛋️  Seleccionando categoría 'Comfort'...")
+    page_with_url.select_comfort_category()
+    
+    # Hacer clic en el campo de teléfono
+    page_with_url.click_phone_field()
+    print("✅ Campo de teléfono seleccionado.")
+    
+    # Ingresar el número de teléfono
+    page_with_url.enter_phone_number(data.UrbanRoutesData.PHONE_NUMBER)
+    print(f"✅ Número de teléfono '{data.UrbanRoutesData.PHONE_NUMBER}' ingresado.")
+    
+    # Hacer clic en el botón "Siguiente"
+    page_with_url.click_next_button()
+    assert page_with_url.driver.find_element(By.ID, "code").is_displayed()
 
 
 # Test 09: Hace clic en la pestaña con texto "Network" y verifica que el elemento esté visible.
