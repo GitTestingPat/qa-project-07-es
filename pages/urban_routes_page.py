@@ -9,7 +9,8 @@ class UrbanRoutesPage:
     COMFORT_OPTION = (By.XPATH, "//div[contains(text(), 'Comfort')]")
     COMFORT_CATEGORY_BUTTON = (By.XPATH, "//div[contains(@class, 'tcard') and .//div[normalize-space()='Comfort']]")
     PHONE_NUMBER_BUTTON = (By.XPATH, "//div[contains(text(), 'Phone number')]")
-    PHONE_LABEL = (By.CSS_SELECTOR, "label[for='phone']")  # El label que está encima 
+    PHONE_LABEL = (By.CSS_SELECTOR, "label[for='phone']")  # La etiqueta que está encima del botón de teléfono
+    PHONE_INPUT = (By.ID, "phone")
     NEXT_BUTTON = (By.XPATH, "//button[text()='Siguiente']")
     SMS_CODE_INPUT = (By.ID, "code")
     CONFIRM_BUTTON = (By.XPATH, "//button[text()='Confirmar']")
@@ -74,10 +75,11 @@ class UrbanRoutesPage:
         phone_button.click()
         print("✅ Modal abierto y campo de teléfono listo")
         
-        # Solo esperar que el input sea visible (el modal ya lo activa)
+        # Esperar que el input sea visible (el modal ya lo activa)
         self.wait.until(EC.visibility_of_element_located((By.ID, "phone")))
         
     def enter_phone_number(self, phone):
+        """Ingresa el número de teléfono en el campo de entrada"""
         phone_input = self.wait.until(EC.presence_of_element_located(self.PHONE_INPUT))
         phone_input.clear()
         phone_input.send_keys(phone)
