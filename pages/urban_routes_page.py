@@ -11,7 +11,7 @@ class UrbanRoutesPage:
     PHONE_NUMBER_BUTTON = (By.XPATH, "//div[contains(text(), 'Phone number')]")
     PHONE_LABEL = (By.CSS_SELECTOR, "label[for='phone']")  # La etiqueta que está encima del botón de teléfono
     PHONE_INPUT = (By.ID, "phone")
-    NEXT_BUTTON = (By.XPATH, "//button[text()='Siguiente']")
+    NEXT_BUTTON = (By.CSS_SELECTOR, "form button.button.full")
     SMS_CODE_INPUT = (By.ID, "code")
     CONFIRM_BUTTON = (By.XPATH, "//button[text()='Confirmar']")
     PAYMENT_ARROW = (By.XPATH, "//img[@alt='Arrow right']")
