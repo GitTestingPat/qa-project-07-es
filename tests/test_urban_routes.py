@@ -1,7 +1,7 @@
 # Este archivo contiene pruebas que simulan el flujo completo de usuario en Urban Routes.
 # Debido a las limitaciones del entorno de prueba, algunos pasos (como la obtención del código
 # de verificación) requieren interactuar con las herramientas de desarrollo del navegador (DevTools).
-
+import pytest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -164,12 +164,42 @@ def test_08_click_next_button(page_with_url):
     page_with_url.click_next_button()
     assert page_with_url.driver.find_element(By.ID, "code").is_displayed()
 
+# Test 09: Captura el código SMS desde la red, lo ingresa y verifica que el código se haya ingresado correctamente.
+def test_09_click_next_button(page_with_url):
+    print(f"\n🔍 Abriendo página para test 08: '{data.BASE_URL}'")
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+    page_with_url.click_request_taxi()
 
-# Test 09: Hace clic en la pestaña con texto "Network" y verifica que el elemento esté visible.
-def test_09_select_tab(driver):
-    network_tab = driver.find_element(By.XPATH, "//div[@class='tab'][text()='Network']")
-    network_tab.click()
-    assert network_tab.is_displayed()
+    print("\n🛋️  Seleccionando categoría 'Comfort'...")
+    page_with_url.select_comfort_category()
+    
+    # Hacer clic en el campo de teléfono
+    page_with_url.click_phone_field()
+    print("✅ Campo de teléfono seleccionado.")
+    
+    # Ingresar el número de teléfono
+    phone_number = data.UrbanRoutesData.PHONE_NUMBER
+    page_with_url.enter_phone_number(phone_number)
+    print(f"✅ Número de teléfono '{phone_number}' ingresado.")
+    
+    # Hacer clic en el botón "Siguiente"
+    page_with_url.click_next_button()
+    
+    # Verificar que el campo de código esté visible
+    assert page_with_url.driver.find_element(By.ID, "code").is_displayed()
+    print("✅ Campo 'Introduce el código del SMS' está visible.")
+
+    # Capturar y usar el código de verificación
+    try:
+        sms_code = page_with_url.get_sms_code_from_network(phone_number)
+        page_with_url.enter_sms_code(sms_code)
+        # 🔍 DEBUGGING: Ver todos los botones
+        #page_with_url.debug_buttons_in_modal()
+        page_with_url.click_confirm_button()
+        print("✅ Código SMS verificado exitosamente.")
+    except Exception as e:
+        pytest.fail(f"❌ Error al capturar o ingresar el código SMS: {e}")
 
 
 # Test 10: Espera hasta que aparezcan elementos con XPath "//div[@class='name']/div" y verifica que haya al menos uno.
