@@ -18,7 +18,10 @@ class UrbanRoutesPage:
     CONFIRM_BUTTON = (By.XPATH, "//button[@class='button full' and @type='submit' and contains(text(), 'Confirm')]")
     RESEND_CODE_BUTTON = (By.XPATH, "//button[contains(text(), 'Vuelve a enviar el código')]")
 
-    PAYMENT_ARROW = (By.XPATH, "//img[@alt='Arrow right']")
+    # Localizador para el botón Método de pago
+    PAYMENT_METHOD_BUTTON = (By.XPATH, "//div[@class='pp-button filled']")  
+
+    
     ADD_CARD_BUTTON = (By.XPATH, "//div[text()='Agregar una tarjeta']")
     CARD_NUMBER_INPUT = (By.ID, "number")
     CARD_CODE_INPUT = (By.ID, "code")
@@ -31,6 +34,7 @@ class UrbanRoutesPage:
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(driver, 15)
+
 
     def get_page(self, url, timeout=20): 
         """Abre la página y espera que cargue completamente"""
@@ -45,19 +49,23 @@ class UrbanRoutesPage:
             print(f"⚠️ Error esperando 'logo-disclaimer': {e}")
             print(f"📄 Título después de espera: '{self.driver.title}'")
 
+
     def set_from_address(self, address):
         from_field = self.wait.until(EC.presence_of_element_located(self.FROM_FIELD))
         from_field.clear()
         from_field.send_keys(address)
+
 
     def set_to_address(self, address):
         to_field = self.wait.until(EC.presence_of_element_located(self.TO_FIELD))
         to_field.clear()
         to_field.send_keys(address)
 
+
     def click_request_taxi(self):
         button = self.wait.until(EC.element_to_be_clickable(self.REQUEST_TAXI_BUTTON))
         button.click()
+
 
     def select_comfort_category(self):
         # Esperar a que el panel de tarifas aparezca (espera al primer tcard)
@@ -65,10 +73,12 @@ class UrbanRoutesPage:
         # Hacer clic en Comfort
         comfort = self.wait.until(EC.element_to_be_clickable(self.COMFORT_CATEGORY_BUTTON))
         comfort.click()
+
         
     def get_comfort_element(self):
         # Obtener el elemento de la categoría Comfort
         return self.wait.until(EC.visibility_of_element_located(self.COMFORT_CATEGORY_BUTTON))
+
 
     def click_phone_field(self):
         """Abre el modal de teléfono y activa el campo"""
@@ -81,6 +91,7 @@ class UrbanRoutesPage:
         
         # Esperar que el input sea visible (el modal ya lo activa)
         self.wait.until(EC.visibility_of_element_located((By.ID, "phone")))
+
         
     def enter_phone_number(self, phone):
         """Ingresa el número de teléfono en el campo de entrada"""
@@ -88,8 +99,10 @@ class UrbanRoutesPage:
         phone_input.clear()
         phone_input.send_keys(phone)
 
+
     def click_next_button(self):
         self.wait.until(EC.element_to_be_clickable(self.NEXT_BUTTON)).click()
+
 
     # Método para ingresar el código de verificación
     def enter_sms_code(self, code):
@@ -102,6 +115,7 @@ class UrbanRoutesPage:
         self.driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", input_field)
     
         print(f"✅ Código de SMS '{code}' ingresado.")
+
 
     # Método para hacer clic en Confirmar
     def click_confirm_button(self):
@@ -120,6 +134,7 @@ class UrbanRoutesPage:
             button = self.driver.find_element(By.XPATH, "//button[text()='Confirm']")
             self.driver.execute_script("arguments[0].click();", button)
             print("✅ Botón 'Confirm' clickeado con JavaScript.")
+
 
     # Método para esperar que el modal esté visible
     def wait_for_sms_modal(self):
@@ -177,8 +192,34 @@ class UrbanRoutesPage:
                 continue
         raise Exception("❌ No se encontró el código SMS en las respuestas de red.")
 
-    def click_payment_arrow(self):
-        self.wait.until(EC.element_to_be_clickable(self.PAYMENT_ARROW)).click()
+
+    # Método para hacer clic en el botón Método de pago
+    def click_payment_method_button(self):
+        button = self.wait.until(
+            EC.element_to_be_clickable(self.PAYMENT_METHOD_BUTTON)
+        )
+        button.click()
+        print("✅ Botón 'Método de pago' clickeado.")
+    
+    
+    # Método para verificar si el botón Método de pago está visible    
+    def is_payment_method_button_visible(self):
+        try:
+            button = self.wait.until(
+                EC.visibility_of_element_located(self.PAYMENT_METHOD_BUTTON)
+            )
+            is_visible = button.is_displayed()
+            if is_visible:
+                print("✅ Botón 'Método de pago' está visible.")
+            return is_visible
+        except Exception as e:
+            print(f"❌ Botón 'Método de pago' NO está visible: {e}")
+            return False
+    
+    
+    
+    
+    
 
     def click_add_card(self):
         self.wait.until(EC.element_to_be_clickable(self.ADD_CARD_BUTTON)).click()
