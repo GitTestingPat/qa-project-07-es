@@ -10,7 +10,7 @@ import data
 
 # Test 01: Abre la URL base y verifica que el título de la página contenga "Urban Routes".
 def test_01_urbanroutes_flow(page):
-    print(f"\n🔍 Intentando abrir: '{data.BASE_URL}'")
+    print(f"\n🔍 Abriendo página para test 01: '{data.BASE_URL}'")
     page.get_page(data.BASE_URL)
     print(f"📄 Título real: '{page.driver.title}'")
     print(f"🌐 URL actual: {page.driver.current_url}")
@@ -144,7 +144,7 @@ def test_07_enter_phone_number(page_with_url):
 
 # Test 08: Hace clic en el botón "Siguiente" y verifica que el campo "Introduce el código del SMS" esté visible.
 def test_08_click_next_button(page_with_url):
-    print(f"\n🔍 Abriendo página para test 07: '{data.BASE_URL}'")
+    print(f"\n🔍 Abriendo página para test 08: '{data.BASE_URL}'")
     page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
     page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
     page_with_url.click_request_taxi()
@@ -164,9 +164,10 @@ def test_08_click_next_button(page_with_url):
     page_with_url.click_next_button()
     assert page_with_url.driver.find_element(By.ID, "code").is_displayed()
 
+
 # Test 09: Captura el código SMS desde la red, lo ingresa y verifica que el código se haya ingresado correctamente.
 def test_09_click_next_button(page_with_url):
-    print(f"\n🔍 Abriendo página para test 08: '{data.BASE_URL}'")
+    print(f"\n🔍 Abriendo página para test 09: '{data.BASE_URL}'")
     page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
     page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
     page_with_url.click_request_taxi()
@@ -202,51 +203,43 @@ def test_09_click_next_button(page_with_url):
         pytest.fail(f"❌ Error al capturar o ingresar el código SMS: {e}")
 
 
-# Test 10: Espera hasta que aparezcan elementos con XPath "//div[@class='name']/div" y verifica que haya al menos uno.
-def test_010_wait_for_network_tab(driver):
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_all_elements_located((By.XPATH, "//div[@class='name']/div"))
-    )
-    assert len(driver.find_elements(By.XPATH, "//div[@class='name']/div")) > 0
-
-
-# Test 11: Obtiene todos los elementos con XPath "//div[@class='name']/div", hace clic en el último y verifica que esté visible.
-def test_011_select_last_network_link(driver):
-    network_links = driver.find_elements(By.XPATH, "//div[@class='name']/div")
-    last_link = network_links[-1]
-    last_link.click()
-    assert last_link.is_displayed()
-
-
-# Test 12: Espera hasta que aparezca un elemento con XPath "//div[@class='preview']/div" y verifica que esté visible.
-def test_012_wait_for_preview_code(driver):
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//div[@class='preview']/div"))
-    )
-    assert driver.find_element(By.XPATH, "//div[@class='preview']/div").is_displayed()
-
-
-# Test 13: Localiza el elemento que contiene el código de verificación y verifica que su texto no esté vacío.
-def test_013_copy_number(driver):
-    code_element = driver.find_element(By.XPATH, "//div[@class='preview']/div")
-    verification_code = code_element.text
-    assert verification_code != ""
-
-
-# Test 14: Ingresa el código de verificación definido en los datos de prueba en el campo de código SMS y verifica que el valor del campo coincida.
-def test_014_enter_number(page):
-    verification_code = data.UrbanRoutesData.VERIFICATION_CODE
-    sms_input = page.driver.find_element(By.ID, "code")
-    sms_input.clear()
-    sms_input.send_keys(verification_code)
-    assert sms_input.get_attribute("value") == verification_code
-
-
-# Test 15: Hace clic en el botón "Confirmar" y verifica que el botón esté visible.
-def test_015_select_button(page):
-    confirm_button = page.driver.find_element(By.XPATH, "//button[text()='Confirmar']")
-    confirm_button.click()
-    assert confirm_button.is_displayed()
+# Test 10: Hace clic en el botón Método de pago y verifica que el botón esté visible.
+def test_10_click_payment_method_button(page_with_url):
+    print(f"\n🔍 Abriendo página para test 10: '{data.BASE_URL}'")
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+    page_with_url.click_request_taxi()
+    
+    print("\n🛋️  Seleccionando categoría 'Comfort'...")
+    page_with_url.select_comfort_category()
+    
+    # Ingresar número de teléfono
+    page_with_url.click_phone_field()
+    print("✅ Campo de teléfono seleccionado.")
+    
+    phone_number = data.UrbanRoutesData.PHONE_NUMBER
+    page_with_url.enter_phone_number(phone_number)
+    print(f"✅ Número de teléfono '{phone_number}' ingresado.")
+    
+    # Confirmar código SMS
+    page_with_url.click_next_button()
+    assert page_with_url.driver.find_element(By.ID, "code").is_displayed()
+    print("✅ Campo 'Introduce el código del SMS' está visible.")
+    
+    try:
+        sms_code = page_with_url.get_sms_code_from_network(phone_number)
+        page_with_url.enter_sms_code(sms_code)
+        page_with_url.click_confirm_button()
+        print("✅ Código SMS verificado exitosamente.")
+    except Exception as e:
+        pytest.fail(f"❌ Error al capturar o ingresar el código SMS: {e}")
+    
+    # Test 10: Verificar y hacer clic en Método de pago
+    print("\n💳 Verificando botón 'Método de pago'...")
+    assert page_with_url.is_payment_method_button_visible()
+    page_with_url.click_payment_method_button()
+    
+    print("✅ Test 10 completado exitosamente.")
 
 
 # Test 16: Hace clic en la flecha de pago (imagen con alt="Arrow right") y verifica que la imagen esté visible.
