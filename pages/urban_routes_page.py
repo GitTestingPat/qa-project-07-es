@@ -176,32 +176,6 @@ class UrbanRoutesPage:
                 # Ignorar logs malformados o no relevantes
                 continue
         raise Exception("❌ No se encontró el código SMS en las respuestas de red.")
-    
-    def debug_buttons_in_modal(self):
-        """Método temporal para debugging - muestra todos los botones en el modal"""
-        import time
-        time.sleep(2)  # Esperar que el modal esté completamente cargado
-        
-        # Buscar todos los botones
-        buttons = self.driver.find_elements(By.TAG_NAME, "button")
-        
-        print(f"\n🔍 Se encontraron {len(buttons)} botones en la página:")
-        for i, button in enumerate(buttons):
-            try:
-                text = button.text
-                classes = button.get_attribute("class")
-                btn_type = button.get_attribute("type")
-                is_displayed = button.is_displayed()
-                is_enabled = button.is_enabled()
-                
-                print(f"\nBotón {i+1}:")
-                print(f"  - Texto: '{text}'")
-                print(f"  - Clases: '{classes}'")
-                print(f"  - Type: '{btn_type}'")
-                print(f"  - Visible: {is_displayed}")
-                print(f"  - Habilitado: {is_enabled}")
-            except Exception as e:
-                print(f"  - Error al leer botón {i+1}: {e}")
 
     def click_payment_arrow(self):
         self.wait.until(EC.element_to_be_clickable(self.PAYMENT_ARROW)).click()
