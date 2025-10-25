@@ -28,8 +28,14 @@ def driver():
     options.add_argument("--disable-background-networking")
     options.add_argument("--disable-background-timer-throttling")
     options.add_argument("--disable-renderer-backgrounding")
+    # Habilitar el registro de red para CDP
+    options.set_capability("goog:loggingPrefs", {"performance": "ALL"})
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=options)
+    
+    # Habilitar la red en CDP
+    driver.execute_cdp_cmd("Network.enable", {})
+    
     driver.implicitly_wait(10)
     yield driver
     driver.quit()
@@ -43,4 +49,10 @@ def page(driver):
 @pytest.fixture
 def page_with_url(page):
     page.get_page(data.BASE_URL)
+    return page
+
+@pytest.fixture
+def page_with_url_and_cdp(driver, data):
+    driver.get(data.BASE_URL)
+    page = UrbanRoutesPage(driver)
     return page
