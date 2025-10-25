@@ -1,6 +1,8 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import json
+import time
 
 class UrbanRoutesPage:
     FROM_FIELD = (By.XPATH, "//input[@id='from']")
@@ -13,7 +15,9 @@ class UrbanRoutesPage:
     PHONE_INPUT = (By.ID, "phone")
     NEXT_BUTTON = (By.CSS_SELECTOR, "form button.button.full")
     SMS_CODE_INPUT = (By.ID, "code")
-    CONFIRM_BUTTON = (By.XPATH, "//button[text()='Confirmar']")
+    CONFIRM_BUTTON = (By.XPATH, "//button[@class='button full' and @type='submit' and contains(text(), 'Confirm')]")
+    RESEND_CODE_BUTTON = (By.XPATH, "//button[contains(text(), 'Vuelve a enviar el código')]")
+
     PAYMENT_ARROW = (By.XPATH, "//img[@alt='Arrow right']")
     ADD_CARD_BUTTON = (By.XPATH, "//div[text()='Agregar una tarjeta']")
     CARD_NUMBER_INPUT = (By.ID, "number")
@@ -26,7 +30,7 @@ class UrbanRoutesPage:
 
     def __init__(self, driver):
         self.driver = driver
-        self.wait = WebDriverWait(driver, 10)
+        self.wait = WebDriverWait(driver, 15)
 
     def get_page(self, url, timeout=20): 
         """Abre la página y espera que cargue completamente"""
@@ -87,13 +91,117 @@ class UrbanRoutesPage:
     def click_next_button(self):
         self.wait.until(EC.element_to_be_clickable(self.NEXT_BUTTON)).click()
 
-    def enter_verification_code(self, code):
-        sms_input = self.wait.until(EC.presence_of_element_located(self.SMS_CODE_INPUT))
-        sms_input.clear()
-        sms_input.send_keys(code)
+    # Método para ingresar el código de verificación
+    def enter_sms_code(self, code):
+        input_field = self.wait.until(EC.visibility_of_element_located(self.SMS_CODE_INPUT))
+        input_field.clear()
+        input_field.send_keys(code)
+        
+        # Dispara eventos manualmente si la app lo requiere
+        self.driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", input_field)
+        self.driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", input_field)
+    
+        print(f"✅ Código de SMS '{code}' ingresado.")
 
+    # Método para hacer clic en Confirmar
     def click_confirm_button(self):
-        self.wait.until(EC.element_to_be_clickable(self.CONFIRM_BUTTON)).click()
+        from selenium.webdriver.support.ui import WebDriverWait
+        
+        # El botón ya está habilitado, solo necesitamos encontrarlo y hacer clic
+        try:
+            button = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[text()='Confirm']"))
+            )
+            button.click()
+            print("✅ Botón 'Confirm' clickeado.")
+        except Exception as e:
+            print(f"⚠️ Error al hacer clic en 'Confirm': {e}")
+            # Intentar con JavaScript como respaldo
+            button = self.driver.find_element(By.XPATH, "//button[text()='Confirm']")
+            self.driver.execute_script("arguments[0].click();", button)
+            print("✅ Botón 'Confirm' clickeado con JavaScript.")
+
+    # Método para esperar que el modal esté visible
+    def wait_for_sms_modal(self):
+        self.wait.until(EC.visibility_of_element_located(self.SMS_CODE_INPUT))
+        print("✅ Modal de SMS visible.")
+        
+    
+    # Método para interceptar la respuesta de red y obtener el código SMS
+    def get_sms_code_from_network(self, phone_number):
+        """
+        Intercepta la respuesta de red que contiene el código SMS.
+        Busca una solicitud GET que contenga el número de teléfono y devuelva un JSON con "code".
+        """
+        print("🔍 Buscando código SMS en la red...")
+        
+        # Espera para asegurar que la solicitud se haya completado
+        time.sleep(3)  # 
+
+        logs = self.driver.get_log("performance")
+        
+        for log in logs:
+            try:
+                message = json.loads(log["message"])
+                method = message.get("message", {}).get("method")
+                params = message.get("message", {}).get("params", {})
+                
+                if method == "Network.responseReceived":
+                    # Verifica que 'response' exista en params
+                    if "response" not in params:
+                        continue
+                    
+                    response = params["response"]
+                    url = response.get("url", "")
+                    
+                    # Normaliza el número para coincidir con la URL (puede estar codificado)
+                    normalized_phone = phone_number.replace("+", "%2B")  # Codificación URL del '+'
+                    
+                    if normalized_phone in url or phone_number in url:
+                        request_id = params.get("requestId")
+                        if not request_id:
+                            continue
+                        
+                        try:
+                            body = self.driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": request_id})
+                            data = json.loads(body["body"])
+                            if "code" in data:
+                                code = str(data["code"])
+                                print(f"✅ Código SMS capturado: {code}")
+                                return code
+                        except Exception as e:
+                            print(f"⚠️ No se pudo extraer el cuerpo de la respuesta: {e}")
+                            continue
+            except Exception:
+                # Ignorar logs malformados o no relevantes
+                continue
+        raise Exception("❌ No se encontró el código SMS en las respuestas de red.")
+    
+    def debug_buttons_in_modal(self):
+        """Método temporal para debugging - muestra todos los botones en el modal"""
+        import time
+        time.sleep(2)  # Esperar que el modal esté completamente cargado
+        
+        # Buscar todos los botones
+        buttons = self.driver.find_elements(By.TAG_NAME, "button")
+        
+        print(f"\n🔍 Se encontraron {len(buttons)} botones en la página:")
+        for i, button in enumerate(buttons):
+            try:
+                text = button.text
+                classes = button.get_attribute("class")
+                btn_type = button.get_attribute("type")
+                is_displayed = button.is_displayed()
+                is_enabled = button.is_enabled()
+                
+                print(f"\nBotón {i+1}:")
+                print(f"  - Texto: '{text}'")
+                print(f"  - Clases: '{classes}'")
+                print(f"  - Type: '{btn_type}'")
+                print(f"  - Visible: {is_displayed}")
+                print(f"  - Habilitado: {is_enabled}")
+            except Exception as e:
+                print(f"  - Error al leer botón {i+1}: {e}")
 
     def click_payment_arrow(self):
         self.wait.until(EC.element_to_be_clickable(self.PAYMENT_ARROW)).click()
