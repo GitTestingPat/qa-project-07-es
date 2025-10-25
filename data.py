@@ -1,4 +1,4 @@
-BASE_URL = "https://cnt-28df270e-3711-40ea-9c37-44a81d0f2671.containerhub.tripleten-services.com/".strip()
+BASE_URL = "https://cnt-5dd107b7-1d31-4c0b-b931-fdce283d12be.containerhub.tripleten-services.com/".strip()
 class UrbanRoutesData:
     ADDRESS_FROM = "East 2nd Street, 601"
     TO_ADDRESS = "1300 1st St"
