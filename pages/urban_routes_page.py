@@ -21,8 +21,10 @@ class UrbanRoutesPage:
     # Localizador para el botón Método de pago
     PAYMENT_METHOD_BUTTON = (By.XPATH, "//div[@class='pp-button filled']")  
 
+    # Localizador para Agregar tarjeta
+    # Localizador para Agregar tarjeta (en inglés)
+    ADD_CARD_BUTTON = (By.XPATH, "//div[@class='pp-title' and text()='Add a card']")
     
-    ADD_CARD_BUTTON = (By.XPATH, "//div[text()='Agregar una tarjeta']")
     CARD_NUMBER_INPUT = (By.ID, "number")
     CARD_CODE_INPUT = (By.ID, "code")
     COMMENT_INPUT = (By.ID, "comment")
@@ -35,7 +37,41 @@ class UrbanRoutesPage:
         self.driver = driver
         self.wait = WebDriverWait(driver, 15)
 
-
+    # def debug_add_card_elements(self):
+    #     """Método temporal para debugging - muestra elementos con 'tarjeta' o 'card'"""
+    #     import time
+    #     time.sleep(2)
+        
+    #     # Buscar por clase pp-title
+    #     titles = self.driver.find_elements(By.CLASS_NAME, "pp-title")
+    #     print(f"\n🔍 Elementos con clase 'pp-title': {len(titles)}")
+    #     for i, title in enumerate(titles):
+    #         try:
+    #             text = title.text
+    #             classes = title.get_attribute("class")
+    #             is_displayed = title.is_displayed()
+    #             print(f"\nElemento {i+1}:")
+    #             print(f"  - Texto: '{text}'")
+    #             print(f"  - Clases: '{classes}'")
+    #             print(f"  - Visible: {is_displayed}")
+    #         except Exception as e:
+    #             print(f"  - Error: {e}")
+        
+    #     # Buscar todos los divs visibles
+    #     divs = self.driver.find_elements(By.TAG_NAME, "div")
+    #     print(f"\n🔍 Buscando divs con 'tarjeta' o 'card' en el texto...")
+    #     for div in divs:
+    #         try:
+    #             text = div.text
+    #             if 'tarjeta' in text.lower() or 'card' in text.lower():
+    #                 classes = div.get_attribute("class")
+    #                 is_displayed = div.is_displayed()
+    #                 if is_displayed:
+    #                     print(f"\n  - Texto: '{text}'")
+    #                     print(f"  - Clases: '{classes}'")
+    #         except Exception:
+    #             pass
+        
     def get_page(self, url, timeout=20): 
         """Abre la página y espera que cargue completamente"""
         self.driver.get(url)
@@ -215,14 +251,32 @@ class UrbanRoutesPage:
         except Exception as e:
             print(f"❌ Botón 'Método de pago' NO está visible: {e}")
             return False
-    
-    
-    
-    
-    
 
-    def click_add_card(self):
-        self.wait.until(EC.element_to_be_clickable(self.ADD_CARD_BUTTON)).click()
+    # Método para hacer click en el botón Agregar tarjeta
+    def click_add_card_button(self):
+        """Hace clic en el botón 'Agregar tarjeta'"""
+        button = self.wait.until(
+            EC.element_to_be_clickable(self.ADD_CARD_BUTTON)
+        )
+        button.click()
+        print("✅ Botón 'Agregar tarjeta' clickeado.")
+
+
+    # Método para verificar que "Agregar tarjeta" esté visible
+    def is_add_card_button_visible(self):
+        """Verifica que el botón 'Agregar tarjeta' esté visible"""
+        try:
+            button = self.wait.until(
+                EC.visibility_of_element_located(self.ADD_CARD_BUTTON)
+            )
+            is_visible = button.is_displayed()
+            if is_visible:
+                print("✅ Botón 'Agregar tarjeta' está visible.")
+            return is_visible
+        except Exception as e:
+            print(f"❌ Botón 'Agregar tarjeta' NO está visible: {e}")
+            return False
+
 
     def enter_card_number(self, number):
         card_num = self.wait.until(EC.presence_of_element_located(self.CARD_NUMBER_INPUT))
