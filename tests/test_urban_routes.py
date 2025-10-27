@@ -9,12 +9,12 @@ import data
 
 
 # Test 01: Abre la URL base y verifica que el título de la página contenga "Urban Routes".
-def test_01_urbanroutes_flow(page):
+def test_01_urbanroutes_flow(page_with_url):
     print(f"\n🔍 Abriendo página para test 01: '{data.BASE_URL}'")
-    page.get_page(data.BASE_URL)
-    print(f"📄 Título real: '{page.driver.title}'")
-    print(f"🌐 URL actual: {page.driver.current_url}")
-    assert "Urban" in page.driver.title  
+    page_with_url.get_page(data.BASE_URL)
+    print(f"📄 Título real: '{page_with_url.driver.title}'")
+    print(f"🌐 URL actual: {page_with_url.driver.current_url}")
+    assert "Urban" in page_with_url.driver.title  
 
 
 # Test 02: Ingresa la dirección de origen en el campo correspondiente y verifica que el valor del campo coincida con la dirección esperada.
@@ -242,89 +242,132 @@ def test_10_click_payment_method_button(page_with_url):
     print("✅ Test 10 completado exitosamente.")
 
 
-# Test 16: Hace clic en la flecha de pago (imagen con alt="Arrow right") y verifica que la imagen esté visible.
-def test_016_select_arrow(page):
-    payment_arrow = page.driver.find_element(By.XPATH, "//img[@alt='Arrow right']")
-    payment_arrow.click()
-    assert payment_arrow.is_displayed()
+# Test 11: Hace clic en el elemento "Agregar tarjeta" y verifica que esté visible.
+def test_11_click_add_card_button(page_with_url):
+    print(f"\n🔍 Abriendo página para test 11: '{data.BASE_URL}'")
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+    page_with_url.click_request_taxi()
+    
+    print("\n🛋️  Seleccionando categoría 'Comfort'...")
+    page_with_url.select_comfort_category()
+    
+    page_with_url.click_phone_field()
+    print("✅ Campo de teléfono seleccionado.")
+    
+    phone_number = data.UrbanRoutesData.PHONE_NUMBER
+    page_with_url.enter_phone_number(phone_number)
+    print(f"✅ Número de teléfono '{phone_number}' ingresado.")
+    
+    page_with_url.click_next_button()
+    assert page_with_url.driver.find_element(By.ID, "code").is_displayed()
+    print("✅ Campo 'Introduce el código del SMS' está visible.")
+    
+    # Confirmar SMS
+    try:
+        sms_code = page_with_url.get_sms_code_from_network(phone_number)
+        page_with_url.enter_sms_code(sms_code)
+        page_with_url.click_confirm_button()
+        print("✅ Código SMS verificado exitosamente.")
+    except Exception as e:
+        pytest.fail(f"❌ Error al capturar o ingresar el código SMS: {e}")
+    
+    # Hacer clic en Método de pago
+    page_with_url.click_payment_method_button()
+    print("✅ Botón 'Método de pago' clickeado.")
+    
+    # 🔍 DEBUGGING: Ver elementos disponibles
+    # page_with_url.debug_add_card_elements()
+    
+    # Test 11: Verificar y hacer clic en Agregar tarjeta
+    print("\n💳 Verificando botón 'Agregar tarjeta'...")
+    assert page_with_url.is_add_card_button_visible()
+    page_with_url.click_add_card_button()
+    
+    print("✅ Test 11 completado exitosamente.")
 
 
-# Test 17: Hace clic en el elemento con texto "Agregar una tarjeta" y verifica que esté visible.
-def test_017_add_card(page):
-    add_card = page.driver.find_element(By.XPATH, "//div[text()='Agregar una tarjeta']")
-    add_card.click()
-    assert add_card.is_displayed()
-
-
-# Test 18: Ingresa el número de tarjeta en el campo correspondiente y verifica que el valor del campo coincida con el número esperado.
-def test_018_enter_number(page):
+# Test 12: Ingresa el número de tarjeta en el campo correspondiente y verifica que el valor del campo coincida con el número esperado.
+def test_012_enter_number(page):
     card_number_input = page.driver.find_element(By.ID, "number")
     card_number_input.clear()
     card_number_input.send_keys(data.UrbanRoutesData.CARD_NUMBER)
     assert card_number_input.get_attribute("value") == data.UrbanRoutesData.CARD_NUMBER
 
 
-# Test 19: Ingresa el código de verificación en el campo de código de tarjeta y verifica que el valor del campo coincida con el código esperado.
-def test_019_enter_code(page):
+# Test 13: Ingresa el código de verificación en el campo de código de tarjeta y verifica que el valor del campo coincida con el código esperado.
+def test_013_enter_code(page):
     code_input = page.driver.find_element(By.ID, "code")
     code_input.clear()
     code_input.send_keys(data.UrbanRoutesData.VERIFICATION_CODE)
     assert code_input.get_attribute("value") == data.UrbanRoutesData.VERIFICATION_CODE
 
 
-# Test 20: Hace clic en el elemento con clase "overlay" y verifica que esté habilitado.
-def test_020_select_overlay(driver):
-    overlay = driver.find_element(By.CLASS_NAME, "overlay")
-    overlay.click()
-    assert overlay.is_enabled()
+# Test 14: Hace clic en el botón Agregar.
+def test_014_click_add(driver):
+    add_button = driver.find_element(By.XPATH, "//button[text()='Agregar']")
+    add_button.click()
+    assert add_button.is_enabled()
 
 
-# Test 21: Hace clic en el botón con texto "Enlace" y verifica que el botón esté visible.
-def test_021_select_link(driver):
-    link_button = driver.find_element(By.XPATH, "//button[text()='Enlace']")
-    link_button.click()
-    assert link_button.is_displayed()
-
-
-# Test 22: Hace clic en el botón con clase "close-button" y verifica que el botón esté visible.
-def test_022_select_close_button(driver):
-    close_button = driver.find_element(By.CLASS_NAME, "close-button")
+# Test 15: Hace clic en el botón cerrar modal (x).
+def test_015_click_close_modal(driver):
+    close_button = driver.find_element(By.XPATH, "//button[contains(@class, 'close-button')]")
     close_button.click()
     assert close_button.is_displayed()
 
 
-# Test 23: Ingresa un mensaje para el conductor en el campo de comentario y verifica que el valor del campo coincida con el mensaje esperado.
-def test_023_add_text(page):
-    comment_input = page.driver.find_element(By.ID, "comment")
-    comment_input.clear()
-    comment_input.send_keys(data.UrbanRoutesData.MESSAGE_FOR_DRIVER)
-    assert comment_input.get_attribute("value") == data.UrbanRoutesData.MESSAGE_FOR_DRIVER
+# Test 16: Agregar mensaje para el conductor y verifica que el campo "Mensaje para el conductor" esté visible.
+def test_016_add_driver_message(driver):
+    driver_message_input = driver.find_element(By.ID, "comment")
+    driver_message_input.click()
+    assert driver_message_input.is_displayed()
 
 
-# Test 24: Hace clic en el control deslizante de mantas (elemento con clase "slider") y verifica que el elemento esté seleccionado.
-def test_024_select_blankets(page):
-    blankets_button = page.driver.find_element(By.CLASS_NAME, "slider")
+# Test 17: Hace clic en el campo "Requisitos del Pedido" y verifica que esté visible.
+def test_017_select_order_requirements(page):
+    order_requirements_field = page.driver.find_element(By.ID, "order-requirements")
+    order_requirements_field.click()
+    assert order_requirements_field.is_displayed()
+
+
+# Test 18: Hace clic en el botón seleccionar "Manta y Pañuelos" y verifica que el botón esté visible..
+def test_018_add_blankets_and_tissues(driver):
+    blankets_button = driver.find_element(By.CLASS_NAME, "counter-plus")
     blankets_button.click()
-    assert blankets_button.is_selected()
+    blankets_button.click()
 
 
-# Test 25: Hace clic dos veces en el botón para agregar helados (elemento con clase "counter-plus").
-def test_025_add_ice_creams(driver):
-    ice_cream_button = driver.find_element(By.CLASS_NAME, "counter-plus")
-    ice_cream_button.click()
-    ice_cream_button.click()
+# Test 19: Hace clic en el botón seleccionar "Cortina Acústica" y verifica que el botón esté visible.
+def test_019_order_acoustic_curtain(driver):
+    order_acoustic_curtain_button = driver.find_element(By.CLASS_NAME, "smart-button-main")
+    order_acoustic_curtain_button.click()
+    assert order_acoustic_curtain_button.is_displayed()
+
+# <---- Acciones dentro de Cubeta de Helado --->
+# Test 20: Hace click en el selector de cantidad de Helado y agrega 1 producto
+def test_020_add_ice_cream(driver):
+    ice_cream_bucket = driver.find_element(By.CLASS_NAME, "ice-cream-bucket")
+    ice_cream_bucket.click()
+    quantity_selector = driver.find_element(By.CLASS_NAME, "quantity-selector")
+    quantity_selector.click()
+    quantity_selector.send_keys("1")
+    assert quantity_selector.get_attribute("value") == "1"
+    
+# Test 21: Hace click en el selector de cantidad de Chocolate y agrega 1 producto
+
+# Test 22: Hace click en el selector de cantidad de Fresa y agrega 1 producto
+
+# Test 23: Hace click en el botón "Pedir un Taxi"
 
 
-# Test 26: Hace clic en el botón final para pedir un taxi (elemento con clase "smart-button-main") y verifica que el botón esté visible.
-def test_026_order_taxi_final(driver):
-    order_taxi_button = driver.find_element(By.CLASS_NAME, "smart-button-main")
-    order_taxi_button.click()
-    assert order_taxi_button.is_displayed()
-
-
-# Test 27: Espera hasta que aparezca la imagen de Bender (imagen con alt="close") y verifica que esté visible.
-def test_027_wait_for_bender(driver):
-    bender_image = WebDriverWait(driver, 10).until(
+# Test 24: Espera hasta que aparezca la imagen del conductor en el modal y verifica que esté visible.
+def test_024_wait_for_conductor_image(driver):
+    conductor_image = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//img[@alt='close']"))
     )
-    assert bender_image.is_displayed()
+    assert conductor_image.is_displayed()
+    
+# Test 25: Hace click en el botón Detalles para ver la información del viaje 
+
+# Test 26: Hace click en el botón "Cancelar"
