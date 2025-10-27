@@ -287,12 +287,56 @@ def test_11_click_add_card_button(page_with_url):
     print("✅ Test 11 completado exitosamente.")
 
 
-# Test 12: Ingresa el número de tarjeta en el campo correspondiente y verifica que el valor del campo coincida con el número esperado.
-def test_012_enter_number(page):
-    card_number_input = page.driver.find_element(By.ID, "number")
-    card_number_input.clear()
-    card_number_input.send_keys(data.UrbanRoutesData.CARD_NUMBER)
-    assert card_number_input.get_attribute("value") == data.UrbanRoutesData.CARD_NUMBER
+# Test 12: Ingresa el número de tarjeta en el campo Número de tarjeta y verifica que el valor coincida con el número esperado.
+def test_12_enter_card_number(page_with_url):
+    print(f"\n🔍 Abriendo página para test 12: '{data.BASE_URL}'")
+    
+    # Pasos previos (igual que test 11)
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+    page_with_url.click_request_taxi()
+    
+    print("\n🛋️  Seleccionando categoría 'Comfort'...")
+    page_with_url.select_comfort_category()
+    
+    page_with_url.click_phone_field()
+    print("✅ Campo de teléfono seleccionado.")
+    
+    phone_number = data.UrbanRoutesData.PHONE_NUMBER
+    page_with_url.enter_phone_number(phone_number)
+    print(f"✅ Número de teléfono '{phone_number}' ingresado.")
+    
+    page_with_url.click_next_button()
+    assert page_with_url.driver.find_element(By.ID, "code").is_displayed()
+    print("✅ Campo 'Introduce el código del SMS' está visible.")
+    
+    # Confirmar SMS
+    try:
+        sms_code = page_with_url.get_sms_code_from_network(phone_number)
+        page_with_url.enter_sms_code(sms_code)
+        page_with_url.click_confirm_button()
+        print("✅ Código SMS verificado exitosamente.")
+    except Exception as e:
+        pytest.fail(f"❌ Error al capturar o ingresar el código SMS: {e}")
+    
+    # Hacer clic en Método de pago
+    page_with_url.click_payment_method_button()
+    print("✅ Botón 'Método de pago' clickeado.")
+    
+    # Hacer clic en Agregar tarjeta
+    page_with_url.click_add_card_button()
+    print("✅ Botón 'Agregar tarjeta' clickeado.")
+    
+    # Test 12: Ingresar número de tarjeta y verificar
+    print("\n💳 Ingresando número de tarjeta...")
+    card_number = data.UrbanRoutesData.CARD_NUMBER
+    page_with_url.enter_card_number(card_number)
+    
+    # Verificar que el valor coincida
+    actual_value = page_with_url.get_card_number_value()
+    assert actual_value == card_number, f"❌ El número de tarjeta no coincide. Esperado: '{card_number}', Actual: '{actual_value}'"
+    
+    print("✅ Test 12 completado exitosamente.")
 
 
 # Test 13: Ingresa el código de verificación en el campo de código de tarjeta y verifica que el valor del campo coincida con el código esperado.
