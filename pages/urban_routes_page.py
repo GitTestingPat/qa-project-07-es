@@ -22,10 +22,11 @@ class UrbanRoutesPage:
     PAYMENT_METHOD_BUTTON = (By.XPATH, "//div[@class='pp-button filled']")  
 
     # Localizador para Agregar tarjeta
-    # Localizador para Agregar tarjeta (en inglés)
     ADD_CARD_BUTTON = (By.XPATH, "//div[@class='pp-title' and text()='Add a card']")
     
+    # Localizadores para el campo Número de tarjeta
     CARD_NUMBER_INPUT = (By.ID, "number")
+    
     CARD_CODE_INPUT = (By.ID, "code")
     COMMENT_INPUT = (By.ID, "comment")
     BLANKETS_SLIDER = (By.CLASS_NAME, "slider")
@@ -71,9 +72,9 @@ class UrbanRoutesPage:
     #                     print(f"  - Clases: '{classes}'")
     #         except Exception:
     #             pass
-        
+    
+    # Método para abrir la página y espera que cargue completamente     
     def get_page(self, url, timeout=20): 
-        """Abre la página y espera que cargue completamente"""
         self.driver.get(url)
         try:
             # Esperar que aparezca el logo-disclaimer con el nombre PLATFORM
@@ -86,23 +87,27 @@ class UrbanRoutesPage:
             print(f"📄 Título después de espera: '{self.driver.title}'")
 
 
+    # Método para establecer la dirección de origen
     def set_from_address(self, address):
         from_field = self.wait.until(EC.presence_of_element_located(self.FROM_FIELD))
         from_field.clear()
         from_field.send_keys(address)
 
 
+    # Método para establecer la dirección de destino
     def set_to_address(self, address):
         to_field = self.wait.until(EC.presence_of_element_located(self.TO_FIELD))
         to_field.clear()
         to_field.send_keys(address)
 
 
+    # Método para hacer clic en el botón Pedir un taxi
     def click_request_taxi(self):
         button = self.wait.until(EC.element_to_be_clickable(self.REQUEST_TAXI_BUTTON))
         button.click()
 
 
+    # Método para seleccionar la categoría Comfort
     def select_comfort_category(self):
         # Esperar a que el panel de tarifas aparezca (espera al primer tcard)
         self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "tcard")))
@@ -110,12 +115,14 @@ class UrbanRoutesPage:
         comfort = self.wait.until(EC.element_to_be_clickable(self.COMFORT_CATEGORY_BUTTON))
         comfort.click()
 
-        
+
+    # Método para obtener el elemento de la categoría Comfort        
     def get_comfort_element(self):
         # Obtener el elemento de la categoría Comfort
         return self.wait.until(EC.visibility_of_element_located(self.COMFORT_CATEGORY_BUTTON))
 
 
+    # Método para hacer clic en el campo de teléfono
     def click_phone_field(self):
         """Abre el modal de teléfono y activa el campo"""
         # Hacer clic en el div que abre el modal
@@ -128,14 +135,16 @@ class UrbanRoutesPage:
         # Esperar que el input sea visible (el modal ya lo activa)
         self.wait.until(EC.visibility_of_element_located((By.ID, "phone")))
 
-        
+
+    # Método para ingresar el número de teléfono        
     def enter_phone_number(self, phone):
         """Ingresa el número de teléfono en el campo de entrada"""
         phone_input = self.wait.until(EC.presence_of_element_located(self.PHONE_INPUT))
         phone_input.clear()
         phone_input.send_keys(phone)
 
-
+    
+    # Método para hacer clic en el botón Siguiente
     def click_next_button(self):
         self.wait.until(EC.element_to_be_clickable(self.NEXT_BUTTON)).click()
 
@@ -252,6 +261,7 @@ class UrbanRoutesPage:
             print(f"❌ Botón 'Método de pago' NO está visible: {e}")
             return False
 
+
     # Método para hacer click en el botón Agregar tarjeta
     def click_add_card_button(self):
         """Hace clic en el botón 'Agregar tarjeta'"""
@@ -278,10 +288,24 @@ class UrbanRoutesPage:
             return False
 
 
-    def enter_card_number(self, number):
-        card_num = self.wait.until(EC.presence_of_element_located(self.CARD_NUMBER_INPUT))
-        card_num.clear()
-        card_num.send_keys(number)
+    # Método para ingresar el número de tarjeta
+    def enter_card_number(self, card_number):
+        input_field = self.wait.until(
+            EC.visibility_of_element_located(self.CARD_NUMBER_INPUT)
+        )
+        input_field.clear()
+        input_field.send_keys(card_number)
+        print(f"✅ Número de tarjeta '{card_number}' ingresado.")
+
+
+    # Método para verificar el valor del campo número de tarjeta
+    def get_card_number_value(self):
+        """Obtiene el valor del campo número de tarjeta"""
+        input_field = self.driver.find_element(*self.CARD_NUMBER_INPUT)
+        value = input_field.get_attribute("value")
+        print(f"💳 Valor del campo número de tarjeta: '{value}'")
+        return value
+
 
     def enter_card_code(self, code):
         card_code = self.wait.until(EC.presence_of_element_located(self.CARD_CODE_INPUT))
