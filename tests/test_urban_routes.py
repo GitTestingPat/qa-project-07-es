@@ -290,8 +290,6 @@ def test_11_click_add_card_button(page_with_url):
 # Test 12: Ingresa el número de tarjeta en el campo Número de tarjeta y verifica que el valor coincida con el número esperado.
 def test_12_enter_card_number(page_with_url):
     print(f"\n🔍 Abriendo página para test 12: '{data.BASE_URL}'")
-    
-    # Pasos previos (igual que test 11)
     page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
     page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
     page_with_url.click_request_taxi()
@@ -339,7 +337,7 @@ def test_12_enter_card_number(page_with_url):
     print("✅ Test 12 completado exitosamente.")
 
 
-# Test 13: Ingresa el código de verificación en el campo de código de tarjeta y verifica que el valor del campo coincida con el código esperado.
+# Test 13: Ingresa el código de verificación en el campo de código de tarjeta y verifica que el valor coincida con el código esperado.
 def test_013_enter_code(page):
     code_input = page.driver.find_element(By.ID, "code")
     code_input.clear()
