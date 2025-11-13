@@ -393,11 +393,39 @@ def test_013_enter_code(page_with_url):
     print("✅ Test 13 completado exitosamente.")
 
 
-# Test 14: Hace clic en el botón Agregar.
-def test_014_click_add(driver):
-    add_button = driver.find_element(By.XPATH, "//button[text()='Agregar']")
-    add_button.click()
-    assert add_button.is_enabled()
+# Test 14: Hace clic en el botón "Agregar" para confirmar la tarjeta
+def test_014_click_add_card_confirm(page_with_url):
+    print(f"\n🔍 Abriendo página para test 14: '{data.BASE_URL}'")
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+    page_with_url.click_request_taxi()
+    
+    page_with_url.select_comfort_category()
+    page_with_url.click_phone_field()
+    
+    phone_number = data.UrbanRoutesData.PHONE_NUMBER
+    page_with_url.enter_phone_number(phone_number)
+    page_with_url.click_next_button()
+    
+    # Confirmar SMS
+    try:
+        sms_code = page_with_url.get_sms_code_from_network(phone_number)
+        page_with_url.enter_sms_code(sms_code)
+        page_with_url.click_confirm_button()
+    except Exception as e:
+        pytest.fail(f"❌ Error al capturar o ingresar el código SMS: {e}")
+    
+    # Agregar tarjeta
+    page_with_url.click_payment_method_button()
+    page_with_url.click_add_card_button()
+    page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
+    page_with_url.enter_card_cvv(data.UrbanRoutesData.CARD_CODE)
+    
+    # Test 14: Hacer clic en Agregar
+    print("\n💳 Haciendo clic en 'Agregar'...")
+    page_with_url.click_add_card_confirm_button()
+    
+    print("✅ Test 14 completado exitosamente.")
 
 
 # Test 15: Hace clic en el botón cerrar modal (x).
