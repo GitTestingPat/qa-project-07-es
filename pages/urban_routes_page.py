@@ -4,30 +4,24 @@ from selenium.webdriver.support import expected_conditions as EC
 import json
 import time
 
-class UrbanRoutesPage:
-    FROM_FIELD = (By.XPATH, "//input[@id='from']")
-    TO_FIELD = (By.XPATH, "//input[@id='to']")
-    REQUEST_TAXI_BUTTON = (By.CLASS_NAME, "button.round")
-    COMFORT_OPTION = (By.XPATH, "//div[contains(text(), 'Comfort')]")
-    COMFORT_CATEGORY_BUTTON = (By.XPATH, "//div[contains(@class, 'tcard') and .//div[normalize-space()='Comfort']]")
-    PHONE_NUMBER_BUTTON = (By.XPATH, "//div[contains(text(), 'Phone number')]")
-    PHONE_LABEL = (By.CSS_SELECTOR, "label[for='phone']")  # La etiqueta que está encima del botón de teléfono
-    PHONE_INPUT = (By.ID, "phone")
-    NEXT_BUTTON = (By.CSS_SELECTOR, "form button.button.full")
-    SMS_CODE_INPUT = (By.ID, "code")
-    CONFIRM_BUTTON = (By.XPATH, "//button[@class='button full' and @type='submit' and contains(text(), 'Confirm')]")
-    RESEND_CODE_BUTTON = (By.XPATH, "//button[contains(text(), 'Vuelve a enviar el código')]")
-
-    # Localizador para el botón Método de pago
-    PAYMENT_METHOD_BUTTON = (By.XPATH, "//div[@class='pp-button filled']")  
-
-    # Localizador para Agregar tarjeta
-    ADD_CARD_BUTTON = (By.XPATH, "//div[@class='pp-title' and text()='Add a card']")
+class UrbanRoutesPage:  
+    FROM_FIELD = (By.XPATH, "//input[@id='from']") # Localizador para el campo origen
+    TO_FIELD = (By.XPATH, "//input[@id='to']") # Localizador para el campo destino
+    REQUEST_TAXI_BUTTON = (By.CLASS_NAME, "button.round") # Localizador para el botón pedir un taxi 
+    COMFORT_OPTION = (By.XPATH, "//div[contains(text(), 'Comfort')]") # Localizador para seleccionar categoria comfort
+    COMFORT_CATEGORY_BUTTON = (By.XPATH, "//div[contains(@class, 'tcard') and .//div[normalize-space()='Comfort']]") # Localizador para seleccionar categoria comfort
+    PHONE_NUMBER_BUTTON = (By.XPATH, "//div[contains(text(), 'Phone number')]") # Localizador para el botón teléfono
+    PHONE_LABEL = (By.CSS_SELECTOR, "label[for='phone']")  # # Localizador para la etiqueta que está encima del botón de teléfono
+    PHONE_INPUT = (By.ID, "phone") # Localizador para ingresar el número de teléfono
+    NEXT_BUTTON = (By.CSS_SELECTOR, "form button.button.full") # Localizador para el botón Siguiente
+    SMS_CODE_INPUT = (By.ID, "code") # Localizador para el campo código de verificación
+    CONFIRM_BUTTON = (By.XPATH, "//button[@class='button full' and @type='submit' and contains(text(), 'Confirm')]") # Localizador para el botón Confirmar
+    RESEND_CODE_BUTTON = (By.XPATH, "//button[contains(text(), 'Vuelve a enviar el código')]") # Localizador para el botón Reenviar código
+    PAYMENT_METHOD_BUTTON = (By.XPATH, "//div[@class='pp-button filled']") # Localizador para el botón Método de pago  
+    ADD_CARD_BUTTON = (By.XPATH, "//div[@class='pp-title' and text()='Add a card']") # Localizador para Agregar tarjeta
+    CARD_NUMBER_INPUT = (By.ID, "number") # Localizador para el campo Número de tarjeta
+    CARD_CVV_INPUT = (By.XPATH, "//input[@id='code' and @placeholder='12']") # Localizador para el campo CVV (código de tarjeta) - Por placeholder
     
-    # Localizadores para el campo Número de tarjeta
-    CARD_NUMBER_INPUT = (By.ID, "number")
-    
-    CARD_CODE_INPUT = (By.ID, "code")
     COMMENT_INPUT = (By.ID, "comment")
     BLANKETS_SLIDER = (By.CLASS_NAME, "slider")
     ICE_CREAM_PLUS_BUTTON = (By.CLASS_NAME, "counter-plus")
@@ -38,40 +32,6 @@ class UrbanRoutesPage:
         self.driver = driver
         self.wait = WebDriverWait(driver, 15)
 
-    # def debug_add_card_elements(self):
-    #     """Método temporal para debugging - muestra elementos con 'tarjeta' o 'card'"""
-    #     import time
-    #     time.sleep(2)
-        
-    #     # Buscar por clase pp-title
-    #     titles = self.driver.find_elements(By.CLASS_NAME, "pp-title")
-    #     print(f"\n🔍 Elementos con clase 'pp-title': {len(titles)}")
-    #     for i, title in enumerate(titles):
-    #         try:
-    #             text = title.text
-    #             classes = title.get_attribute("class")
-    #             is_displayed = title.is_displayed()
-    #             print(f"\nElemento {i+1}:")
-    #             print(f"  - Texto: '{text}'")
-    #             print(f"  - Clases: '{classes}'")
-    #             print(f"  - Visible: {is_displayed}")
-    #         except Exception as e:
-    #             print(f"  - Error: {e}")
-        
-    #     # Buscar todos los divs visibles
-    #     divs = self.driver.find_elements(By.TAG_NAME, "div")
-    #     print(f"\n🔍 Buscando divs con 'tarjeta' o 'card' en el texto...")
-    #     for div in divs:
-    #         try:
-    #             text = div.text
-    #             if 'tarjeta' in text.lower() or 'card' in text.lower():
-    #                 classes = div.get_attribute("class")
-    #                 is_displayed = div.is_displayed()
-    #                 if is_displayed:
-    #                     print(f"\n  - Texto: '{text}'")
-    #                     print(f"  - Clases: '{classes}'")
-    #         except Exception:
-    #             pass
     
     # Método para abrir la página y espera que cargue completamente     
     def get_page(self, url, timeout=20): 
@@ -307,11 +267,24 @@ class UrbanRoutesPage:
         return value
 
 
+    # Método para ingresar el código de la tarjeta
     def enter_card_code(self, code):
-        card_code = self.wait.until(EC.presence_of_element_located(self.CARD_CODE_INPUT))
-        card_code.clear()
-        card_code.send_keys(code)
+        cvv_field = self.wait.until(
+            EC.visibility_of_element_located(self.CARD_CVV_INPUT)
+        )
+        cvv_field.clear()
+        cvv_field.send_keys(code)
+        print(f"✅ Código CVV '{code}' ingresado.")
 
+        
+    # Método para obtener el valor del campo código CVV (dentro del iframe)
+    def get_card_code_value(self):
+        cvv_field = self.driver.find_element(*self.CARD_CVV_INPUT)
+        value = cvv_field.get_attribute("value")
+        print(f"🔢 Valor del código CVV: '{value}'")
+        return value
+    
+    
     def add_comment(self, comment):
         comment_input = self.wait.until(EC.presence_of_element_located(self.COMMENT_INPUT))
         comment_input.clear()
