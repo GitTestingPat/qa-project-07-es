@@ -21,6 +21,8 @@ class UrbanRoutesPage:
     ADD_CARD_BUTTON = (By.XPATH, "//div[@class='pp-title' and text()='Add a card']") # Localizador para Agregar tarjeta
     CARD_NUMBER_INPUT = (By.ID, "number") # Localizador para el campo Número de tarjeta
     CARD_CVV_INPUT = (By.XPATH, "//input[@id='code' and @placeholder='12']") # Localizador para el campo CVV (código de tarjeta) - Por placeholder
+    ADD_CARD_CONFIRM_BUTTON = (By.XPATH, "//button[@type='submit' and contains(text(), 'Agregar')]") # Localizador para el botón Agregar tarjeta
+    CLOSE_MODAL_BUTTON = (By.XPATH, "//button[@class='close-button section-close' or contains(@class, 'payment-picker close')]") # Localizador para el botón Cerrar modal
     
     COMMENT_INPUT = (By.ID, "comment")
     BLANKETS_SLIDER = (By.CLASS_NAME, "slider")
@@ -284,6 +286,15 @@ class UrbanRoutesPage:
         print(f"🔢 Valor del código CVV: '{value}'")
         return value
     
+    
+    def click_add_card_confirm_button(self):
+        """Hace clic en el botón 'Agregar' para confirmar la tarjeta"""
+        button = self.wait.until(
+            EC.element_to_be_clickable(self.ADD_CARD_CONFIRM_BUTTON)
+        )
+        button.click()
+        print("✅ Botón 'Agregar' clickeado.")
+        
     
     def add_comment(self, comment):
         comment_input = self.wait.until(EC.presence_of_element_located(self.COMMENT_INPUT))
