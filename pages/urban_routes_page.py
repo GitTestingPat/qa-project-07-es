@@ -23,8 +23,8 @@ class UrbanRoutesPage:
     CARD_CVV_INPUT = (By.XPATH, "//input[@id='code' and @placeholder='12']") # Localizador para el campo CVV (código de tarjeta) - Por placeholder
     ADD_CARD_CONFIRM_BUTTON = (By.XPATH, "//button[@type='submit' and contains(text(), 'Agregar')]") # Localizador para el botón Agregar tarjeta
     CLOSE_MODAL_BUTTON = (By.XPATH, "//button[@class='close-button section-close' or contains(@class, 'payment-picker close')]") # Localizador para el botón Cerrar modal
+    DRIVER_MESSAGE_FIELD = (By.ID, "comment") # Localizador para mensaje al conductor
     
-    COMMENT_INPUT = (By.ID, "comment")
     BLANKETS_SLIDER = (By.CLASS_NAME, "slider")
     ICE_CREAM_PLUS_BUTTON = (By.CLASS_NAME, "counter-plus")
     ORDER_TAXI_BUTTON_FINAL = (By.CLASS_NAME, "smart-button-main")
@@ -286,6 +286,7 @@ class UrbanRoutesPage:
         print(f"🔢 Valor del código CVV: '{value}'")
         return value
     
+    
     # Método para encontrar el botón Agregar y hacer clic en él
     def click_add_card_confirm_button(self):
         """Hace clic en el botón 'Agregar' para confirmar la tarjeta"""
@@ -294,7 +295,9 @@ class UrbanRoutesPage:
         )
         button.click()
         print("✅ Botón 'Agregar' clickeado.")
-        
+    
+    
+    # Método para cerrar el modal de pago
     def close_payment_modal(self):
         """Cierra el modal de pago"""
         try:
@@ -311,10 +314,22 @@ class UrbanRoutesPage:
             print("✅ Modal cerrado con JavaScript.")
             
             
-    def add_comment(self, comment):
-        comment_input = self.wait.until(EC.presence_of_element_located(self.COMMENT_INPUT))
-        comment_input.clear()
-        comment_input.send_keys(comment)
+    def enter_driver_message(self, message):
+        """Ingresa un mensaje para el conductor"""
+        input_field = self.wait.until(
+            EC.visibility_of_element_located(self.DRIVER_MESSAGE_FIELD)
+        )
+        input_field.clear()
+        input_field.send_keys(message)
+        print(f"✅ Mensaje para el conductor ingresado: '{message}'")
+    
+    
+    def get_driver_message_value(self):
+        """Obtiene el valor del campo de mensaje al conductor"""
+        input_field = self.driver.find_element(*self.DRIVER_MESSAGE_FIELD)
+        value = input_field.get_attribute("value")
+        print(f"💬 Mensaje actual: '{value}'")
+        return value
 
     def activate_blankets(self):
         self.wait.until(EC.element_to_be_clickable(self.BLANKETS_SLIDER)).click()
