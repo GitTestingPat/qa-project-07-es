@@ -295,7 +295,22 @@ class UrbanRoutesPage:
         button.click()
         print("✅ Botón 'Agregar' clickeado.")
         
-    
+    def close_payment_modal(self):
+        """Cierra el modal de pago"""
+        try:
+            close_button = self.wait.until(
+                EC.element_to_be_clickable(self.CLOSE_MODAL_BUTTON)
+            )
+            close_button.click()
+            print("✅ Modal de pago cerrado.")
+        except Exception as e:
+            print(f"⚠️ No se pudo cerrar el modal: {e}")
+            # Intentar con JavaScript
+            button = self.driver.find_element(*self.CLOSE_MODAL_BUTTON)
+            self.driver.execute_script("arguments[0].click();", button)
+            print("✅ Modal cerrado con JavaScript.")
+            
+            
     def add_comment(self, comment):
         comment_input = self.wait.until(EC.presence_of_element_located(self.COMMENT_INPUT))
         comment_input.clear()
