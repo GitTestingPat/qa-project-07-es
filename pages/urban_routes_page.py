@@ -24,9 +24,10 @@ class UrbanRoutesPage:
     ADD_CARD_CONFIRM_BUTTON = (By.XPATH, "//button[@type='submit' and contains(text(), 'Agregar')]") # Localizador para el botón Agregar tarjeta
     CLOSE_MODAL_BUTTON = (By.XPATH, "//button[@class='close-button section-close' or contains(@class, 'payment-picker close')]") # Localizador para el botón Cerrar modal
     DRIVER_MESSAGE_FIELD = (By.ID, "comment") # Localizador para mensaje al conductor
+    # Localizadores para requisitos del pedido
+    BLANKETS_COUNTER_PLUS = (By.XPATH, "//div[@class='r-sw']//div[@class='counter-plus']")
+    ICE_CREAM_COUNTER_PLUS = (By.XPATH, "//div[@class='r-group']//div[@class='counter-plus']")
     
-    BLANKETS_SLIDER = (By.CLASS_NAME, "slider")
-    ICE_CREAM_PLUS_BUTTON = (By.CLASS_NAME, "counter-plus")
     ORDER_TAXI_BUTTON_FINAL = (By.CLASS_NAME, "smart-button-main")
     BENDER_IMAGE = (By.XPATH, "//img[@alt='close']")
 
@@ -313,7 +314,8 @@ class UrbanRoutesPage:
             self.driver.execute_script("arguments[0].click();", button)
             print("✅ Modal cerrado con JavaScript.")
             
-            
+    
+    # Método para ingresar un mensaje para el conductor        
     def enter_driver_message(self, message):
         """Ingresa un mensaje para el conductor"""
         input_field = self.wait.until(
@@ -324,6 +326,7 @@ class UrbanRoutesPage:
         print(f"✅ Mensaje para el conductor ingresado: '{message}'")
     
     
+    # Método para obtener el valor del campo de mensaje al conductor
     def get_driver_message_value(self):
         """Obtiene el valor del campo de mensaje al conductor"""
         input_field = self.driver.find_element(*self.DRIVER_MESSAGE_FIELD)
@@ -331,13 +334,28 @@ class UrbanRoutesPage:
         print(f"💬 Mensaje actual: '{value}'")
         return value
 
-    def activate_blankets(self):
-        self.wait.until(EC.element_to_be_clickable(self.BLANKETS_SLIDER)).click()
-
-    def add_ice_creams(self, quantity=2):
-        plus_btn = self.wait.until(EC.element_to_be_clickable(self.ICE_CREAM_PLUS_BUTTON))
-        for _ in range(quantity):
-            plus_btn.click()
+    
+    # Método para agregar mantas y pañuelos
+    def add_blankets_and_tissues(self, quantity=2):
+        """Agrega mantas y pañuelos"""
+        plus_button = self.wait.until(
+            EC.element_to_be_clickable(self.BLANKETS_COUNTER_PLUS)
+        )
+        for i in range(quantity):
+            plus_button.click()
+            print(f"✅ Manta y pañuelos agregados ({i+1}/{quantity})")
+    
+    
+    # Método para agregar helados
+    def add_ice_cream(self, quantity=2):
+        """Agrega helados"""
+        plus_button = self.wait.until(
+            EC.element_to_be_clickable(self.ICE_CREAM_COUNTER_PLUS)
+        )
+        for i in range(quantity):
+            plus_button.click()
+            time.sleep(0.5)  # Pequeña pausa entre clics
+            print(f"✅ Helado agregado ({i+1}/{quantity})")
 
     def click_order_taxi_final(self):
         self.wait.until(EC.element_to_be_clickable(self.ORDER_TAXI_BUTTON_FINAL)).click()
