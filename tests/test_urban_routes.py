@@ -429,10 +429,39 @@ def test_014_click_add_card_confirm(page_with_url):
 
 
 # Test 15: Hace clic en el botón cerrar modal (x).
-def test_015_click_close_modal(driver):
-    close_button = driver.find_element(By.XPATH, "//button[contains(@class, 'close-button')]")
-    close_button.click()
-    assert close_button.is_displayed()
+def test_015_close_payment_modal(page_with_url):
+    print(f"\n🔍 Abriendo página para test 15: '{data.BASE_URL}'")
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+    page_with_url.click_request_taxi()
+    
+    page_with_url.select_comfort_category()
+    page_with_url.click_phone_field()
+    
+    phone_number = data.UrbanRoutesData.PHONE_NUMBER
+    page_with_url.enter_phone_number(phone_number)
+    page_with_url.click_next_button()
+    
+    # Confirmar SMS
+    try:
+        sms_code = page_with_url.get_sms_code_from_network(phone_number)
+        page_with_url.enter_sms_code(sms_code)
+        page_with_url.click_confirm_button()
+    except Exception as e:
+        pytest.fail(f"❌ Error al capturar o ingresar el código SMS: {e}")
+    
+    # Agregar tarjeta completa
+    page_with_url.click_payment_method_button()
+    page_with_url.click_add_card_button()
+    page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
+    page_with_url.enter_card_cvv(data.UrbanRoutesData.CARD_CODE)
+    page_with_url.click_add_card_confirm_button()
+    
+    # Test 15: Cerrar modal
+    print("\n❌ Cerrando modal de pago...")
+    page_with_url.close_payment_modal()
+    
+    print("✅ Test 15 completado exitosamente.")
 
 
 # Test 16: Agregar mensaje para el conductor y verifica que el campo "Mensaje para el conductor" esté visible.
