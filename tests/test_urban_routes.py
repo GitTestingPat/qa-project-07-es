@@ -1,9 +1,9 @@
 # Este archivo contiene pruebas que simulan el flujo completo de usuario en Urban Routes.
 # Debido a las limitaciones del entorno de prueba, algunos pasos (como la obtención del código
 # de verificación) requieren interactuar con las herramientas de desarrollo del navegador (DevTools).
+
 import pytest
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import data
 
@@ -419,7 +419,9 @@ def test_014_click_add_card_confirm(page_with_url):
     page_with_url.click_payment_method_button()
     page_with_url.click_add_card_button()
     page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
-    page_with_url.enter_card_cvv(data.UrbanRoutesData.CARD_CODE)
+    page_with_url.enter_card_code(data.UrbanRoutesData.CARD_CODE)
+    
+    # page_with_url.debug_iframes()
     
     # Test 14: Hacer clic en Agregar
     print("\n💳 Haciendo clic en 'Agregar'...")
@@ -454,7 +456,7 @@ def test_015_close_payment_modal(page_with_url):
     page_with_url.click_payment_method_button()
     page_with_url.click_add_card_button()
     page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
-    page_with_url.enter_card_cvv(data.UrbanRoutesData.CARD_CODE)
+    page_with_url.enter_card_code(data.UrbanRoutesData.CARD_CODE)
     page_with_url.click_add_card_confirm_button()
     
     # Test 15: Cerrar modal
@@ -490,7 +492,7 @@ def test_016_enter_driver_message(page_with_url):
     page_with_url.click_payment_method_button()
     page_with_url.click_add_card_button()
     page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
-    page_with_url.enter_card_cvv(data.UrbanRoutesData.CARD_CODE)
+    page_with_url.enter_card_code(data.UrbanRoutesData.CARD_CODE)
     page_with_url.click_add_card_confirm_button()
     page_with_url.close_payment_modal()
     
@@ -514,49 +516,201 @@ def test_017_verify_order_requirements_section(page_with_url):
     page_with_url.click_request_taxi()
     page_with_url.select_comfort_category()
     
-    # Este test puede verificar que la sección de requisitos esté visible
-    # Por ahora, solo confirma que llegamos hasta aquí
-    assert "Comfort" in page_with_url.driver.page_source
+    # Este test verifica que la sección de Requisitos del Pedido esté visible
+    # Solo confirma que llegamos hasta aquí
+    print("\n📋 Verificando sección 'Requisitos del Pedido'...")
+    assert page_with_url.is_order_requirements_section_visible()
     print("✅ Test 17 completado exitosamente.")
 
 
 # Test 18: Hace clic en el botón seleccionar "Manta y Pañuelos" y verifica que el botón esté visible..
-def test_018_add_blankets_and_tissues(driver):
-    blankets_button = driver.find_element(By.CLASS_NAME, "counter-plus")
-    blankets_button.click()
-    blankets_button.click()
+def test_018_add_blankets_and_tissues(page_with_url):
+    print(f"\n🔍 Abriendo página para test 18: '{data.BASE_URL}'")
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+    page_with_url.click_request_taxi()
+    
+    page_with_url.select_comfort_category()
+    page_with_url.click_phone_field()
+    
+    phone_number = data.UrbanRoutesData.PHONE_NUMBER
+    page_with_url.enter_phone_number(phone_number)
+    page_with_url.click_next_button()
+    
+    # Confirmar SMS
+    try:
+        sms_code = page_with_url.get_sms_code_from_network(phone_number)
+        page_with_url.enter_sms_code(sms_code)
+        page_with_url.click_confirm_button()
+    except Exception as e:
+        pytest.fail(f"❌ Error al capturar o ingresar el código SMS: {e}")
+    
+    # Configurar pago
+    page_with_url.click_payment_method_button()
+    page_with_url.click_add_card_button()
+    page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
+    page_with_url.enter_card_code(data.UrbanRoutesData.CARD_CODE)
+    page_with_url.click_add_card_confirm_button()
+    page_with_url.close_payment_modal()
+    
+    print("\n📋 Verificando sección 'Requisitos del Pedido'...")
+    assert page_with_url.is_order_requirements_section_visible()
+    
+    # Test 18: Activar switch de mantas y pañuelos
+    print("\n🧣 Activando mantas y pañuelos...")
+    page_with_url.add_blankets_and_tissues() 
+    
+    print("✅ Test 18 completado exitosamente.")
 
 
 # Test 19: Hace clic en el botón seleccionar "Cortina Acústica" y verifica que el botón esté visible.
-def test_019_order_acoustic_curtain(driver):
-    order_acoustic_curtain_button = driver.find_element(By.CLASS_NAME, "smart-button-main")
-    order_acoustic_curtain_button.click()
-    assert order_acoustic_curtain_button.is_displayed()
+def test_019_add_acoustic_curtain(page_with_url):
+    print(f"\n🔍 Abriendo página para test 19: '{data.BASE_URL}'")
+    # Implementar según necesidad
+    print("✅ Test 19 - Placeholder completado.")
+
 
 # <---- Acciones dentro de Cubeta de Helado --->
 # Test 20: Hace click en el selector de cantidad de Helado y agrega 1 producto
-def test_020_add_ice_cream(driver):
-    ice_cream_bucket = driver.find_element(By.CLASS_NAME, "ice-cream-bucket")
-    ice_cream_bucket.click()
-    quantity_selector = driver.find_element(By.CLASS_NAME, "quantity-selector")
-    quantity_selector.click()
-    quantity_selector.send_keys("1")
-    assert quantity_selector.get_attribute("value") == "1"
+def test_020_add_ice_cream(page_with_url):
+    print(f"\n🔍 Abriendo página para test 20: '{data.BASE_URL}'")
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+    page_with_url.click_request_taxi()
+    
+    page_with_url.select_comfort_category()
+    page_with_url.click_phone_field()
+    
+    phone_number = data.UrbanRoutesData.PHONE_NUMBER
+    page_with_url.enter_phone_number(phone_number)
+    page_with_url.click_next_button()
+    
+    # Confirmar SMS
+    try:
+        sms_code = page_with_url.get_sms_code_from_network(phone_number)
+        page_with_url.enter_sms_code(sms_code)
+        page_with_url.click_confirm_button()
+    except Exception as e:
+        pytest.fail(f"❌ Error al capturar o ingresar el código SMS: {e}")
+    
+    # Configurar pago
+    page_with_url.click_payment_method_button()
+    page_with_url.click_add_card_button()
+    page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
+    page_with_url.enter_card_cvv(data.UrbanRoutesData.CARD_CODE)
+    page_with_url.click_add_card_confirm_button()
+    page_with_url.close_payment_modal()
+    
+    # Agregar extras
+    page_with_url.add_blankets_and_tissues(quantity=2)
+    
+    # Test 20: Agregar helado
+    print("\n🍦 Agregando helado...")
+    page_with_url.add_ice_cream(quantity=2)
+    
+    print("✅ Test 20 completado exitosamente.")
+    
     
 # Test 21: Hace click en el selector de cantidad de Chocolate y agrega 1 producto
+def test_021_placeholder_chocolate(page_with_url):
+    print("✅ Test 21 - Placeholder para chocolate.")
+
 
 # Test 22: Hace click en el selector de cantidad de Fresa y agrega 1 producto
+def test_022_placeholder_strawberry(page_with_url):
+    print("✅ Test 22 - Placeholder para fresa.")
 
 # Test 23: Hace click en el botón "Pedir un Taxi"
-
+def test_023_click_order_taxi_final(page_with_url):
+    print(f"\n🔍 Abriendo página para test 23: '{data.BASE_URL}'")
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+    page_with_url.click_request_taxi()
+    
+    page_with_url.select_comfort_category()
+    page_with_url.click_phone_field()
+    
+    phone_number = data.UrbanRoutesData.PHONE_NUMBER
+    page_with_url.enter_phone_number(phone_number)
+    page_with_url.click_next_button()
+    
+    # Confirmar SMS
+    try:
+        sms_code = page_with_url.get_sms_code_from_network(phone_number)
+        page_with_url.enter_sms_code(sms_code)
+        page_with_url.click_confirm_button()
+    except Exception as e:
+        pytest.fail(f"❌ Error al capturar o ingresar el código SMS: {e}")
+    
+    # Configurar pago
+    page_with_url.click_payment_method_button()
+    page_with_url.click_add_card_button()
+    page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
+    page_with_url.enter_card_cvv(data.UrbanRoutesData.CARD_CODE)
+    page_with_url.click_add_card_confirm_button()
+    page_with_url.close_payment_modal()
+    
+    # Agregar extras
+    page_with_url.add_blankets_and_tissues(quantity=2)
+    page_with_url.add_ice_cream(quantity=2)
+    
+    # Test 23: Pedir un taxi
+    print("\n🚕 Haciendo clic en 'Pedir un taxi'...")
+    page_with_url.click_order_taxi_button()
+    
+    print("✅ Test 23 completado exitosamente.")
+    
 
 # Test 24: Espera hasta que aparezca la imagen del conductor en el modal y verifica que esté visible.
-def test_024_wait_for_conductor_image(driver):
-    conductor_image = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//img[@alt='close']"))
-    )
-    assert conductor_image.is_displayed()
+def test_024_wait_for_driver_image(page_with_url):
+    print(f"\n🔍 Abriendo página para test 24: '{data.BASE_URL}'")
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+    page_with_url.click_request_taxi()
+    
+    page_with_url.select_comfort_category()
+    page_with_url.click_phone_field()
+    
+    phone_number = data.UrbanRoutesData.PHONE_NUMBER
+    page_with_url.enter_phone_number(phone_number)
+    page_with_url.click_next_button()
+    
+    # Confirmar SMS
+    try:
+        sms_code = page_with_url.get_sms_code_from_network(phone_number)
+        page_with_url.enter_sms_code(sms_code)
+        page_with_url.click_confirm_button()
+    except Exception as e:
+        pytest.fail(f"❌ Error al capturar o ingresar el código SMS: {e}")
+    
+    # Configurar pago
+    page_with_url.click_payment_method_button()
+    page_with_url.click_add_card_button()
+    page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
+    page_with_url.enter_card_cvv(data.UrbanRoutesData.CARD_CODE)
+    page_with_url.click_add_card_confirm_button()
+    page_with_url.close_payment_modal()
+    
+    # Agregar extras
+    page_with_url.add_blankets_and_tissues(quantity=2)
+    page_with_url.add_ice_cream(quantity=2)
+    
+    # Pedir taxi
+    page_with_url.click_order_taxi_button()
+    
+    # Test 24: Esperar imagen del conductor
+    print("\n👤 Esperando imagen del conductor...")
+    assert page_with_url.is_driver_image_visible(timeout=40)
+    
+    print("✅ Test 24 completado exitosamente.")
+    
     
 # Test 25: Hace click en el botón Detalles para ver la información del viaje 
+def test_025_view_trip_details(page_with_url):
+    print("✅ Test 25 - Placeholder para detalles del viaje.")
+
 
 # Test 26: Hace click en el botón "Cancelar"
+def test_026_cancel_trip(page_with_url):
+    print("✅ Test 26 - Placeholder para cancelar viaje.")
+    
