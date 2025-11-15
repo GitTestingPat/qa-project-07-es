@@ -7,3 +7,17 @@ __pycache__/*      # Ignora el directorio __pycache
 .vscode/
 env/
 .env
+
+# Screenshots y evidencias locales
+screenshots/
+test-results/
+reports/
+
+# Experimentos personales
+scratch/
+playground/
+
+# Archivos de configuración local
+local_settings.py
+config.yaml
+secrets.json
