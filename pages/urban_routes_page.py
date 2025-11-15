@@ -5,31 +5,81 @@ import json
 import time
 
 class UrbanRoutesPage:  
-    FROM_FIELD = (By.XPATH, "//input[@id='from']") # Localizador para el campo origen
-    TO_FIELD = (By.XPATH, "//input[@id='to']") # Localizador para el campo destino
-    REQUEST_TAXI_BUTTON = (By.CLASS_NAME, "button.round") # Localizador para el botón pedir un taxi 
-    COMFORT_OPTION = (By.XPATH, "//div[contains(text(), 'Comfort')]") # Localizador para seleccionar categoria comfort
-    COMFORT_CATEGORY_BUTTON = (By.XPATH, "//div[contains(@class, 'tcard') and .//div[normalize-space()='Comfort']]") # Localizador para seleccionar categoria comfort
-    PHONE_NUMBER_BUTTON = (By.XPATH, "//div[contains(text(), 'Phone number')]") # Localizador para el botón teléfono
-    PHONE_LABEL = (By.CSS_SELECTOR, "label[for='phone']")  # # Localizador para la etiqueta que está encima del botón de teléfono
-    PHONE_INPUT = (By.ID, "phone") # Localizador para ingresar el número de teléfono
-    NEXT_BUTTON = (By.CSS_SELECTOR, "form button.button.full") # Localizador para el botón Siguiente
-    SMS_CODE_INPUT = (By.ID, "code") # Localizador para el campo código de verificación
-    CONFIRM_BUTTON = (By.XPATH, "//button[@class='button full' and @type='submit' and contains(text(), 'Confirm')]") # Localizador para el botón Confirmar
-    RESEND_CODE_BUTTON = (By.XPATH, "//button[contains(text(), 'Vuelve a enviar el código')]") # Localizador para el botón Reenviar código
-    PAYMENT_METHOD_BUTTON = (By.XPATH, "//div[@class='pp-button filled']") # Localizador para el botón Método de pago  
-    ADD_CARD_BUTTON = (By.XPATH, "//div[@class='pp-title' and text()='Add a card']") # Localizador para Agregar tarjeta
-    CARD_NUMBER_INPUT = (By.ID, "number") # Localizador para el campo Número de tarjeta
-    CARD_CVV_INPUT = (By.XPATH, "//input[@id='code' and @placeholder='12']") # Localizador para el campo CVV (código de tarjeta) - Por placeholder
-    ADD_CARD_CONFIRM_BUTTON = (By.XPATH, "//button[@type='submit' and contains(text(), 'Agregar')]") # Localizador para el botón Agregar tarjeta
-    CLOSE_MODAL_BUTTON = (By.XPATH, "//button[@class='close-button section-close' or contains(@class, 'payment-picker close')]") # Localizador para el botón Cerrar modal
-    DRIVER_MESSAGE_FIELD = (By.ID, "comment") # Localizador para mensaje al conductor
+    # Localizador para el campo origen
+    FROM_FIELD = (By.XPATH, "//input[@id='from']") 
+    
+    # Localizador para el campo destino
+    TO_FIELD = (By.XPATH, "//input[@id='to']") 
+    
+    # Localizador para el botón pedir un taxi 
+    REQUEST_TAXI_BUTTON = (By.CLASS_NAME, "button.round") 
+    
+    # Localizador para seleccionar categoria comfort
+    COMFORT_OPTION = (By.XPATH, "//div[contains(text(), 'Comfort')]") 
+
+    # Localizador para seleccionar categoria comfort
+    COMFORT_CATEGORY_BUTTON = (By.XPATH, "//div[contains(@class, 'tcard') and .//div[normalize-space()='Comfort']]") 
+    
+    # Localizador para el botón teléfono
+    PHONE_NUMBER_BUTTON = (By.XPATH, "//div[contains(text(), 'Phone number')]") 
+    
+    # Localizador para la etiqueta que está encima del botón de teléfono
+    PHONE_LABEL = (By.CSS_SELECTOR, "label[for='phone']")  
+    
+    # Localizador para ingresar el número de teléfono
+    PHONE_INPUT = (By.ID, "phone") 
+    
+    # Localizador para el botón Siguiente
+    NEXT_BUTTON = (By.CSS_SELECTOR, "form button.button.full") 
+    
+    # Localizador para el campo código de verificación
+    SMS_CODE_INPUT = (By.ID, "code") 
+    
+    # Localizador para el botón Confirmar
+    CONFIRM_BUTTON = (By.XPATH, "//button[@class='button full' and @type='submit' and contains(text(), 'Confirm')]") 
+    
+    # Localizador para el botón Reenviar código
+    RESEND_CODE_BUTTON = (By.XPATH, "//button[contains(text(), 'Vuelve a enviar el código')]") 
+    
+    # Localizador para el botón Método de pago  
+    PAYMENT_METHOD_BUTTON = (By.XPATH, "//div[@class='pp-button filled']") 
+    
+    # Localizador para Agregar tarjeta
+    ADD_CARD_BUTTON = (By.XPATH, "//div[@class='pp-title' and text()='Add a card']") 
+    
+    # Localizador para el campo Número de tarjeta
+    CARD_NUMBER_INPUT = (By.ID, "number") 
+    
+    # Localizador para el campo CVV (código de tarjeta) - Por placeholder
+    CARD_CVV_INPUT = (By.XPATH, "//input[@id='code' and @placeholder='12']")    
+    
+    # Localizador para el botón Agregar tarjeta
+    ADD_CARD_CONFIRM_BUTTON = (By.XPATH, "//button[normalize-space()='Add']")
+    
+    # Localizador para el botón Cerrar modal
+    CLOSE_MODAL_BUTTON = (By.XPATH, "//button[@class='close-button section-close' or contains(@class, 'payment-picker close')]") 
+    
+    # Localizador para mensaje al conductor
+    DRIVER_MESSAGE_FIELD = (By.ID, "comment") 
+    
+    # Localizador para la sección Requisitos del Pedido
+    ORDER_REQUIREMENTS_SECTION = (By.XPATH, "//div[@class='reqs-head']")
+    
     # Localizadores para requisitos del pedido
-    BLANKETS_COUNTER_PLUS = (By.XPATH, "//div[@class='r-sw']//div[@class='counter-plus']")
+    BLANKETS_SWITCH = (By.XPATH, "//div[@class='r-sw']//input[@type='checkbox']")
     ICE_CREAM_COUNTER_PLUS = (By.XPATH, "//div[@class='r-group']//div[@class='counter-plus']")
     
-    ORDER_TAXI_BUTTON_FINAL = (By.CLASS_NAME, "smart-button-main")
-    BENDER_IMAGE = (By.XPATH, "//img[@alt='close']")
+    # Localizadores para pedir taxi y conductor
+    ORDER_TAXI_FINAL_BUTTON = (By.CLASS_NAME, "smart-button")
+    DRIVER_INFO_MODAL = (By.CLASS_NAME, "order-header-title")
+    DRIVER_IMAGE = (By.XPATH, "//img[@alt='Driver' or @class='driver-photo']")
+    
+    # Botón de detalles del viaje (si existe)
+    TRIP_DETAILS_BUTTON = (By.XPATH, "//button[contains(text(), 'Detalles') or contains(@class, 'details')]")
+    
+    # Botón cancelar
+    CANCEL_BUTTON = (By.XPATH, "//button[contains(text(), 'Cancelar') or contains(@class, 'cancel')]")
+
 
     def __init__(self, driver):
         self.driver = driver
@@ -291,12 +341,166 @@ class UrbanRoutesPage:
     # Método para encontrar el botón Agregar y hacer clic en él
     def click_add_card_confirm_button(self):
         """Hace clic en el botón 'Agregar' para confirmar la tarjeta"""
+        
+        # Activar el modal haciendo clic en el campo número de tarjeta
+        try:
+            card_number_field = self.driver.find_element(*self.CARD_NUMBER_INPUT)
+            card_number_field.click()
+            time.sleep(0.3)  # Dar tiempo a que se disparen eventos JS
+            print("✅ Modal activado con clic en número de tarjeta.")
+        except Exception as e:
+            print(f"⚠️ No se pudo hacer clic en número de tarjeta: {e}")
+        
+        # Esperar y hacer clic en el botón
         button = self.wait.until(
             EC.element_to_be_clickable(self.ADD_CARD_CONFIRM_BUTTON)
         )
+        
+        # Scroll al botón (por si está fuera de vista)
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", button)
+        time.sleep(0.2)
+        
+        # Clic
         button.click()
         print("✅ Botón 'Agregar' clickeado.")
+        
+        
+    # def click_add_card_confirm_button(self):
+    #     """Hace clic en el botón 'Agregar' para confirmar la tarjeta"""
+        
+    #     # Activar el modal haciendo clic en el campo número de tarjeta
+    #     try:
+    #         card_number_field = self.driver.find_element(*self.CARD_NUMBER_INPUT)
+    #         card_number_field.click()
+    #         time.sleep(0.3)
+    #         print("✅ Modal activado con clic en número de tarjeta.")
+    #     except Exception as e:
+    #         print(f"⚠️ No se pudo hacer clic en número de tarjeta: {e}")
+        
+    #     # Verificar si necesitamos cambiar a un iframe
+    #     try:
+    #         # Intentar encontrar el botón en el contexto actual
+    #         button = self.driver.find_element(*self.ADD_CARD_CONFIRM_BUTTON)
+    #         print("✅ Botón encontrado en contexto principal.")
+    #     except:
+    #         # Si no se encuentra, buscar en iframes
+    #         print("⚠️ Botón no encontrado en contexto principal, buscando en iframes...")
+    #         iframes = self.driver.find_elements(By.TAG_NAME, "iframe")
+    #         print(f"🔍 Encontrados {len(iframes)} iframes")
+            
+    #         button_found = False
+    #         for i, iframe in enumerate(iframes):
+    #             try:
+    #                 print(f"  Cambiando a iframe {i+1}...")
+    #                 self.driver.switch_to.frame(iframe)
+                    
+    #                 # Intentar encontrar el botón dentro del iframe
+    #                 button = self.driver.find_element(*self.ADD_CARD_CONFIRM_BUTTON)
+    #                 print(f"✅ Botón encontrado en iframe {i+1}")
+    #                 button_found = True
+    #                 break
+    #             except:
+    #                 # Volver al contexto principal y probar el siguiente iframe
+    #                 self.driver.switch_to.default_content()
+    #                 continue
+            
+    #         if not button_found:
+    #             # Volver al contexto principal antes de lanzar error
+    #             self.driver.switch_to.default_content()
+    #             raise Exception("❌ No se pudo encontrar el botón 'Agregar' en ningún contexto")
+        
+    #     # Hacer clic en el botón
+    #     try:
+    #         # Esperar a que sea clickeable
+    #         button = WebDriverWait(self.driver, 10).until(
+    #             EC.element_to_be_clickable(self.ADD_CARD_CONFIRM_BUTTON)
+    #         )
+            
+    #         # Scroll al botón (por si está fuera de vista)
+    #         self.driver.execute_script("arguments[0].scrollIntoView(true);", button)
+    #         time.sleep(0.2)
+            
+    #         button.click()
+    #         print("✅ Botón 'Agregar' clickeado.")
+            
+    #     except Exception as e:
+    #         print(f"⚠️ Error al hacer clic normal: {e}, intentando con JavaScript...")
+    #         button = self.driver.find_element(*self.ADD_CARD_CONFIRM_BUTTON)
+    #         self.driver.execute_script("arguments[0].click();", button)
+    #         print("✅ Botón 'Agregar' clickeado con JavaScript.")
+        
+    #     finally:
+    #         # IMPORTANTE: Volver al contexto principal
+    #         self.driver.switch_to.default_content()
+    #         print("✅ Vuelto al contexto principal.")
+        
     
+    # def debug_iframes(self):
+    #     """Método temporal para detectar iframes en la página"""
+    #     iframes = self.driver.find_elements(By.TAG_NAME, "iframe")
+    #     print(f"\n🔍 Total de iframes encontrados: {len(iframes)}")
+        
+    #     for i, iframe in enumerate(iframes):
+    #         print(f"\niframe {i+1}:")
+    #         print(f"  - ID: {iframe.get_attribute('id')}")
+    #         print(f"  - Name: {iframe.get_attribute('name')}")
+    #         print(f"  - Class: {iframe.get_attribute('class')}")
+    #         print(f"  - Src: {iframe.get_attribute('src')}")
+    
+    
+    
+    # def debug_modal_html(self):
+    #     """Guarda el HTML completo del modal y muestra todos los botones"""
+    #     print("\n🔍 === DEBUGGING MODAL ===")
+        
+    #     # Guardar HTML completo
+    #     html_source = self.driver.page_source
+    #     with open("debug_modal.html", "w", encoding="utf-8") as f:
+    #         f.write(html_source)
+    #     print("✅ HTML guardado en 'debug_modal.html'")
+        
+    #     # Buscar TODOS los botones
+    #     buttons = self.driver.find_elements(By.TAG_NAME, "button")
+    #     print(f"\n🔍 Total de botones encontrados: {len(buttons)}")
+        
+    #     for i, btn in enumerate(buttons):
+    #         try:
+    #             text = btn.text
+    #             classes = btn.get_attribute("class")
+    #             btn_type = btn.get_attribute("type")
+    #             is_visible = btn.is_displayed()
+    #             is_enabled = btn.is_enabled()
+    #             disabled = btn.get_attribute("disabled")
+                
+    #             if is_visible or 'agregar' in text.lower() or 'add' in text.lower():
+    #                 print(f"\n📍 Botón {i+1}:")
+    #                 print(f"  Texto: '{text}'")
+    #                 print(f"  Clases: '{classes}'")
+    #                 print(f"  Type: '{btn_type}'")
+    #                 print(f"  Visible: {is_visible}")
+    #                 print(f"  Enabled: {is_enabled}")
+    #                 print(f"  Disabled attr: {disabled}")
+    #         except Exception as e:
+    #             print(f"  Error: {e}")
+        
+    #     # Buscar el modal específico
+    #     try:
+    #         modals = self.driver.find_elements(By.CLASS_NAME, "modal")
+    #         print(f"\n🔍 Modales encontrados: {len(modals)}")
+    #         for i, modal in enumerate(modals):
+    #             if modal.is_displayed():
+    #                 print(f"\nModal {i+1} visible:")
+    #                 print(f"  Clases: {modal.get_attribute('class')}")
+    #                 # Buscar botones dentro del modal
+    #                 modal_buttons = modal.find_elements(By.TAG_NAME, "button")
+    #                 print(f"  Botones dentro: {len(modal_buttons)}")
+    #                 for j, mb in enumerate(modal_buttons):
+    #                     print(f"    Botón {j+1}: '{mb.text}' - visible: {mb.is_displayed()}")
+    #     except Exception as e:
+    #         print(f"Error buscando modales: {e}")
+        
+        
+        
     
     # Método para cerrar el modal de pago
     def close_payment_modal(self):
@@ -334,16 +538,39 @@ class UrbanRoutesPage:
         print(f"💬 Mensaje actual: '{value}'")
         return value
 
+    # Método para verificar si la sección de Requisitos del Pedido está visible y hacer clic en ella
+    def is_order_requirements_section_visible(self):
+        """Verifica si la sección de Requisitos del Pedido está visible"""
+        try:
+            section = self.wait.until(
+                EC.visibility_of_element_located(self.ORDER_REQUIREMENTS_SECTION)
+            )
+            is_visible = section.is_displayed()
+            if is_visible:
+                print("✅ Sección 'Requisitos del Pedido' está visible.")
+            return is_visible
+        except Exception as e:
+            print(f"❌ Sección 'Requisitos del Pedido' NO está visible: {e}")
+            return False
+    
     
     # Método para agregar mantas y pañuelos
-    def add_blankets_and_tissues(self, quantity=2):
-        """Agrega mantas y pañuelos"""
-        plus_button = self.wait.until(
-            EC.element_to_be_clickable(self.BLANKETS_COUNTER_PLUS)
+    def add_blankets_and_tissues(self):
+        """Activa el switch de mantas y pañuelos"""
+        import time
+        
+        # Esperar a que overlay desaparezca completamente
+        time.sleep(1)
+        self.wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, 'overlay')))
+        
+        # Localizar y hacer clic con JavaScript directamente
+        switch_input = self.wait.until(
+            EC.presence_of_element_located(self.BLANKETS_SWITCH)
         )
-        for i in range(quantity):
-            plus_button.click()
-            print(f"✅ Manta y pañuelos agregados ({i+1}/{quantity})")
+        
+        # Usar JavaScript para evitar problemas de interceptación
+        self.driver.execute_script("arguments[0].click();", switch_input)
+        print("✅ Switch de mantas y pañuelos activado")
     
     
     # Método para agregar helados
@@ -357,16 +584,49 @@ class UrbanRoutesPage:
             time.sleep(0.5)  # Pequeña pausa entre clics
             print(f"✅ Helado agregado ({i+1}/{quantity})")
 
-    def click_order_taxi_final(self):
-        self.wait.until(EC.element_to_be_clickable(self.ORDER_TAXI_BUTTON_FINAL)).click()
 
-    def wait_for_bender(self):
-        return self.wait.until(EC.presence_of_element_located(self.BENDER_IMAGE))
-
-    def is_from_address_set(self, expected_address):
-        from_field = self.driver.find_element(*self.FROM_FIELD)
-        return from_field.get_attribute("value") == expected_address
-
-    def is_to_address_set(self, expected_address):
-        to_field = self.driver.find_element(*self.TO_FIELD)
-        return to_field.get_attribute("value") == expected_address
+    # Método para hacer clic en el botón final Pedir un taxi
+    def click_order_taxi_button(self):
+        """Hace clic en el botón final 'Pedir un taxi'"""
+        button = self.wait.until(
+            EC.element_to_be_clickable(self.ORDER_TAXI_FINAL_BUTTON)
+        )
+        button.click()
+        print("✅ Botón 'Pedir un taxi' clickeado.")
+    
+    
+    # Localizadores para el modal de información del conductor
+    def wait_for_driver_info_modal(self, timeout=40):
+        """Espera a que aparezca el modal con información del conductor"""
+        try:
+            modal = WebDriverWait(self.driver, timeout).until(
+                EC.visibility_of_element_located(self.DRIVER_INFO_MODAL)
+            )
+            print("✅ Modal de información del conductor visible.")
+            return modal
+        except Exception as e:
+            print(f"❌ No se pudo encontrar el modal del conductor: {e}")
+            raise
+    
+    
+    # Método para verificar si la imagen del conductor está visible
+    def is_driver_image_visible(self, timeout=40):
+        """Verifica si la imagen del conductor está visible"""
+        try:
+            image = WebDriverWait(self.driver, timeout).until(
+                EC.presence_of_element_located(self.DRIVER_IMAGE)
+            )
+            is_visible = image.is_displayed()
+            if is_visible:
+                print("✅ Imagen del conductor visible.")
+            return is_visible
+        except Exception as e:
+            print(f"❌ Imagen del conductor no encontrada: {e}")
+            return False
+        
+        # TODO: Agregar métodos para detalles del viaje y cancelar pedido si es necesario
+        # TODO: Agregar manejo de excepciones y logs detallados en cada método  
+        # TODO: Agregar validaciones adicionales según se requiera
+        # TODO: Agregar métodos para capturas de pantalla en caso de errores
+        # TODO: Agregar métodos para esperar elementos específicos si es necesario
+        # TODO: Agregar métodos para validar estados de botones (habilitado/deshabilitado)
