@@ -21,3 +21,8 @@ playground/
 local_settings.py
 config.yaml
 secrets.json
+
+# Archivos de debugging generados
+debug_*.html
+debug_output/
+*.debug.html
