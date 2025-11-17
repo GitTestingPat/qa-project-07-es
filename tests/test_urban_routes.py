@@ -566,7 +566,40 @@ def test_018_add_blankets_and_tissues(page_with_url):
 # Test 19: Hace clic en el botón seleccionar "Cortina Acústica" y verifica que el botón esté visible.
 def test_019_add_acoustic_curtain(page_with_url):
     print(f"\n🔍 Abriendo página para test 19: '{data.BASE_URL}'")
-    # Implementar según necesidad
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+    page_with_url.click_request_taxi()
+    
+    page_with_url.select_comfort_category()
+    page_with_url.click_phone_field()
+    
+    phone_number = data.UrbanRoutesData.PHONE_NUMBER
+    page_with_url.enter_phone_number(phone_number)
+    page_with_url.click_next_button()
+    
+    # Confirmar SMS
+    try:
+        sms_code = page_with_url.get_sms_code_from_network(phone_number)
+        page_with_url.enter_sms_code(sms_code)
+        page_with_url.click_confirm_button()
+    except Exception as e:
+        pytest.fail(f"❌ Error al capturar o ingresar el código SMS: {e}")
+    
+    # Configurar pago
+    page_with_url.click_payment_method_button()
+    page_with_url.click_add_card_button()
+    page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
+    page_with_url.enter_card_code(data.UrbanRoutesData.CARD_CODE)
+    page_with_url.click_add_card_confirm_button()
+    page_with_url.close_payment_modal()
+    
+    print("\n📋 Verificando sección 'Requisitos del Pedido'...")
+    assert page_with_url.is_order_requirements_section_visible()
+    
+    # Test 19: Activar switch de cortina acústica
+    print("\n🔇 Activando cortina acústica...")
+    page_with_url.add_acoustic_curtain()
+    
     print("✅ Test 19 - Placeholder completado.")
 
 
