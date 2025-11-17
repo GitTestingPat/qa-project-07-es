@@ -69,6 +69,9 @@ class UrbanRoutesPage:
     BLANKETS_SWITCH = (By.XPATH, "//div[@class='r-sw']//input[@type='checkbox']")
     ICE_CREAM_COUNTER_PLUS = (By.XPATH, "//div[@class='r-group']//div[@class='counter-plus']")
     
+    # Localizador para agregar cortina acustica
+    ADD_ACOUSTIC_CURTAIN_BUTTON = (By.XPATH, "//button[contains(text(), 'Add acoustic curtain')]")
+    
     # Localizadores para pedir taxi y conductor
     ORDER_TAXI_FINAL_BUTTON = (By.CLASS_NAME, "smart-button")
     DRIVER_INFO_MODAL = (By.CLASS_NAME, "order-header-title")
@@ -435,6 +438,15 @@ class UrbanRoutesPage:
         self.driver.execute_script("arguments[0].click();", switch_input)
         print("✅ Switch de mantas y pañuelos activado")
     
+    # Método para agregar cortina acústica
+    def add_acoustic_curtain(self):
+        """Hace clic en el botón para agregar cortina acústica"""
+        button = self.wait.until(
+            EC.element_to_be_clickable(self.ADD_ACOUSTIC_CURTAIN_BUTTON)
+        )
+        button.click()
+        print("✅ Botón 'Agregar cortina acústica' clickeado.")
+    
     
     # Método para agregar helados
     def add_ice_cream(self, quantity=2):
@@ -458,7 +470,7 @@ class UrbanRoutesPage:
         print("✅ Botón 'Pedir un taxi' clickeado.")
     
     
-    # Localizadores para el modal de información del conductor
+    # Método para el modal de información del conductor
     def wait_for_driver_info_modal(self, timeout=40):
         """Espera a que aparezca el modal con información del conductor"""
         try:
