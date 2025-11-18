@@ -72,8 +72,11 @@ class UrbanRoutesPage:
     # Localizador para cortina acústica (checkbox)
     ACOUSTIC_CURTAIN_SWITCH = (By.XPATH, "(//input[@type='checkbox' and @class='switch-input'])[2]")
     
-    # Localizador para agregar helados
+    # Localizador para agregar helados (botón +)
     ICE_CREAM_COUNTER_PLUS = (By.XPATH, "//div[@class='r-group']//div[@class='counter-plus']")
+    
+    # Localizador para agregar chocolate (botón + de chocolate específicamente)
+    CHOCOLATE_COUNTER_PLUS = (By.XPATH, "//div[@class='r-counter-label' and text()='Chocolate']/following-sibling::div[@class='r-counter']//div[@class='counter-plus']")
     
     # ---------------------------------------------
     # Localizadores para pedir taxi y conductor
@@ -472,14 +475,58 @@ class UrbanRoutesPage:
     
     # Método para agregar helados
     def add_ice_cream(self, quantity=2):
-        """Agrega helados"""
+        """Agrega helados usando el botón +"""
+        import time
+        
+        # Esperar a que overlay desaparezca completamente
+        time.sleep(1)
+        try:
+            self.wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, 'overlay')))
+        except Exception:
+            pass
+        
+        # Hacer scroll hacia el elemento
+        self.driver.execute_script("window.scrollBy(0, 300);")
+        time.sleep(0.5)
+        
+        # Localizar el botón +
         plus_button = self.wait.until(
-            EC.element_to_be_clickable(self.ICE_CREAM_COUNTER_PLUS)
+            EC.presence_of_element_located(self.ICE_CREAM_COUNTER_PLUS)
         )
+        
+        # Hacer clics usando JavaScript para evitar interceptación
         for i in range(quantity):
-            plus_button.click()
-            time.sleep(0.5)  # Pequeña pausa entre clics
+            self.driver.execute_script("arguments[0].click();", plus_button)
+            time.sleep(0.3)
             print(f"✅ Helado agregado ({i+1}/{quantity})")
+            
+    
+    # Método para agregar chocolate
+    def add_chocolate(self, quantity=2):
+        """Agrega chocolates usando el botón +"""
+        import time
+        
+        # Esperar a que overlay desaparezca completamente
+        time.sleep(1)
+        try:
+            self.wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, 'overlay')))
+        except Exception:
+            pass
+        
+        # Hacer scroll hacia el elemento
+        self.driver.execute_script("window.scrollBy(0, 400);")
+        time.sleep(0.5)
+        
+        # Localizar el botón +
+        plus_button = self.wait.until(
+            EC.presence_of_element_located(self.CHOCOLATE_COUNTER_PLUS)
+        )
+        
+        # Hacer clics usando JavaScript para evitar interceptación
+        for i in range(quantity):
+            self.driver.execute_script("arguments[0].click();", plus_button)
+            time.sleep(0.3)
+            print(f"✅ Chocolate agregado ({i+1}/{quantity})")
 
 
     # Método para hacer clic en el botón final Pedir un taxi
