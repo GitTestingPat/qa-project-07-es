@@ -65,13 +65,17 @@ class UrbanRoutesPage:
     # Localizador para la sección Requisitos del Pedido
     ORDER_REQUIREMENTS_SECTION = (By.XPATH, "//div[@class='reqs-head']")
     
-    # Localizadores para requisitos del pedido
+    # --- Localizadores para requisitos del pedido ---
+    # Localizador para el switch de agregar mantas y pañuelos
     BLANKETS_SWITCH = (By.XPATH, "//div[@class='r-sw']//input[@type='checkbox']")
+        
+    # Localizador para cortina acústica (checkbox)
+    ACOUSTIC_CURTAIN_SWITCH = (By.XPATH, "(//input[@type='checkbox' and @class='switch-input'])[2]")
+    
+    # Localizador para agregar helados
     ICE_CREAM_COUNTER_PLUS = (By.XPATH, "//div[@class='r-group']//div[@class='counter-plus']")
     
-    # Localizador para agregar cortina acustica
-    ADD_ACOUSTIC_CURTAIN_BUTTON = (By.XPATH, "//button[contains(text(), 'Add acoustic curtain')]")
-    
+    # ---------------------------------------------
     # Localizadores para pedir taxi y conductor
     ORDER_TAXI_FINAL_BUTTON = (By.CLASS_NAME, "smart-button")
     DRIVER_INFO_MODAL = (By.CLASS_NAME, "order-header-title")
@@ -403,6 +407,7 @@ class UrbanRoutesPage:
         value = input_field.get_attribute("value")
         print(f"💬 Mensaje actual: '{value}'")
         return value
+    
 
     # Método para verificar si la sección de Requisitos del Pedido está visible y hacer clic en ella
     def is_order_requirements_section_visible(self):
@@ -437,16 +442,33 @@ class UrbanRoutesPage:
         # Usar JavaScript para evitar problemas de interceptación
         self.driver.execute_script("arguments[0].click();", switch_input)
         print("✅ Switch de mantas y pañuelos activado")
+        
     
     # Método para agregar cortina acústica
     def add_acoustic_curtain(self):
-        """Hace clic en el botón para agregar cortina acústica"""
-        button = self.wait.until(
-            EC.element_to_be_clickable(self.ADD_ACOUSTIC_CURTAIN_BUTTON)
+        """Activa el switch de cortina acústica"""
+        import time
+        
+        # Esperar a que overlay desaparezca completamente
+        time.sleep(1)
+        try:
+            self.wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, 'overlay')))
+        except Exception:
+            pass
+        
+        # Hacer scroll hacia el elemento primero
+        self.driver.execute_script("window.scrollBy(0, 200);")
+        time.sleep(0.5)
+        
+        # Localizar el segundo checkbox (cortina acústica)
+        switch_input = self.wait.until(
+            EC.presence_of_element_located(self.ACOUSTIC_CURTAIN_SWITCH)
         )
-        button.click()
-        print("✅ Botón 'Agregar cortina acústica' clickeado.")
-    
+        
+        # Usar JavaScript para hacer clic
+        self.driver.execute_script("arguments[0].click();", switch_input)
+        print("✅ Switch de cortina acústica activado")
+        
     
     # Método para agregar helados
     def add_ice_cream(self, quantity=2):
