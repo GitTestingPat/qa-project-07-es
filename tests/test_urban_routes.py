@@ -629,25 +629,59 @@ def test_020_add_ice_cream(page_with_url):
     page_with_url.click_payment_method_button()
     page_with_url.click_add_card_button()
     page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
-    page_with_url.enter_card_cvv(data.UrbanRoutesData.CARD_CODE)
+    page_with_url.enter_card_code(data.UrbanRoutesData.CARD_CODE)
     page_with_url.click_add_card_confirm_button()
     page_with_url.close_payment_modal()
     
-    # Agregar extras
-    page_with_url.add_blankets_and_tissues(quantity=2)
+    print("\n📋 Verificando sección 'Requisitos del Pedido'...")
+    assert page_with_url.is_order_requirements_section_visible()
     
     # Test 20: Agregar helado
     print("\n🍦 Agregando helado...")
-    page_with_url.add_ice_cream(quantity=2)
+    page_with_url.add_ice_cream(quantity=1)
     
     print("✅ Test 20 completado exitosamente.")
     
     
 # Test 21: Hace click en el selector de cantidad de Chocolate y agrega 1 producto
-def test_021_placeholder_chocolate(page_with_url):
-    print("✅ Test 21 - Placeholder para chocolate.")
+def test_021_add_chocolate(page_with_url):
+    print(f"\n🔍 Abriendo página para test 21: '{data.BASE_URL}'")
+    page_with_url.set_from_address(data.UrbanRoutesData.ADDRESS_FROM)
+    page_with_url.set_to_address(data.UrbanRoutesData.TO_ADDRESS)
+    page_with_url.click_request_taxi()
+    
+    page_with_url.select_comfort_category()
+    page_with_url.click_phone_field()
+    
+    phone_number = data.UrbanRoutesData.PHONE_NUMBER
+    page_with_url.enter_phone_number(phone_number)
+    page_with_url.click_next_button()
+    
+    # Confirmar SMS
+    try:
+        sms_code = page_with_url.get_sms_code_from_network(phone_number)
+        page_with_url.enter_sms_code(sms_code)
+        page_with_url.click_confirm_button()
+    except Exception as e:
+        pytest.fail(f"❌ Error al capturar o ingresar el código SMS: {e}")
+    
+    # Configurar pago
+    page_with_url.click_payment_method_button()
+    page_with_url.click_add_card_button()
+    page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
+    page_with_url.enter_card_code(data.UrbanRoutesData.CARD_CODE)
+    page_with_url.click_add_card_confirm_button()
+    page_with_url.close_payment_modal()
+    
+    print("\n📋 Verificando sección 'Requisitos del Pedido'...")
+    assert page_with_url.is_order_requirements_section_visible()
+    
+    # Test 21: Agregar chocolate
+    print("\n🍫 Agregando chocolate...")    
+    page_with_url.add_chocolate(quantity=1)
+    
+    print("✅ Test 21 completado exitosamente.")
 
-# TODO: MODIFICAR PRINT DEL TEST 21
 
 # Test 22: Hace click en el selector de cantidad de Fresa y agrega 1 producto
 def test_022_placeholder_strawberry(page_with_url):
