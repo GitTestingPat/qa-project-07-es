@@ -600,8 +600,7 @@ def test_019_add_acoustic_curtain(page_with_url):
     print("\n🔇 Activando cortina acústica...")
     page_with_url.add_acoustic_curtain()
     
-    print("✅ Test 19 - Placeholder completado.")
-
+    print("✅ Test 19 completado exitosamente.")
 
 # <---- Acciones dentro de Cubeta de Helado --->
 # Test 20: Hace click en el selector de cantidad de Helado y agrega 1 producto
@@ -648,10 +647,13 @@ def test_020_add_ice_cream(page_with_url):
 def test_021_placeholder_chocolate(page_with_url):
     print("✅ Test 21 - Placeholder para chocolate.")
 
+# TODO: MODIFICAR PRINT DEL TEST 21
 
 # Test 22: Hace click en el selector de cantidad de Fresa y agrega 1 producto
 def test_022_placeholder_strawberry(page_with_url):
     print("✅ Test 22 - Placeholder para fresa.")
+
+#TODO: MODIFICAR PRINT DEL TEST 22
 
 # Test 23: Hace click en el botón "Pedir un Taxi"
 def test_023_click_order_taxi_final(page_with_url):
@@ -742,8 +744,20 @@ def test_024_wait_for_driver_image(page_with_url):
 def test_025_view_trip_details(page_with_url):
     print("✅ Test 25 - Placeholder para detalles del viaje.")
 
+#TODO: MODIFICAR PRINT DEL TEST 25
 
 # Test 26: Hace click en el botón "Cancelar"
 def test_026_cancel_trip(page_with_url):
     print("✅ Test 26 - Placeholder para cancelar viaje.")
     
+# TODO: MODIFICAR PRINT DEL TEST 26
+
+#--- Fin de tests en tests/test_urban_routes.py ---
+
+# Nota: Los tests del 21 al 26 son placeholders y deben ser implementados con la lógica correspondiente.
+
+# TODO: AGREGAR DECORADORES DE ETIQUETAS A CADA TEST
+# Ejemplo:
+# @pytest.mark.smoke
+# def test_01_urbanroutes_flow(page_with_url):
+#     ...   
