@@ -82,10 +82,14 @@ class UrbanRoutesPage:
     STRAWBERRY_COUNTER_PLUS = (By.XPATH, "//div[@class='r-counter-label' and text()='Strawberry']/following-sibling::div[@class='r-counter']//div[@class='counter-plus']")
     
     # ---------------------------------------------
-    # Localizadores para pedir taxi y conductor
+    # Localizador para el botón final pedir un taxi 
     ORDER_TAXI_FINAL_BUTTON = (By.CLASS_NAME, "smart-button")
+
+    # Localizador para la imagen del conductor
+    DRIVER_IMAGE = (By.XPATH, "//img[@alt]")
+    
+    # Localizador para el modal de información del conductor
     DRIVER_INFO_MODAL = (By.CLASS_NAME, "order-header-title")
-    DRIVER_IMAGE = (By.XPATH, "//img[@alt='Driver' or @class='driver-photo']")
     
     # Botón de detalles del viaje
     TRIP_DETAILS_BUTTON = (By.XPATH, "//button[contains(text(), 'Detalles') or contains(@class, 'details')]")
@@ -585,6 +589,27 @@ class UrbanRoutesPage:
         print("✅ Botón 'Pedir un taxi' clickeado.")
     
     
+    # Método para verificar si la imagen del conductor está visible
+    def is_driver_image_visible(self, timeout=40):
+        """Verifica si la imagen del conductor está visible"""
+        try:
+            print("⏳ Esperando que aparezca la imagen del conductor...")
+            
+            # Esperar a que aparezca la imagen del conductor
+            image = WebDriverWait(self.driver, timeout).until(
+                EC.presence_of_element_located(self.DRIVER_IMAGE)
+            )
+            
+            is_visible = image.is_displayed()
+            if is_visible:
+                print("✅ Imagen del conductor visible.")
+            return is_visible
+            
+        except Exception as e:
+            print(f"❌ Imagen del conductor no encontrada después de {timeout}s: {e}")
+            return False
+        
+    
     # Método para el modal de información del conductor
     def wait_for_driver_info_modal(self, timeout=40):
         """Espera a que aparezca el modal con información del conductor"""
@@ -597,22 +622,6 @@ class UrbanRoutesPage:
         except Exception as e:
             print(f"❌ No se pudo encontrar el modal del conductor: {e}")
             raise
-    
-    
-    # Método para verificar si la imagen del conductor está visible
-    def is_driver_image_visible(self, timeout=40):
-        """Verifica si la imagen del conductor está visible"""
-        try:
-            image = WebDriverWait(self.driver, timeout).until(
-                EC.presence_of_element_located(self.DRIVER_IMAGE)
-            )
-            is_visible = image.is_displayed()
-            if is_visible:
-                print("✅ Imagen del conductor visible.")
-            return is_visible
-        except Exception as e:
-            print(f"❌ Imagen del conductor no encontrada: {e}")
-            return False
         
         # TODO: Agregar métodos para detalles del viaje y cancelar pedido si es necesario
         # TODO: Agregar manejo de excepciones y logs detallados en cada método  
