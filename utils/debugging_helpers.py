@@ -5,7 +5,7 @@ No se usan en tests regulares pero son útiles para investigación.
 
 def debug_iframes(self):
     """Método temporal para detectar iframes en la página"""
-    iframes = self.driver.find_elements(By.TAG_NAME, "iframe")  # noqa: F821
+    iframes = self.driver.find_elements(By.TAG_NAME, "iframe")  # type: ignore # noqa: F821
     print(f"\n🔍 Total de iframes encontrados: {len(iframes)}")
     
     for i, iframe in enumerate(iframes):
@@ -27,7 +27,7 @@ def debug_modal_html(self):
     print("✅ HTML guardado en 'debug_modal.html'")
     
     # Buscar TODOS los botones
-    buttons = self.driver.find_elements(By.TAG_NAME, "button")  # noqa: F821
+    buttons = self.driver.find_elements(By.TAG_NAME, "button")  # type: ignore # noqa: F821
     print(f"\n🔍 Total de botones encontrados: {len(buttons)}")
     
     for i, btn in enumerate(buttons):
@@ -52,16 +52,57 @@ def debug_modal_html(self):
     
     # Buscar el modal específico
     try:
-        modals = self.driver.find_elements(By.CLASS_NAME, "modal")  # noqa: F821
+        modals = self.driver.find_elements(By.CLASS_NAME, "modal")  # type: ignore # noqa: F821
         print(f"\n🔍 Modales encontrados: {len(modals)}")
         for i, modal in enumerate(modals):
             if modal.is_displayed():
                 print(f"\nModal {i+1} visible:")
                 print(f"  Clases: {modal.get_attribute('class')}")
                 # Buscar botones dentro del modal
-                modal_buttons = modal.find_elements(By.TAG_NAME, "button")  # noqa: F821
+                modal_buttons = modal.find_elements(By.TAG_NAME, "button")  # type: ignore # noqa: F821
                 print(f"  Botones dentro: {len(modal_buttons)}")
                 for j, mb in enumerate(modal_buttons):
                     print(f"    Botón {j+1}: '{mb.text}' - visible: {mb.is_displayed()}")
     except Exception as e:
         print(f"Error buscando modales: {e}")
+        
+
+def is_driver_image_visible(self, timeout=40):
+        """Verifica si la imagen del conductor está visible"""
+        try:
+            print("⏳ Esperando que aparezca la imagen del conductor...")
+            
+            # Guardar HTML para diagnóstico
+            import time
+            time.sleep(5)  # Esperar un poco después de hacer clic
+            
+            with open('debug_after_order.html', 'w', encoding='utf-8') as f:
+                f.write(self.driver.page_source)
+            print("📄 HTML guardado en debug_after_order.html")
+            
+            # Intentar múltiples estrategias de búsqueda
+            locators = [
+                (By.XPATH, "//img[contains(@src, 'bender')]"),  # noqa: F821 # type: ignore # type: ignore
+                (By.XPATH, "//img[contains(@src, 'driver')]"),  # noqa: F821 # type: ignore
+                (By.XPATH, "//div[@class='order-body']//img"),  # noqa: F821 # type: ignore
+                (By.CSS_SELECTOR, "img[alt*='driver']"),  # noqa: F821 # type: ignore # type: ignore
+                (By.XPATH, "//img[@alt]")  # noqa: F821 # type: ignore
+            ]
+            
+            for locator in locators:
+                try:
+                    image = WebDriverWait(self.driver, timeout).until(  # noqa: F821 # type: ignore
+                        EC.presence_of_element_located(locator)  # noqa: F821 # type: ignore
+                    )
+                    if image.is_displayed():
+                        print(f"✅ Imagen del conductor visible con locator: {locator}")
+                        return True
+                except Exception:
+                    continue
+            
+            print("❌ No se encontró la imagen con ningún localizador")
+            return False
+            
+        except Exception as e:
+            print(f"❌ Error: {e}")
+            return False
