@@ -803,7 +803,7 @@ def test_024_wait_for_driver_image(page_with_url):
     
     # Test 24: Esperar imagen del conductor
     print("\n👤 Esperando imagen del conductor...")
-    assert page_with_url.is_driver_image_visible(timeout=40)
+    assert page_with_url.is_driver_image_visible()
     
     print("✅ Test 24 completado exitosamente.")
     
