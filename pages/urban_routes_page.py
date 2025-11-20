@@ -87,7 +87,7 @@ class UrbanRoutesPage:
     DRIVER_INFO_MODAL = (By.CLASS_NAME, "order-header-title")
     DRIVER_IMAGE = (By.XPATH, "//img[@alt='Driver' or @class='driver-photo']")
     
-    # Botón de detalles del viaje (si existe)
+    # Botón de detalles del viaje
     TRIP_DETAILS_BUTTON = (By.XPATH, "//button[contains(text(), 'Detalles') or contains(@class, 'details')]")
     
     # Botón cancelar
@@ -562,10 +562,26 @@ class UrbanRoutesPage:
     # Método para hacer clic en el botón final Pedir un taxi
     def click_order_taxi_button(self):
         """Hace clic en el botón final 'Pedir un taxi'"""
+        import time
+        
+        # Esperar a que overlay desaparezca completamente
+        time.sleep(1)
+        try:
+            self.wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, 'overlay')))
+        except Exception:
+            pass
+        
+        # Hacer scroll hacia el botón
+        self.driver.execute_script("window.scrollBy(0, 500);")
+        time.sleep(0.5)
+        
+        # Localizar el botón
         button = self.wait.until(
-            EC.element_to_be_clickable(self.ORDER_TAXI_FINAL_BUTTON)
+            EC.presence_of_element_located(self.ORDER_TAXI_FINAL_BUTTON)
         )
-        button.click()
+        
+        # Hacer clic con JavaScript para evitar interceptación
+        self.driver.execute_script("arguments[0].click();", button)
         print("✅ Botón 'Pedir un taxi' clickeado.")
     
     
