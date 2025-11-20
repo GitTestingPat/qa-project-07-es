@@ -78,6 +78,9 @@ class UrbanRoutesPage:
     # Localizador para agregar chocolate (botón + de chocolate específicamente)
     CHOCOLATE_COUNTER_PLUS = (By.XPATH, "//div[@class='r-counter-label' and text()='Chocolate']/following-sibling::div[@class='r-counter']//div[@class='counter-plus']")
     
+    # Localizador para agregar fresa (botón + de fresa específicamente)
+    STRAWBERRY_COUNTER_PLUS = (By.XPATH, "//div[@class='r-counter-label' and text()='Strawberry']/following-sibling::div[@class='r-counter']//div[@class='counter-plus']")
+    
     # ---------------------------------------------
     # Localizadores para pedir taxi y conductor
     ORDER_TAXI_FINAL_BUTTON = (By.CLASS_NAME, "smart-button")
@@ -527,6 +530,33 @@ class UrbanRoutesPage:
             self.driver.execute_script("arguments[0].click();", plus_button)
             time.sleep(0.3)
             print(f"✅ Chocolate agregado ({i+1}/{quantity})")
+            
+    # Método para agregar fresa
+    def add_strawberry(self, quantity=2):
+        """Agrega fresas usando el botón +"""
+        import time
+        
+        # Esperar a que overlay desaparezca completamente
+        time.sleep(1)
+        try:
+            self.wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, 'overlay')))
+        except Exception:
+            pass
+        
+        # Hacer scroll hacia el elemento
+        self.driver.execute_script("window.scrollBy(0, 500);")
+        time.sleep(0.5)
+        
+        # Localizar el botón +
+        plus_button = self.wait.until(
+            EC.presence_of_element_located(self.STRAWBERRY_COUNTER_PLUS)
+        )
+        
+        # Hacer clics usando JavaScript para evitar interceptación
+        for i in range(quantity):
+            self.driver.execute_script("arguments[0].click();", plus_button)
+            time.sleep(0.3)
+            print(f"✅ Fresa agregada ({i+1}/{quantity})")
 
 
     # Método para hacer clic en el botón final Pedir un taxi
