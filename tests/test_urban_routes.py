@@ -722,7 +722,6 @@ def test_022_add_strawberry(page_with_url):
     
     print("✅ Test 22 completado exitosamente.")
 
-#TODO: MODIFICAR PRINT DEL TEST 22
 
 # Test 23: Hace click en el botón "Pedir un Taxi"
 def test_023_click_order_taxi_final(page_with_url):
@@ -750,13 +749,13 @@ def test_023_click_order_taxi_final(page_with_url):
     page_with_url.click_payment_method_button()
     page_with_url.click_add_card_button()
     page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
-    page_with_url.enter_card_cvv(data.UrbanRoutesData.CARD_CODE)
+    page_with_url.enter_card_code(data.UrbanRoutesData.CARD_CODE)
     page_with_url.click_add_card_confirm_button()
     page_with_url.close_payment_modal()
     
     # Agregar extras
-    page_with_url.add_blankets_and_tissues(quantity=2)
-    page_with_url.add_ice_cream(quantity=2)
+    page_with_url.add_blankets_and_tissues()
+    page_with_url.add_ice_cream(quantity=1)
     
     # Test 23: Pedir un taxi
     print("\n🚕 Haciendo clic en 'Pedir un taxi'...")
@@ -791,13 +790,13 @@ def test_024_wait_for_driver_image(page_with_url):
     page_with_url.click_payment_method_button()
     page_with_url.click_add_card_button()
     page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
-    page_with_url.enter_card_cvv(data.UrbanRoutesData.CARD_CODE)
+    page_with_url.enter_card_code(data.UrbanRoutesData.CARD_CODE)
     page_with_url.click_add_card_confirm_button()
     page_with_url.close_payment_modal()
     
     # Agregar extras
-    page_with_url.add_blankets_and_tissues(quantity=2)
-    page_with_url.add_ice_cream(quantity=2)
+    page_with_url.add_blankets_and_tissues()
+    page_with_url.add_ice_cream(quantity=1)
     
     # Pedir taxi
     page_with_url.click_order_taxi_button()
