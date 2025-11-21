@@ -891,7 +891,7 @@ def test_026_view_trip_details(page_with_url):
     # Pedir taxi
     page_with_url.click_order_taxi_button()
     
-    # Click en Detalles
+    # Test 26: Click en Detalles
     print("\n📄 Haciendo clic en 'Detalles' del viaje...")
     assert page_with_url.click_trip_details_button()
     
