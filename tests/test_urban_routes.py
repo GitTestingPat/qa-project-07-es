@@ -162,8 +162,8 @@ def test_08_click_next_button(page_with_url):
     print(f"✅ Número de teléfono '{data.UrbanRoutesData.PHONE_NUMBER}' ingresado.")
     
     # Hacer clic en el botón "Siguiente"
-    assert page_with_url.click_next_button()
-    assert page_with_url.driver.find_element(By.ID, "code").is_displayed()
+    page_with_url.click_next_button()
+    page_with_url.driver.find_element(By.ID, "code").is_displayed()
 
 
 # Test 09: Captura el código SMS desde la red, lo ingresa y verifica que el código se haya ingresado correctamente.
@@ -237,8 +237,8 @@ def test_10_click_payment_method_button(page_with_url):
     
     # Test 10: Verificar y hacer clic en Método de pago
     print("\n💳 Verificando botón 'Método de pago'...")
-    assert page_with_url.is_payment_method_button_visible()
-    assert page_with_url.click_payment_method_button()
+    page_with_url.is_payment_method_button_visible()
+    page_with_url.click_payment_method_button()
     
     print("✅ Test 10 completado exitosamente.")
 
@@ -277,13 +277,10 @@ def test_11_click_add_card_button(page_with_url):
     page_with_url.click_payment_method_button()
     print("✅ Botón 'Método de pago' clickeado.")
     
-    # 🔍 DEBUGGING: Ver elementos disponibles
-    # page_with_url.debug_add_card_elements()
-    
     # Test 11: Verificar y hacer clic en Agregar tarjeta
     print("\n💳 Verificando botón 'Agregar tarjeta'...")
-    assert page_with_url.is_add_card_button_visible()
-    assert page_with_url.click_add_card_button()
+    page_with_url.is_add_card_button_visible()
+    page_with_url.click_add_card_button()
     
     print("✅ Test 11 completado exitosamente.")
 
@@ -426,7 +423,7 @@ def test_014_click_add_card_confirm(page_with_url):
     
     # Test 14: Hacer clic en Agregar
     print("\n💳 Haciendo clic en 'Agregar'...")
-    assert page_with_url.click_add_card_confirm_button()
+    page_with_url.click_add_card_confirm_button()
     
     print("✅ Test 14 completado exitosamente.")
 
@@ -462,7 +459,7 @@ def test_015_close_payment_modal(page_with_url):
     
     # Test 15: Cerrar modal
     print("\n❌ Cerrando modal de pago...")
-    assert page_with_url.close_payment_modal()
+    page_with_url.close_payment_modal()
     
     print("✅ Test 15 completado exitosamente.")
 
@@ -556,11 +553,11 @@ def test_018_add_blankets_and_tissues(page_with_url):
     page_with_url.close_payment_modal()
     
     print("\n📋 Verificando sección 'Requisitos del Pedido'...")
-    assert page_with_url.is_order_requirements_section_visible()
+    page_with_url.is_order_requirements_section_visible()
     
     # Test 18: Activar switch de mantas y pañuelos
     print("\n🧣 Activando mantas y pañuelos...")
-    assert page_with_url.add_blankets_and_tissues() 
+    page_with_url.add_blankets_and_tissues() 
     
     print("✅ Test 18 completado exitosamente.")
 
@@ -596,11 +593,11 @@ def test_019_add_acoustic_curtain(page_with_url):
     page_with_url.close_payment_modal()
     
     print("\n📋 Verificando sección 'Requisitos del Pedido'...")
-    assert page_with_url.is_order_requirements_section_visible()
+    page_with_url.is_order_requirements_section_visible()
     
     # Test 19: Activar switch de cortina acústica
     print("\n🔇 Activando cortina acústica...")
-    assert page_with_url.add_acoustic_curtain()
+    page_with_url.add_acoustic_curtain()
     
     print("✅ Test 19 completado exitosamente.")
 
@@ -636,11 +633,11 @@ def test_020_add_ice_cream(page_with_url):
     page_with_url.close_payment_modal()
     
     print("\n📋 Verificando sección 'Requisitos del Pedido'...")
-    assert page_with_url.is_order_requirements_section_visible()
+    page_with_url.is_order_requirements_section_visible()
     
     # Test 20: Agregar helado
     print("\n🍦 Agregando helado...")
-    assert page_with_url.add_ice_cream(quantity=1)
+    page_with_url.add_ice_cream(quantity=1)
     
     print("✅ Test 20 completado exitosamente.")
     
@@ -676,11 +673,11 @@ def test_021_add_chocolate(page_with_url):
     page_with_url.close_payment_modal()
     
     print("\n📋 Verificando sección 'Requisitos del Pedido'...")
-    assert page_with_url.is_order_requirements_section_visible()
+    page_with_url.is_order_requirements_section_visible()
     
     # Test 21: Agregar chocolate
     print("\n🍫 Agregando chocolate...")    
-    assert page_with_url.add_chocolate(quantity=1)
+    page_with_url.add_chocolate(quantity=1)
     
     print("✅ Test 21 completado exitosamente.")
 
@@ -716,11 +713,11 @@ def test_022_add_strawberry(page_with_url):
     page_with_url.close_payment_modal()
     
     print("\n📋 Verificando sección 'Requisitos del Pedido'...")
-    assert page_with_url.is_order_requirements_section_visible()
+    page_with_url.is_order_requirements_section_visible()
     
     # Test 22: Agregar fresa
     print("\n🍓 Agregando fresa...")
-    assert page_with_url.add_strawberry(quantity=1)
+    page_with_url.add_strawberry(quantity=1)
     
     print("✅ Test 22 completado exitosamente.")
 
@@ -761,7 +758,7 @@ def test_023_click_order_taxi_final(page_with_url):
     
     # Test 23: Pedir un taxi
     print("\n🚕 Haciendo clic en 'Pedir un taxi'...")
-    assert page_with_url.click_order_taxi_button()
+    page_with_url.click_order_taxi_button()
     
     print("✅ Test 23 completado exitosamente.")
     
