@@ -95,7 +95,7 @@ class UrbanRoutesPage:
     TRIP_DETAILS_BUTTON = (By.XPATH, "//img[@alt='burger']")
     
     # Botón cancelar
-    CANCEL_BUTTON = (By.XPATH, "//button[contains(text(), 'Cancelar') or contains(@class, 'cancel')]")
+    CANCEL_BUTTON = (By.XPATH, "//button[@type='button']//img[@alt='close']")
 
 
     def __init__(self, driver):
@@ -653,17 +653,19 @@ class UrbanRoutesPage:
         
         
     # Método para hacer clic en botón cancelar
-    def click_cancel_button(self):  
+    def click_cancel_trip_button(self):  
         """Hace clic en el botón 'Cancelar'"""
         try:
             button = self.wait.until(
-                EC.element_to_be_clickable(self.CANCEL_BUTTON)
+                EC.presence_of_element_located(self.CANCEL_BUTTON)
             )
-            button.click()
+            self.driver.execute_script("arguments[0].click();", button)
             print("✅ Botón 'Cancelar' clickeado.")
             print("✅ Viaje cancelado correctamente.")
+            return True
         except Exception as e:
             print(f"❌ No se pudo cancelar el viaje: {e}")
+            return False
 
         
         # TODO: Agregar manejo de excepciones y logs detallados en cada método  
