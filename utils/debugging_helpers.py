@@ -106,3 +106,6 @@ def is_driver_image_visible(self, timeout=40):
         except Exception as e:
             print(f"❌ Error: {e}")
             return False
+        
+# 🔍 DEBUGGING: Ver elementos disponibles
+page_with_url.debug_add_card_elements()  # type: ignore # noqa: F821
