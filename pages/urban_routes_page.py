@@ -92,7 +92,7 @@ class UrbanRoutesPage:
     DRIVER_INFO_MODAL = (By.CLASS_NAME, "order-header-title")
     
     # Botón de detalles del viaje
-    TRIP_DETAILS_BUTTON = (By.XPATH, "//button[contains(text(), 'Detalles') or contains(@class, 'details')]")
+    TRIP_DETAILS_BUTTON = (By.XPATH, "//img[@alt='burger']")
     
     # Botón cancelar
     CANCEL_BUTTON = (By.XPATH, "//button[contains(text(), 'Cancelar') or contains(@class, 'cancel')]")
@@ -624,6 +624,33 @@ class UrbanRoutesPage:
         except Exception as e:
             print(f"❌ Modal de información del conductor NO está visible: {e}")
             return False
+    
+    
+    # Método para hacer clic en el botón Detalles del viaje
+    def click_trip_details_button(self):  
+        """Hace clic en el botón 'Detalles del viaje'"""
+        try:
+            # Esperar a que el elemento esté presente
+            button = self.wait.until(
+                EC.presence_of_element_located(self.TRIP_DETAILS_BUTTON)
+            )
+            
+            # Intentar clic normal primero
+            try:
+                button.click()
+                print("✅ Botón 'Detalles del viaje' clickeado (clic normal).")
+                return True
+            except Exception:
+                # Si falla por overlay, usar JavaScript
+                print("⚠️ Clic normal bloqueado, usando JavaScript...")
+                self.driver.execute_script("arguments[0].click();", button)
+                print("✅ Botón 'Detalles del viaje' clickeado (JavaScript).")
+                return True
+                
+        except Exception as e:
+            print(f"❌ No se pudo hacer clic en 'Detalles del viaje': {e}")
+            return False
+        
         
     # Método para hacer clic en botón cancelar
     def click_cancel_button(self):  
