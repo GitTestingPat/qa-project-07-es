@@ -12,6 +12,8 @@ env/
 screenshots/
 test-results/
 reports/
+report.html
+*.html
 
 # Experimentos personales
 scratch/
