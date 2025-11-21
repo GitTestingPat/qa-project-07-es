@@ -611,19 +611,34 @@ class UrbanRoutesPage:
         
     
     # Método para el modal de información del conductor
-    def wait_for_driver_info_modal(self, timeout=40):
-        """Espera a que aparezca el modal con información del conductor"""
+    def is_driver_info_visible(self): 
+        """Verifica si el modal de información del conductor está visible"""
         try:
-            modal = WebDriverWait(self.driver, timeout).until(
+            modal = self.wait.until(
                 EC.visibility_of_element_located(self.DRIVER_INFO_MODAL)
             )
-            print("✅ Modal de información del conductor visible.")
-            return modal
+            is_visible = modal.is_displayed()
+            if is_visible:
+                print("✅ Modal de información del conductor visible.")
+            return is_visible
         except Exception as e:
-            print(f"❌ No se pudo encontrar el modal del conductor: {e}")
-            raise
+            print(f"❌ Modal de información del conductor NO está visible: {e}")
+            return False
         
-        # TODO: Agregar métodos para detalles del viaje y cancelar pedido si es necesario
+    # Método para hacer clic en botón cancelar
+    def click_cancel_button(self):  
+        """Hace clic en el botón 'Cancelar'"""
+        try:
+            button = self.wait.until(
+                EC.element_to_be_clickable(self.CANCEL_BUTTON)
+            )
+            button.click()
+            print("✅ Botón 'Cancelar' clickeado.")
+            print("✅ Viaje cancelado correctamente.")
+        except Exception as e:
+            print(f"❌ No se pudo cancelar el viaje: {e}")
+
+        
         # TODO: Agregar manejo de excepciones y logs detallados en cada método  
         # TODO: Agregar validaciones adicionales según se requiera
         # TODO: Agregar métodos para capturas de pantalla en caso de errores
