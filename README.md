@@ -137,6 +137,14 @@ Once pytest is installed, you can run your tests as follows:
 ```bash
 pytest
 ```
+## Run tests
+
+### HTML Reports
+```bash
+pytest -v -s --html=report.html --self-contained-html
+```
+
+The report wil be generated in `report.html` (not versioned)
 
 This will execute all tests in the current directory and its subdirectories.
 
