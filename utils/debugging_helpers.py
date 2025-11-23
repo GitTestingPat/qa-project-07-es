@@ -109,3 +109,10 @@ def is_driver_image_visible(self, timeout=40):
         
 # 🔍 DEBUGGING: Ver elementos disponibles
 page_with_url.debug_add_card_elements()  # type: ignore # noqa: F821
+
+# 👇 DIAGNÓSTICO DEL DOM 👇
+print("\n📄 Guardando el código fuente de la página para inspección...")
+html_source = page_with_url.driver.page_source # type: ignore  # noqa: F821
+with open("debug_page_source.html", "w", encoding="utf-8") as f:
+    f.write(html_source)
+print("✅ Código fuente guardado en 'debug_page_source.html'. Por favor, ábrelo en un navegador y busca el campo de teléfono.")
