@@ -666,46 +666,6 @@ class UrbanRoutesPage:
         except Exception as e:
             print(f"❌ No se pudo cancelar el viaje: {e}")
             return False
-
-    # ---- Métodos auxiliares para validaciones y verificaciones ----
-    # Agrega validaciones incluyendo verificación de valores nulos, campos vacíos, atributos y estados de elementos.
-    # Método para verificar el estado de un elemento
-    def verify_element_state(self, locator, should_be_visible=True, should_be_enabled=True):
-        """Valida el estado de un elemento (visible, habilitado, etc.)"""
-        element = self.wait.until(EC.presence_of_element_located(locator))
-        
-        if should_be_visible:
-            assert element.is_displayed(), f"❌ Elemento no está visible: {locator}"
-        if should_be_enabled:
-            assert element.is_enabled(), f"❌ Elemento no está habilitado: {locator}"
-        
-        return element
-
-    # Método para verificar el valor de un input
-    def verify_input_value(self, locator, expected_value, field_name=""):
-        """Verifica que el valor de un input coincida con lo esperado"""
-        element = self.driver.find_element(*locator)
-        actual_value = element.get_attribute("value")
-        
-        assert actual_value is not None, f"❌ {field_name} es None"
-        assert actual_value != "", f"❌ {field_name} está vacío"
-        assert actual_value.strip() != "", f"❌ {field_name} contiene solo espacios"
-        assert actual_value == expected_value, f"❌ {field_name} no coincide. Esperado: '{expected_value}', Actual: '{actual_value}'"
-        
-        return actual_value
-
-    # Método para verificar si un texto está en el código fuente de la página
-    def verify_element_in_page_source(self, text, should_exist=True):
-        """Verifica que un texto exista o no en el código fuente"""
-        page_source = self.driver.page_source
-        text_found = text in page_source
-        
-        if should_exist:
-            assert text_found, f"❌ Texto '{text}' no encontrado en la página"
-        else:
-            assert not text_found, f"❌ Texto '{text}' encontrado pero no debería estar"
-        
-        return text_found
     
     
         
