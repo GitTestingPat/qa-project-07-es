@@ -51,6 +51,8 @@ def page_with_url(page):
     page.get_page(data.BASE_URL)
     return page
 
+# Fixture para abrir la URL base y habilitar CDP (Chrome DevTools Protocol) antes de cada test que lo requiera
+# Para capturar tráfico de red o realizar otras acciones avanzadas
 @pytest.fixture
 def page_with_url_and_cdp(driver, data):
     driver.get(data.BASE_URL)
