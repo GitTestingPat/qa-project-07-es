@@ -11,10 +11,18 @@ import data
 # Test 01: Abre la URL base y verifica que el título de la página contenga "Urban Routes".
 def test_01_urbanroutes_flow(page_with_url):
     print(f"\n🔍 Abriendo página para test 01: '{data.BASE_URL}'")
-    page_with_url.get_page(data.BASE_URL)
     print(f"📄 Título real: '{page_with_url.driver.title}'")
     print(f"🌐 URL actual: {page_with_url.driver.current_url}")
-    assert "Urban" in page_with_url.driver.title  
+    
+    # Validaciones adicionales
+    assert page_with_url.driver.title != "", "❌ El título de la página está vacío"
+    assert len(page_with_url.driver.title) > 0, "❌ El título no tiene contenido"
+    assert page_with_url.driver.current_url == data.BASE_URL, f"❌ URL no coincide. Esperado: {data.BASE_URL}, Actual: {page_with_url.driver.current_url}"
+    assert "Urban" in page_with_url.driver.title, f"❌ 'Urban' no encontrado en título: '{page_with_url.driver.title}'"
+    
+    # Verificación final
+    assert "Urban" in page_with_url.driver.title
+    print("✅ Título de la página contiene 'Urban'.")
 
 
 # Test 02: Ingresa la dirección de origen en el campo correspondiente y verifica que el valor del campo coincida con la dirección esperada.
@@ -34,8 +42,15 @@ def test_02_set_from_address(page_with_url):
     print(f"🎯 Dirección esperada:                '{valor_esperado}'")
     print(f"✅ ¿Coinciden? {valor_real == valor_esperado}")
 
+    # Validaciones adicionales
+    assert valor_real != "", "❌ El campo 'from' está vacío"
+    assert valor_real.strip() != "", "❌ El campo 'from' contiene solo espacios"
+    assert valor_real == valor_esperado, f"❌ Dirección no coincide. Esperado: '{valor_esperado}', Obtenido: '{valor_real}'"
+    assert from_field.is_displayed(), "❌ El campo 'from' no está visible"
+    
     # Verifica que el valor ingresado sea correcto 
     assert valor_real == valor_esperado
+    print("✅ Valor ingresado en el campo 'from' es correcto.")
 
 
 # Test 03: Ingresa la dirección de destino en el campo correspondiente y verifica que el valor del campo coincida con la dirección esperada.
@@ -55,8 +70,15 @@ def test_03_set_to_address(page_with_url):
     print(f"🎯 Dirección esperada:                 '{valor_esperado}'")
     print(f"✅ ¿Coinciden? {valor_real == valor_esperado}")
 
-    # Verificar
+    # Validaciones adicionales
+    assert valor_real != "", "❌ El campo 'to' está vacío"
+    assert valor_real.strip() != "", "❌ El campo 'to' contiene solo espacios"
+    assert valor_real == valor_esperado, f"❌ Dirección no coincide. Esperado: '{valor_esperado}', Obtenido: '{valor_real}'"
+    assert to_field.is_displayed(), "❌ El campo 'to' no está visible"
+    
+    # Verifica que el valor ingresado sea correcto
     assert valor_real == valor_esperado
+    print("✅ Valor ingresado en el campo 'to' es correcto.")
 
 
 # Test 04: Hace clic en el botón "Pedir un taxi" y verifica que el texto "Comfort" aparezca en el código fuente de la página.
@@ -74,9 +96,20 @@ def test_04_click_request_taxi(page_with_url):
         EC.presence_of_element_located(page_with_url.COMFORT_OPTION)
     )
     comfort_text = comfort_element.text
+    
+    # Validaciones adicionales
+    assert comfort_element is not None, "❌ Elemento 'Comfort' no encontrado"
+    assert comfort_text != "", "❌ El texto de 'Comfort' está vacío"
+    assert comfort_text.strip() != "", "❌ El texto de 'Comfort' contiene solo espacios"
+    assert "Comfort" in comfort_text, f"❌ 'Comfort' no encontrado en: '{comfort_text}'"
+    assert comfort_element.is_displayed(), "❌ Elemento 'Comfort' no está visible"
+    
     print(f"✅ Texto encontrado: '{comfort_text}'")
+    
+    # Verifica que el texto "Comfort" esté presente
     assert "Comfort" in comfort_text
-
+    print("✅ 'Comfort' encontrado en el código fuente de la página.")
+    
 
 # Test 05: Hace clic en la categoría "Comfort" y verifica que el texto "Comfort" esté presente en el código fuente de la página.
 def test_05_select_category(page_with_url):
@@ -90,8 +123,19 @@ def test_05_select_category(page_with_url):
 
     # Verificar que el elemento esté visible (usando el MISMO localizador)
     comfort_element = page_with_url.get_comfort_element()
-    assert comfort_element.is_displayed()
     
+    # Validaciones mejoradas
+    assert comfort_element is not None, "❌ Elemento 'Comfort' es None"
+    assert comfort_element.is_displayed(), "❌ Elemento 'Comfort' no está visible"
+    assert comfort_element.is_enabled(), "❌ Elemento 'Comfort' no está habilitado"
+    
+    # Verificar atributos CSS para validar selección
+    class_attribute = comfort_element.get_attribute("class")
+    assert class_attribute is not None, "❌ No se pudo obtener el atributo 'class'"
+    assert "tcard" in class_attribute, f"❌ Clase 'tcard' no encontrada en: '{class_attribute}'"
+    
+    # Verificar visibilidad
+    assert comfort_element.is_displayed()
     print("✅ Categoría 'Comfort' visible y seleccionada.")
 
 
@@ -106,18 +150,23 @@ def test_06_click_phone_field(page_with_url):
     print("\n🛋️  Seleccionando categoría 'Comfort'...")
     page_with_url.select_comfort_category()
     
-    # # 👇 DIAGNÓSTICO DEL DOM 👇
-    # print("\n📄 Guardando el código fuente de la página para inspección...")
-    # html_source = page_with_url.driver.page_source
-    # with open("debug_page_source.html", "w", encoding="utf-8") as f:
-    #     f.write(html_source)
-    # print("✅ Código fuente guardado en 'debug_page_source.html'. Por favor, ábrelo en un navegador y busca el campo de teléfono.")
-    
-    # Haz clic en el input real de teléfono
+    # Hacer clic en el input real de teléfono
     page_with_url.click_phone_field()
-    print("✅ Campo de teléfono seleccionado.")    
+    print("✅ Campo de teléfono seleccionado.")   
+    
+    # Validaciones adicionales
+    page_source = page_with_url.driver.page_source
+    assert page_source is not None, "❌ El código fuente de la página es None"
+    assert len(page_source) > 0, "❌ El código fuente de la página está vacío"
+    assert "Phone number" in page_source, "❌ 'Phone number' no encontrado en el código fuente"
+    
+    phone_input = page_with_url.driver.find_element(*page_with_url.PHONE_INPUT)
+    assert phone_input.is_displayed(), "❌ El campo de teléfono no está visible"
+    assert phone_input.is_enabled(), "❌ El campo de teléfono no está habilitado"
+    
     # Verificar que el texto "Phone number" está en el código fuente
     assert "Phone number" in page_with_url.driver.page_source
+    print("✅ 'Número de teléfono' encontrado en el código fuente de la página.")
 
 
 # Test 07: Ingresa el número de teléfono en el campo correspondiente y verifica que el valor del campo coincida con el número esperado.
@@ -948,3 +997,4 @@ def test_027_cancel_trip(page_with_url):
 # @pytest.mark.smoke
 # def test_01_urbanroutes_flow(page_with_url):
 #     ...   
+# TODO: AGREGAR MANEJO DE EXCEPCIONES Y LOGGING MÁS DETALLADO SI ES NECESARIO
