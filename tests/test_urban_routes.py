@@ -154,18 +154,10 @@ def test_06_click_phone_field(page_with_url):
     page_with_url.click_phone_field()
     print("✅ Campo de teléfono seleccionado.")   
     
-    # Validaciones adicionales
-    page_source = page_with_url.driver.page_source
-    assert page_source is not None, "❌ El código fuente de la página es None"
-    assert len(page_source) > 0, "❌ El código fuente de la página está vacío"
-    assert "Phone number" in page_source, "❌ 'Phone number' no encontrado en el código fuente"
-    
-    phone_input = page_with_url.driver.find_element(*page_with_url.PHONE_INPUT)
-    assert phone_input.is_displayed(), "❌ El campo de teléfono no está visible"
-    assert phone_input.is_enabled(), "❌ El campo de teléfono no está habilitado"
-    
     # Verificar que el texto "Phone number" está en el código fuente
-    assert "Phone number" in page_with_url.driver.page_source
+    assert page_with_url.is_phone_number_in_page_source(), "❌ Validación de página source falló"
+    assert page_with_url.is_phone_input_visible_and_enabled() is not None, "❌ Validación del campo teléfono falló"
+    
     print("✅ 'Número de teléfono' encontrado en el código fuente de la página.")
 
 
@@ -943,7 +935,7 @@ def test_026_view_trip_details(page_with_url):
     
     print("✅ Test 26 completado exitosamente.")
 
-
+@pytest.mark.smoke
 # Test 27: Hace click en el botón "Cancelar"
 def test_027_cancel_trip(page_with_url):
     print(f"\n🔍 Abriendo página para test 27: '{data.BASE_URL}'")
@@ -990,7 +982,6 @@ def test_027_cancel_trip(page_with_url):
 
 #--- Fin de tests en tests/test_urban_routes.py ---
 
-# Nota: Los tests del 21 al 27 son placeholders y deben ser implementados con la lógica correspondiente.
 
 # TODO: AGREGAR DECORADORES DE ETIQUETAS A CADA TEST
 # Ejemplo:
