@@ -212,6 +212,13 @@ def test_08_click_next_button(page_with_url):
     page_with_url.click_next_button()
     page_with_url.driver.find_element(By.ID, "code").is_displayed()
 
+    # Validaciones adicionales
+    sms_input = page_with_url.driver.find_element(By.ID, "code")
+    assert sms_input is not None, "❌ Campo SMS es None"
+    assert sms_input.is_displayed(), "❌ Campo 'Introduce el código del SMS' no está visible"
+    assert sms_input.is_enabled(), "❌ Campo SMS no está habilitado"
+    assert sms_input.get_attribute("type") == "text", "❌ El tipo de campo SMS no es 'text'"
+    
     
 # Test 09: Captura el código SMS desde la red, lo ingresa y verifica que el código se haya ingresado correctamente.
 def test_09_click_next_button(page_with_url):
