@@ -386,6 +386,14 @@ def test_12_enter_card_number(page_with_url):
     actual_value = page_with_url.get_card_number_value()
     assert actual_value == card_number, f"❌ El número de tarjeta no coincide. Esperado: '{card_number}', Actual: '{actual_value}'"
     
+    # Validaciones adicionales
+    actual_value = page_with_url.get_card_number_value()
+    assert actual_value is not None, "❌ El valor de la tarjeta es None"
+    assert actual_value != "", "❌ El campo de tarjeta está vacío"
+    assert len(actual_value) > 0, "❌ El número de tarjeta no tiene dígitos"
+    assert actual_value.strip() != "", "❌ El campo de tarjeta contiene solo espacios"
+    assert actual_value == data.UrbanRoutesData.CARD_NUMBER, f"❌ El número de tarjeta no coincide. Esperado: '{data.UrbanRoutesData.CARD_NUMBER}', Actual: '{actual_value}'"
+    
     print("✅ Test 12 completado exitosamente.")
 
 
