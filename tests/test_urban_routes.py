@@ -183,6 +183,12 @@ def test_07_enter_phone_number(page_with_url):
     actual_phone = page_with_url.driver.find_element(*page_with_url.PHONE_INPUT).get_attribute("value")
     assert actual_phone == data.UrbanRoutesData.PHONE_NUMBER, f"Expected: {data.UrbanRoutesData.PHONE_NUMBER}, Got: {actual_phone}"
 
+    # Validaciones adicionales
+    assert actual_phone is not None, "❌ El valor del campo teléfono es None"
+    assert actual_phone != "", "❌ El campo teléfono está vacío"
+    assert actual_phone.strip() != "", "❌ El campo teléfono contiene solo espacios"
+    assert len(actual_phone) > 0, "❌ El número de teléfono no tiene dígitos"
+    assert actual_phone == data.UrbanRoutesData.PHONE_NUMBER, f"❌ Teléfono no coincide. Esperado: {data.UrbanRoutesData.PHONE_NUMBER}, Obtenido: {actual_phone}"
 
 # Test 08: Hace clic en el botón "Siguiente" y verifica que el campo "Introduce el código del SMS" esté visible.
 def test_08_click_next_button(page_with_url):
@@ -206,7 +212,7 @@ def test_08_click_next_button(page_with_url):
     page_with_url.click_next_button()
     page_with_url.driver.find_element(By.ID, "code").is_displayed()
 
-
+    
 # Test 09: Captura el código SMS desde la red, lo ingresa y verifica que el código se haya ingresado correctamente.
 def test_09_click_next_button(page_with_url):
     print(f"\n🔍 Abriendo página para test 09: '{data.BASE_URL}'")
