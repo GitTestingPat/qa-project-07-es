@@ -387,7 +387,6 @@ def test_12_enter_card_number(page_with_url):
     assert actual_value == card_number, f"❌ El número de tarjeta no coincide. Esperado: '{card_number}', Actual: '{actual_value}'"
     
     # Validaciones adicionales
-    actual_value = page_with_url.get_card_number_value()
     assert actual_value is not None, "❌ El valor de la tarjeta es None"
     assert actual_value != "", "❌ El campo de tarjeta está vacío"
     assert len(actual_value) > 0, "❌ El número de tarjeta no tiene dígitos"
@@ -565,6 +564,12 @@ def test_016_enter_driver_message(page_with_url):
     actual_message = page_with_url.get_driver_message_value()
     assert actual_message == message, f"❌ El mensaje no coincide. Esperado: '{message}', Actual: '{actual_message}'"
     
+    # Validaciones adicionales
+    assert actual_message is not None, "❌ El mensaje es None"
+    assert actual_message != "", "❌ El campo de mensaje está vacío"
+    assert actual_message.strip() != "", "❌ El campo de mensaje contiene solo espacios"
+    assert len(actual_message) > 0, "❌ El mensaje no tiene contenido"
+
     print("✅ Test 16 completado exitosamente.")
 
 
