@@ -868,8 +868,14 @@ def test_024_wait_for_driver_image(page_with_url):
     page_with_url.click_order_taxi_button()
     
     # Test 24: Esperar imagen del conductor
-    print("\n👤 Esperando imagen del conductor...")
-    assert page_with_url.is_driver_image_visible()
+    is_visible = page_with_url.is_driver_image_visible()
+    assert is_visible is True, "❌ La imagen del conductor no está visible"
+    
+    # Validaciones adicionales
+    driver_image = page_with_url.driver.find_element(*page_with_url.DRIVER_IMAGE)
+    assert driver_image is not None, "❌ Elemento de imagen es None"
+    assert driver_image.get_attribute("alt") is not None, "❌ La imagen no tiene atributo 'alt'"
+    assert len(driver_image.get_attribute("alt")) > 0, "❌ El atributo 'alt' de la imagen está vacío"
     
     print("✅ Test 24 completado exitosamente.")
     
