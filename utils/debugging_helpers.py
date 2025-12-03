@@ -110,6 +110,9 @@ def is_driver_image_visible(self, timeout=40):
 # 🔍 DEBUGGING: Ver elementos disponibles
 page_with_url.debug_add_card_elements()  # type: ignore # noqa: F821
 
+# 🔍 DEBUGGING: Ver todos los botones (estaba dentro del test 09)
+page_with_url.debug_buttons_in_modal() # type: ignore # noqa: F821
+        
 # 👇 DIAGNÓSTICO DEL DOM 👇
 print("\n📄 Guardando el código fuente de la página para inspección...")
 html_source = page_with_url.driver.page_source # type: ignore  # noqa: F821
