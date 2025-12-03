@@ -309,6 +309,12 @@ def test_10_click_payment_method_button(page_with_url):
     page_with_url.is_payment_method_button_visible()
     page_with_url.click_payment_method_button()
     
+    # Validaciones adicionales
+    payment_button = page_with_url.driver.find_element(*page_with_url.PAYMENT_METHOD_BUTTON)
+    assert payment_button.is_displayed(), "❌ El botón 'Método de pago' no está visible"
+    assert payment_button.is_enabled(), "❌ El botón 'Método de pago' no está habilitado"
+    assert payment_button.text.strip() == "Método de pago", f"❌ Texto del botón incorrecto. Esperado: 'Método de pago', Actual: '{payment_button.text.strip()}'"
+    
     print("✅ Test 10 completado exitosamente.")
 
 
