@@ -158,6 +158,16 @@ def test_06_click_phone_field(page_with_url):
     assert page_with_url.is_phone_number_in_page_source(), "❌ Validación de página source falló"
     assert page_with_url.is_phone_input_visible_and_enabled() is not None, "❌ Validación del campo teléfono falló"
     
+    # Validaciones adicionales
+    page_source = page_with_url.driver.page_source
+    assert page_source is not None, "❌ El código fuente de la página es None"
+    assert len(page_source) > 0, "❌ El código fuente de la página está vacío"
+    assert "Phone number" in page_source, "❌ 'Phone number' no encontrado en el código fuente"
+    
+    phone_input = page_with_url.driver.find_element(*page_with_url.PHONE_INPUT)
+    assert phone_input.is_displayed(), "❌ El campo de teléfono no está visible"
+    assert phone_input.is_enabled(), "❌ El campo de teléfono no está habilitado"
+    
     print("✅ 'Número de teléfono' encontrado en el código fuente de la página.")
 
 
