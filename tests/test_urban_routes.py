@@ -260,13 +260,18 @@ def test_09_click_next_button(page_with_url):
     try:
         sms_code = page_with_url.get_sms_code_from_network(phone_number)
         page_with_url.enter_sms_code(sms_code)
-        # 🔍 DEBUGGING: Ver todos los botones
-        #page_with_url.debug_buttons_in_modal()
         page_with_url.click_confirm_button()
         print("✅ Código SMS verificado exitosamente.")
     except Exception as e:
         pytest.fail(f"❌ Error al capturar o ingresar el código SMS: {e}")
 
+        # Validaciones adicionales
+    sms_input_value = page_with_url.driver.find_element(By.ID, "code").get_attribute("value")
+    assert sms_input_value is not None, "❌ El valor del campo de código SMS es None"
+    assert sms_input_value != "", "❌ El campo de código SMS está vacío"
+    assert len(sms_input_value) > 0, "❌ El campo de código SMS no contiene dígitos"
+    assert sms_input_value.strip() != "", "❌ El campo de código SMS contiene solo espacios"
+    assert sms_input_value == sms_code, f"❌ El código ingresado no coincide. Esperado: '{sms_code}', Actual: '{sms_input_value}'"
 
 # Test 10: Hace clic en el botón Método de pago y verifica que el botón esté visible.
 def test_10_click_payment_method_button(page_with_url):
