@@ -478,6 +478,13 @@ def test_013_enter_code(page_with_url):
     actual_code = page_with_url.get_card_code_value()
     assert actual_code == card_code, f"❌ El código CVV no coincide. Esperado: '{card_code}', Actual: '{actual_code}'"
     
+    # Validaciones adicionales
+    assert actual_code is not None, "❌ El valor del código CVV es None"
+    assert actual_code != "", "❌ El campo de código CVV está vacío"
+    assert len(actual_code) > 0, "❌ El código CVV no tiene dígitos"
+    assert actual_code.strip() == actual_code, "❌ El código CVV contiene espacios innecesarios"
+    assert actual_code.isdigit(), "❌ El código CVV contiene caracteres no numéricos"
+    
     print("✅ Test 13 completado exitosamente.")
 
 
