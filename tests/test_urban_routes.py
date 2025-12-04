@@ -357,6 +357,14 @@ def test_11_click_add_card_button(page_with_url):
     page_with_url.is_add_card_button_visible()
     page_with_url.click_add_card_button()
     
+    # Validaciones adicionales
+    add_card_button = page_with_url.driver.find_element(*page_with_url.ADD_CARD_BUTTON)
+    assert add_card_button.is_displayed(), "❌ El botón 'Agregar tarjeta' no está visible"
+    assert add_card_button.is_enabled(), "❌ El botón 'Agregar tarjeta' no está habilitado"
+    expected_text = "Agregar tarjeta"
+    actual_text = add_card_button.text.strip()
+    assert actual_text == expected_text, f"❌ Texto del botón incorrecto. Esperado: '{expected_text}', Actual: '{actual_text}'"
+    
     print("✅ Test 11 completado exitosamente.")
 
 
