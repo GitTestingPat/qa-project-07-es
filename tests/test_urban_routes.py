@@ -516,11 +516,15 @@ def test_014_click_add_card_confirm(page_with_url):
     page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
     page_with_url.enter_card_code(data.UrbanRoutesData.CARD_CODE)
     
-    # page_with_url.debug_iframes()
-    
     # Test 14: Hacer clic en Agregar
     print("\n💳 Haciendo clic en 'Agregar'...")
     page_with_url.click_add_card_confirm_button()
+    
+    # Validaciones adicionales
+    add_confirm_button = page_with_url.driver.find_element(*page_with_url.ADD_CARD_CONFIRM_BUTTON)
+    assert add_confirm_button.is_displayed(), "❌ El botón 'Agregar' no está visible"
+    assert add_confirm_button.is_enabled(), "❌ El botón 'Agregar' no está habilitado"
+    assert add_confirm_button.text.strip() != "", "❌ El botón 'Agregar' no tiene texto"
     
     print("✅ Test 14 completado exitosamente.")
 
