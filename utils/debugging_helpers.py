@@ -14,7 +14,9 @@ def debug_iframes(self):
         print(f"  - Name: {iframe.get_attribute('name')}")
         print(f"  - Class: {iframe.get_attribute('class')}")
         print(f"  - Src: {iframe.get_attribute('src')}")
-
+        
+# 🔍 DEBUGGING: Ver iframes en la página (estaba dentro del test 14 y pertenece al metodo debug_iframes)
+page_with_url.debug_iframes()  # type: ignore # noqa: F821
 
 def debug_modal_html(self):
     """Guarda el HTML completo del modal y muestra todos los botones"""
