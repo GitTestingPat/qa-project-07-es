@@ -305,15 +305,16 @@ def test_10_click_payment_method_button(page_with_url):
         pytest.fail(f"❌ Error al capturar o ingresar el código SMS: {e}")
     
     # Test 10: Verificar y hacer clic en Método de pago
-    print("\n💳 Verificando botón 'Método de pago'...")
+    print("\n💳 Verificando botón 'Payment method Cash'...")
     page_with_url.is_payment_method_button_visible()
     page_with_url.click_payment_method_button()
     
     # Validaciones adicionales
     payment_button = page_with_url.driver.find_element(*page_with_url.PAYMENT_METHOD_BUTTON)
-    assert payment_button.is_displayed(), "❌ El botón 'Método de pago' no está visible"
-    assert payment_button.is_enabled(), "❌ El botón 'Método de pago' no está habilitado"
-    assert payment_button.text.strip() == "Método de pago", f"❌ Texto del botón incorrecto. Esperado: 'Método de pago', Actual: '{payment_button.text.strip()}'"
+    assert payment_button.is_displayed(), "❌ El botón 'Payment method Cash' no está visible"
+    assert payment_button.is_enabled(), "❌ El botón 'Payment method Cash' no está habilitado"
+    actual_text = payment_button.text.strip().replace('\n', ' ')
+    assert actual_text == 'Payment method Cash', f"❌ Texto del botón incorrecto. Esperado: 'Payment method Cash', Actual: '{actual_text}'"
     
     print("✅ Test 10 completado exitosamente.")
 
@@ -350,20 +351,21 @@ def test_11_click_add_card_button(page_with_url):
     
     # Hacer clic en Método de pago
     page_with_url.click_payment_method_button()
-    print("✅ Botón 'Método de pago' clickeado.")
+    print("✅ Botón 'Payment method' clickeado.")
     
-    # Test 11: Verificar y hacer clic en Agregar tarjeta
+    # Test 11: Verificar botón 'Agregar tarjeta' ANTES de hacer clic
     print("\n💳 Verificando botón 'Agregar tarjeta'...")
-    page_with_url.is_add_card_button_visible()
-    page_with_url.click_add_card_button()
     
-    # Validaciones adicionales
+    # ✅ VALIDAR ANTES DE HACER CLIC
     add_card_button = page_with_url.driver.find_element(*page_with_url.ADD_CARD_BUTTON)
     assert add_card_button.is_displayed(), "❌ El botón 'Agregar tarjeta' no está visible"
     assert add_card_button.is_enabled(), "❌ El botón 'Agregar tarjeta' no está habilitado"
-    expected_text = "Agregar tarjeta"
+    expected_text = "Add a card"
     actual_text = add_card_button.text.strip()
     assert actual_text == expected_text, f"❌ Texto del botón incorrecto. Esperado: '{expected_text}', Actual: '{actual_text}'"
+    
+    # Ahora hacer clic
+    page_with_url.click_add_card_button()
     
     print("✅ Test 11 completado exitosamente.")
 
