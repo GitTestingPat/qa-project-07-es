@@ -28,3 +28,9 @@ secrets.json
 debug_*.html
 debug_output/
 *.debug.html
+
+# Coverage reports
+.coverage
+coverage.xml
+coverage.json
+htmlcov/
