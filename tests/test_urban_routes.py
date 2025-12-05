@@ -676,6 +676,11 @@ def test_018_add_blankets_and_tissues(page_with_url):
     print("\n🧣 Activando mantas y pañuelos...")
     page_with_url.add_blankets_and_tissues() 
     
+    # Validaciones adicionales
+    blankets_switch = page_with_url.driver.find_element(*page_with_url.BLANKETS_SWITCH)
+    assert blankets_switch.is_displayed(), "❌ El interruptor de 'Manta y Pañuelos' no está visible"
+    assert blankets_switch.is_enabled(), "❌ El interruptor de 'Manta y Pañuelos' no está habilitado"
+    
     print("✅ Test 18 completado exitosamente.")
 
 
