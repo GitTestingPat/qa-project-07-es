@@ -274,7 +274,7 @@ class UrbanRoutesPage:
             EC.element_to_be_clickable(self.PAYMENT_METHOD_BUTTON)
         )
         button.click()
-        print("✅ Botón 'Método de pago' clickeado.")
+        print("✅ Botón 'Payment method Cash' clickeado.")
     
     
     # Método para verificar si el botón Método de pago está visible    
@@ -285,10 +285,10 @@ class UrbanRoutesPage:
             )
             is_visible = button.is_displayed()
             if is_visible:
-                print("✅ Botón 'Método de pago' está visible.")
+                print("✅ Botón 'Payment method Cash' está visible.")
             return is_visible
         except Exception as e:
-            print(f"❌ Botón 'Método de pago' NO está visible: {e}")
+            print(f"❌ Botón 'Payment method' NO está visible: {e}")
             return False
 
 
