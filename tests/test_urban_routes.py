@@ -558,14 +558,14 @@ def test_015_close_payment_modal(page_with_url):
     page_with_url.enter_card_code(data.UrbanRoutesData.CARD_CODE)
     page_with_url.click_add_card_confirm_button()
     
+    # Test 15: Cerrar modal
+    print("\n❌ Cerrando modal de pago...")
+    page_with_url.close_payment_modal()
+    
     # Validaciones adicionales
     close_button = page_with_url.driver.find_element(*page_with_url.CLOSE_PAYMENT_MODAL_BUTTON)
     assert close_button.is_displayed(), "❌ El botón de cierre (X) del modal no está visible"
     assert close_button.is_enabled(), "❌ El botón de cierre (X) no está habilitado"
-    
-    # Test 15: Cerrar modal
-    print("\n❌ Cerrando modal de pago...")
-    page_with_url.close_payment_modal()
     
     print("✅ Test 15 completado exitosamente.")
 
@@ -630,6 +630,11 @@ def test_017_verify_order_requirements_section(page_with_url):
     # Solo confirma que llegamos hasta aquí
     print("\n📋 Verificando sección 'Requisitos del Pedido'...")
     assert page_with_url.is_order_requirements_section_visible()
+    
+    # Validaciones adicionales
+    requirements_section = page_with_url.driver.find_element(*page_with_url.ORDER_REQUIREMENTS_SECTION)
+    assert requirements_section.is_displayed(), "❌ La sección 'Requisitos del Pedido' no está visible"
+    assert requirements_section is not None, "❌ La sección 'Requisitos del Pedido' es None"
     
     print("✅ Test 17 completado exitosamente.")
 
