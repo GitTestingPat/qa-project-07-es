@@ -4,6 +4,7 @@
 
 import pytest
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import data
 
@@ -518,17 +519,57 @@ def test_014_click_add_card_confirm(page_with_url):
     page_with_url.enter_card_number(data.UrbanRoutesData.CARD_NUMBER)
     page_with_url.enter_card_code(data.UrbanRoutesData.CARD_CODE)
     
-    # Test 14: Hacer clic en Agregar
+    # Test 14: Validaciones antes de hacer clic
+    print("\n💳 Validando botón 'Agregar' antes de hacer clic...")
+    
+    # Assertion 1: Verificar que el botón está presente
+    try:
+        add_confirm_button = page_with_url.driver.find_element(*page_with_url.ADD_CARD_CONFIRM_BUTTON)
+        assert add_confirm_button is not None, "❌ El botón 'Agregar' no se encontró"
+        print("✅ Botón 'Agregar' encontrado.")
+    except Exception as e:
+        pytest.fail(f"❌ No se pudo localizar el botón 'Agregar': {e}")
+    
+    # Assertion 2: Verificar que el botón está visible
+    assert add_confirm_button.is_displayed(), "❌ El botón 'Agregar' no está visible"
+    print("✅ Botón 'Agregar' visible.")
+    
+    # Hacer clic en 'Agregar'
     print("\n💳 Haciendo clic en 'Agregar'...")
     page_with_url.click_add_card_confirm_button()
     
-    # Validaciones adicionales
-    add_confirm_button = page_with_url.driver.find_element(*page_with_url.ADD_CARD_CONFIRM_BUTTON)
-    assert add_confirm_button.is_displayed(), "❌ El botón 'Agregar' no está visible"
-    assert add_confirm_button.is_enabled(), "❌ El botón 'Agregar' no está habilitado"
-    assert add_confirm_button.text.strip() != "", "❌ El botón 'Agregar' no tiene texto"
+    # Validaciones después de hacer clic
+    print("\n✔️ Validando que la tarjeta fue agregada correctamente...")
     
-    print("✅ Test 14 completado exitosamente.")
+    # Assertion 3: Verificar que el modal de agregar tarjeta se cerró
+    try:
+        WebDriverWait(page_with_url.driver, 10).until(
+            EC.invisibility_of_element_located(page_with_url.ADD_CARD_CONFIRM_BUTTON)
+        )
+        print("✅ Modal de agregar tarjeta cerrado correctamente.")
+    except Exception as e:
+        pytest.fail(f"❌ El modal no se cerró después de agregar la tarjeta: {e}")
+    
+    # Assertion 4: Verificar que volvió a la vista de método de pago
+    try:
+        payment_method_button = WebDriverWait(page_with_url.driver, 10).until(
+            EC.visibility_of_element_located(page_with_url.PAYMENT_METHOD_BUTTON)
+        )
+        assert payment_method_button.is_displayed(), "❌ No regresó a la vista de método de pago"
+        print("✅ Regresó correctamente a la vista de método de pago.")
+    except Exception as e:
+        pytest.fail(f"❌ No se pudo verificar el regreso a la vista de método de pago: {e}")
+    
+    # Assertion 5: Verificar que el método de pago cambió (opcional, si el texto cambia)
+    try:
+        payment_method_text = payment_method_button.text.strip().replace('\n', ' ')
+        # El texto ahora debería mostrar la tarjeta agregada en lugar de "Cash"
+        # Si no cambia el texto, puedes omitir esta validación
+        print(f"✅ Texto del método de pago: '{payment_method_text}'")
+    except Exception as e:
+        print(f"⚠️ No se pudo verificar el texto del método de pago: {e}")
+    
+    print("\n✅ Test 14 completado exitosamente.")
 
 
 # Test 15: Hace clic en el botón cerrar modal (x).
