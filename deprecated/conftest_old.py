@@ -8,9 +8,9 @@ Razón de remoción: Fixture nunca utilizada y código comentado innecesario.
 """
 
 import pytest
-from selenium import webdriver
+from selenium import webdriver  # noqa: F401
 from pages.urban_routes_page import UrbanRoutesPage
-import data
+import data  # noqa: F401
 
 
 # ============================================================================
@@ -27,7 +27,7 @@ import data
 # ============================================================================
 
 @pytest.fixture
-def page_with_url_and_cdp(driver, data):
+def page_with_url_and_cdp(driver, data):  # noqa: F811
     """
     OBSOLETA: No usar
     
