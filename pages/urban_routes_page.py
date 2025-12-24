@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 
 # Importar utilidades
 from utils.network_utils import extract_code_from_sms_request
-from utils.wait_utils import wait_for_element, wait_for_element_to_be_clickable
+
 
 class UrbanRoutesPage:  
     # Localizador para el campo origen
