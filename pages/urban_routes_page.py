@@ -1,8 +1,11 @@
-from selenium.webdriver.common.by import By
+import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import json
-import time
+from selenium.webdriver.common.by import By
+
+# Importar utilidades
+from utils.network_utils import extract_code_from_sms_request
+from utils.wait_utils import wait_for_element, wait_for_element_to_be_clickable
 
 class UrbanRoutesPage:  
     # Localizador para el campo origen
@@ -220,52 +223,17 @@ class UrbanRoutesPage:
     # Método para interceptar la respuesta de red y obtener el código SMS
     def get_sms_code_from_network(self, phone_number):
         """
-        Intercepta la respuesta de red que contiene el código SMS.
-        Busca una solicitud GET que contenga el número de teléfono y devuelva un JSON con "code".
+        Obtiene el código SMS del tráfico de red usando CDP.
+        
+        Esta función usa network_utils para extraer el código.
+        
+        Args:
+            phone_number: Número de teléfono usado
+            
+        Returns:
+            str: Código SMS extraído
         """
-        print("🔍 Buscando código SMS en la red...")
-        
-        # Espera para asegurar que la solicitud se haya completado
-        time.sleep(3)  # 
-
-        logs = self.driver.get_log("performance")
-        
-        for log in logs:
-            try:
-                message = json.loads(log["message"])
-                method = message.get("message", {}).get("method")
-                params = message.get("message", {}).get("params", {})
-                
-                if method == "Network.responseReceived":
-                    # Verifica que 'response' exista en params
-                    if "response" not in params:
-                        continue
-                    
-                    response = params["response"]
-                    url = response.get("url", "")
-                    
-                    # Normaliza el número para coincidir con la URL (puede estar codificado)
-                    normalized_phone = phone_number.replace("+", "%2B")  # Codificación URL del '+'
-                    
-                    if normalized_phone in url or phone_number in url:
-                        request_id = params.get("requestId")
-                        if not request_id:
-                            continue
-                        
-                        try:
-                            body = self.driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": request_id})
-                            data = json.loads(body["body"])
-                            if "code" in data:
-                                code = str(data["code"])
-                                print(f"✅ Código SMS capturado: {code}")
-                                return code
-                        except Exception as e:
-                            print(f"⚠️ No se pudo extraer el cuerpo de la respuesta: {e}")
-                            continue
-            except Exception:
-                # Ignorar logs malformados o no relevantes
-                continue
-        raise Exception("❌ No se encontró el código SMS en las respuestas de red.")
+        return extract_code_from_sms_request(phone_number, self.driver, timeout=60)
 
 
     # Método para hacer clic en el botón Método de pago
@@ -667,26 +635,3 @@ class UrbanRoutesPage:
             print(f"❌ No se pudo cancelar el viaje: {e}")
             return False
     
-    # --- Métodos para validaciones adicionales ---
-    # Metodo para verificar que 'Phone number' esté en el código fuente de la página
-    def is_phone_number_in_page_source(self):
-        """Verifica que 'Phone number' esté en el código fuente de la página"""
-        page_source = self.driver.page_source
-        assert page_source is not None, "❌ El código fuente de la página es None"
-        assert len(page_source) > 0, "❌ El código fuente de la página está vacío"
-        assert "Phone number" in page_source, "❌ 'Phone number' no encontrado en el código fuente"
-        return True
-
-    # Método para verificar que el campo de teléfono esté visible y habilitado
-    def is_phone_input_visible_and_enabled(self):
-        """Verifica que el campo de teléfono esté visible y habilitado"""
-        phone_input = self.driver.find_element(*self.PHONE_INPUT)
-        assert phone_input is not None, "❌ El campo de teléfono es None"
-        assert phone_input.is_displayed(), "❌ El campo de teléfono no está visible"
-        assert phone_input.is_enabled(), "❌ El campo de teléfono no está habilitado"
-        return phone_input
-        
-        # TODO: Agregar manejo de excepciones y logs detallados en cada método  
-        # TODO: Agregar métodos para capturas de pantalla en caso de errores
-        # TODO: Agregar métodos para esperar elementos específicos si es necesario
-        # TODO: Agregar métodos para validar estados de botones (habilitado/deshabilitado)
