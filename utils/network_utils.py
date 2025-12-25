@@ -104,7 +104,7 @@ def extract_code_from_sms_request(phone_number: str, driver, timeout: int = 60) 
                                             
                                             if code:
                                                 print(f"🎉 Código SMS capturado exitosamente: {code}")
-                                                return code
+                                                return str(code)
                                     except Exception as e:
                                         print(f"⚠️ Error al obtener el body de la respuesta: {e}")
                                         # Continuar buscando si hay error al obtener el body
