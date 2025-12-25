@@ -6,7 +6,6 @@ from selenium.webdriver.common.by import By
 # Importar utilidades
 from utils.network_utils import extract_code_from_sms_request
 
-
 class UrbanRoutesPage:  
     # Localizador para el campo origen
     FROM_FIELD = (By.XPATH, "//input[@id='from']") 
@@ -635,3 +634,31 @@ class UrbanRoutesPage:
             print(f"❌ No se pudo cancelar el viaje: {e}")
             return False
     
+
+    # --- Métodos para validaciones adicionales ---
+    
+    # Método para verificar si 'Phone number' está en el código fuente
+    def is_phone_number_in_page_source(self):
+        """
+        Verifica que 'Phone number' esté en el código fuente de la página.
+        
+        Nota: Método mantenido por compatibilidad con tests existentes.
+        """
+        page_source = self.driver.page_source
+        assert page_source is not None, "❌ El código fuente de la página es None"
+        assert len(page_source) > 0, "❌ El código fuente de la página está vacío"
+        assert "Phone number" in page_source, "❌ 'Phone number' no encontrado"
+        return True
+    
+    # Método para verificar si el campo de teléfono está visible y habilitado
+    def is_phone_input_visible_and_enabled(self):
+        """
+        Verifica que el campo de teléfono esté visible y habilitado.
+        
+        Nota: Método mantenido por compatibilidad con tests existentes.
+        """
+        phone_input = self.driver.find_element(*self.PHONE_INPUT)
+        assert phone_input is not None, "❌ El campo de teléfono es None"
+        assert phone_input.is_displayed(), "❌ El campo de teléfono no está visible"
+        assert phone_input.is_enabled(), "❌ El campo de teléfono no está habilitado"
+        return phone_input
