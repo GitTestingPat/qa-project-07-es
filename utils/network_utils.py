@@ -36,6 +36,9 @@ def extract_code_from_sms_request(phone_number: str, driver, timeout: int = 60) 
     relacionados con el número de teléfono y extrae el código SMS
     de la respuesta.
     
+    IMPORTANTE: Esta es la implementación ORIGINAL que SÍ funciona.
+    Mantiene la lógica exacta del método original de urban_routes_page.py
+    
     Args:
         phone_number (str): Número de teléfono usado en el request
         driver (WebDriver): Instancia de WebDriver con CDP habilitado
@@ -56,41 +59,61 @@ def extract_code_from_sms_request(phone_number: str, driver, timeout: int = 60) 
         driver.execute_cdp_cmd("Network.enable", {})
     """
     start_time = time.time()
-    last_log_count = 0
     
-    print(f"🔍 Buscando código SMS para número: {phone_number}")
-    print(f"⏱️  Timeout configurado: {timeout}s")
+    print(f"🔍 Buscando código SMS en tráfico de red para: {phone_number}")
+    print(f"⏱️  Timeout: {timeout}s")
     
     while time.time() - start_time < timeout:
-        logs = get_network_logs(driver)
+        logs = driver.get_log("performance")
         
-        # Solo procesar logs nuevos
-        new_logs = logs[last_log_count:]
-        last_log_count = len(logs)
-        
-        for log in new_logs:
+        for log in logs:
             try:
                 message = json.loads(log["message"])
                 method = message.get("message", {}).get("method", "")
                 
-                # Buscar respuestas de red
                 if method == "Network.responseReceived":
                     params = message["message"]["params"]
                     response_url = params["response"]["url"]
                     
                     # Verificar si la URL contiene el número de teléfono
                     if f"number={phone_number}" in response_url:
-                        print(f"✅ URL encontrada: {response_url}")
+                        print(f"✅ URL encontrada que contiene el número: {response_url}")
                         request_id = params["requestId"]
                         
-                        # Intentar obtener el body de la respuesta
-                        code = _extract_code_from_response_body(driver, request_id, logs)
-                        if code:
-                            print(f"🎉 Código SMS capturado: {code}")
-                            return code
-                            
-            except (json.JSONDecodeError, KeyError, TypeError) as e:
-                # Log mal formado o sin datos relevantes
+                        # Buscar el loading finished correspondiente
+                        for inner_log in logs:
+                            try:
+                                inner_message = json.loads(inner_log["message"])
+                                inner_method = inner_message.get("message", {}).get("method", "")
+                                
+                                if (inner_method == "Network.loadingFinished" and 
+                                    inner_message["message"]["params"]["requestId"] == request_id):
+                                    
+                                    # Obtener el body de la respuesta
+                                    try:
+                                        response_body = driver.execute_cdp_cmd(
+                                            "Network.getResponseBody",
+                                            {"requestId": request_id}
+                                        )
+                                        
+                                        body = response_body.get("body", "")
+                                        if body:
+                                            # Parsear JSON y extraer código
+                                            data = json.loads(body)
+                                            code = data.get("code")
+                                            
+                                            if code:
+                                                print(f"🎉 Código SMS capturado exitosamente: {code}")
+                                                return code
+                                    except Exception as e:
+                                        print(f"⚠️ Error al obtener el body de la respuesta: {e}")
+                                        # Continuar buscando si hay error al obtener el body
+                                        continue
+                                        
+                            except (json.JSONDecodeError, KeyError, TypeError):
+                                continue
+                                
+            except (json.JSONDecodeError, KeyError, TypeError):
                 continue
         
         # Esperar un poco antes de revisar de nuevo
@@ -99,66 +122,17 @@ def extract_code_from_sms_request(phone_number: str, driver, timeout: int = 60) 
         # Mostrar progreso cada 10 segundos
         elapsed = int(time.time() - start_time)
         if elapsed % 10 == 0 and elapsed > 0:
-            print(f"⏱️  Esperando... {elapsed}s / {timeout}s")
+            print(f"⏱️  Esperando código SMS... {elapsed}s transcurridos")
     
     # Si llegamos aquí, se agotó el timeout
     raise Exception(
-        f"❌ No se pudo obtener el código SMS en {timeout}s. "
-        f"Verifica que:\n"
-        f"  1. El número de teléfono '{phone_number}' sea correcto\n"
-        f"  2. El request SMS se haya enviado correctamente\n"
-        f"  3. CDP esté habilitado en el driver"
+        f"❌ No se pudo obtener el código SMS en {timeout}s.\n"
+        f"Posibles causas:\n"
+        f"  1. El número de teléfono '{phone_number}' no es válido\n"
+        f"  2. El request SMS no se envió correctamente\n"
+        f"  3. CDP no está habilitado en el driver\n"
+        f"  4. La respuesta del servidor tardó más de {timeout}s"
     )
-
-
-def _extract_code_from_response_body(driver, request_id: str, logs: List) -> Optional[str]:
-    """
-    Extrae el código del body de una respuesta HTTP.
-    
-    Función auxiliar interna para extract_code_from_sms_request.
-    
-    Args:
-        driver (WebDriver): Instancia de WebDriver
-        request_id (str): ID del request cuyo body queremos extraer
-        logs (list): Lista de logs de red
-        
-    Returns:
-        str: Código extraído o None si no se encuentra
-    """
-    try:
-        # Buscar el evento de carga completada
-        for log in logs:
-            try:
-                inner_message = json.loads(log["message"])
-                inner_method = inner_message.get("message", {}).get("method", "")
-                
-                if (inner_method == "Network.loadingFinished" and 
-                    inner_message["message"]["params"]["requestId"] == request_id):
-                    
-                    # Obtener el body de la respuesta usando CDP
-                    response_body = driver.execute_cdp_cmd(
-                        "Network.getResponseBody",
-                        {"requestId": request_id}
-                    )
-                    
-                    body = response_body.get("body", "")
-                    if not body:
-                        return None
-                    
-                    # Parsear JSON y extraer código
-                    data = json.loads(body)
-                    code = data.get("code")
-                    
-                    if code:
-                        return code
-                        
-            except (json.JSONDecodeError, KeyError, TypeError):
-                continue
-                
-    except Exception as e:
-        print(f"⚠️  Error al extraer código del body: {e}")
-    
-    return None
 
 
 def wait_for_network_idle(driver, timeout: int = 5):
