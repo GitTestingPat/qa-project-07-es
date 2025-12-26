@@ -34,3 +34,6 @@ debug_output/
 coverage.xml
 coverage.json
 htmlcov/
+
+# Documentación generada
+COMANDOS.md
