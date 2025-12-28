@@ -38,7 +38,7 @@ def test_wait_utils_with_real_page(page_with_url):
 
 def test_validation_utils_url(page_with_url):
     """Verifica que validation_utils funcione"""
-    from utils.validation_utils import validate_url
+    from deprecated.validation_utils import validate_url
     import data
     
     # Validar que la URL actual sea correcta
