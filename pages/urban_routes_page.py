@@ -108,15 +108,11 @@ class UrbanRoutesPage:
     # Método para abrir la página y espera que cargue completamente     
     def get_page(self, url, timeout=20): 
         self.driver.get(url)
-        try:
-            # Esperar que aparezca el logo-disclaimer con el nombre PLATFORM
-            WebDriverWait(self.driver, timeout).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "logo-disclaimer"))
-            )
-            print("✅ Página cargada correctamente")
-        except Exception as e:
-            print(f"⚠️ Error esperando 'logo-disclaimer': {e}")
-            print(f"📄 Título después de espera: '{self.driver.title}'")
+        # Esperar que aparezca el logo-disclaimer con el nombre PLATFORM
+        WebDriverWait(self.driver, timeout).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "logo-disclaimer"))
+        )
+        print("✅ Página cargada correctamente")
 
 
     # Método para establecer la dirección de origen
