@@ -194,19 +194,12 @@ class UrbanRoutesPage:
     def click_confirm_button(self):
         from selenium.webdriver.support.ui import WebDriverWait
         
-        # El botón ya está habilitado, solo necesitamos encontrarlo y hacer clic
-        try:
-            button = WebDriverWait(self.driver, 10).until(
-                EC.element_to_be_clickable((By.XPATH, "//button[text()='Confirm']"))
-            )
-            button.click()
-            print("✅ Botón 'Confirm' clickeado.")
-        except Exception as e:
-            print(f"⚠️ Error al hacer clic en 'Confirm': {e}")
-            # Intentar con JavaScript como respaldo
-            button = self.driver.find_element(By.XPATH, "//button[text()='Confirm']")
-            self.driver.execute_script("arguments[0].click();", button)
-            print("✅ Botón 'Confirm' clickeado con JavaScript.")
+    # El botón ya está habilitado, solo necesitamos encontrarlo y hacer clic
+        button = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//button[text()='Confirm']"))
+        )
+        button.click()
+        print("✅ Botón 'Confirm' clickeado.")
 
 
     # Método para esperar que el modal esté visible
