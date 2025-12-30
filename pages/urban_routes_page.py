@@ -308,14 +308,11 @@ class UrbanRoutesPage:
         """Hace clic en el botón 'Agregar' para confirmar la tarjeta"""
         
         # Activar el modal haciendo clic en el campo número de tarjeta
-        try:
-            card_number_field = self.driver.find_element(*self.CARD_NUMBER_INPUT)
-            card_number_field.click()
-            time.sleep(0.3)  # Dar tiempo a que se disparen eventos JS
-            print("✅ Modal activado con clic en número de tarjeta.")
-        except Exception as e:
-            print(f"⚠️ No se pudo hacer clic en número de tarjeta: {e}")
-        
+        card_number_field = self.driver.find_element(*self.CARD_NUMBER_INPUT)
+        card_number_field.click()
+        time.sleep(0.3)  # Dar tiempo a que se disparen eventos JS
+        print("✅ Modal activado con clic en número de tarjeta.")
+                
         # Esperar y hacer clic en el botón
         button = self.wait.until(
             EC.element_to_be_clickable(self.ADD_CARD_CONFIRM_BUTTON)
@@ -344,7 +341,7 @@ class UrbanRoutesPage:
             # Intentar con JavaScript
             button = self.driver.find_element(*self.CLOSE_MODAL_BUTTON)
             self.driver.execute_script("arguments[0].click();", button)
-            print("✅ Modal cerrado con JavaScript.")
+            print("✅ Modal de pago cerrado con JavaScript.")
             
     
     # Método para ingresar un mensaje para el conductor        
