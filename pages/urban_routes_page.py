@@ -235,17 +235,13 @@ class UrbanRoutesPage:
     
     # Método para verificar si el botón Método de pago está visible    
     def is_payment_method_button_visible(self):
-        try:
-            button = self.wait.until(
-                EC.visibility_of_element_located(self.PAYMENT_METHOD_BUTTON)
-            )
-            is_visible = button.is_displayed()
-            if is_visible:
-                print("✅ Botón 'Payment method Cash' está visible.")
-            return is_visible
-        except Exception as e:
-            print(f"❌ Botón 'Payment method' NO está visible: {e}")
-            return False
+        button = self.wait.until(
+            EC.visibility_of_element_located(self.PAYMENT_METHOD_BUTTON)
+        )
+        is_visible = button.is_displayed()
+        if is_visible:
+            print("✅ Botón 'Payment method Cash' está visible.")
+        return is_visible
 
 
     # Método para hacer click en el botón Agregar tarjeta
@@ -261,17 +257,13 @@ class UrbanRoutesPage:
     # Método para verificar que "Agregar tarjeta" esté visible
     def is_add_card_button_visible(self):
         """Verifica que el botón 'Agregar tarjeta' esté visible"""
-        try:
-            button = self.wait.until(
-                EC.visibility_of_element_located(self.ADD_CARD_BUTTON)
-            )
-            is_visible = button.is_displayed()
-            if is_visible:
-                print("✅ Botón 'Agregar tarjeta' está visible.")
-            return is_visible
-        except Exception as e:
-            print(f"❌ Botón 'Agregar tarjeta' NO está visible: {e}")
-            return False
+        button = self.wait.until(
+            EC.visibility_of_element_located(self.ADD_CARD_BUTTON)
+        )
+        is_visible = button.is_displayed()
+        if is_visible:
+            print("✅ Botón 'Agregar tarjeta' está visible.")
+        return is_visible
 
 
     # Método para ingresar el número de tarjeta
